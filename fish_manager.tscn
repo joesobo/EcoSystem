@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://m3l74tktju12"]
+
+[ext_resource type="Script" path="res://FishManager.gd" id="1_j5x7p"]
+
+[node name="FishManager" type="Node2D"]
+script = ExtResource("1_j5x7p")
