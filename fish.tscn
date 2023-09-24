@@ -17,11 +17,13 @@ lock_rotation = true
 script = ExtResource("1_8igcb")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D"]
+visible = false
 position = Vector2(5, 5)
 scale = Vector2(10, 10)
 shape = SubResource("RectangleShape2D_k5teq")
 
 [node name="Sprite2D" type="Sprite2D" parent="RigidBody2D"]
+visible = false
 position = Vector2(5, 5)
 scale = Vector2(10, 10)
 texture = SubResource("CanvasTexture_huqkc")
