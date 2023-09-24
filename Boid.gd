@@ -4,7 +4,7 @@ extends RigidBody2D
 @export var speed = 0
 @export var velocity: Vector2
 
-@export var avoidRadius = 20
+@export var avoidRadius = 30
 @export var visualRange = 50
 @export var turnSpeed = 0.1
 
@@ -19,20 +19,19 @@ var viewport_rect
 
 func _ready():
 	randomize()
-	
+
 	var area2D: Area2D = get_child(2)
 	viewport_rect = get_viewport_rect()
-	
+
 	var collision_shape: CollisionShape2D = area2D.get_child(0)
 	collision_shape.shape.radius = avoidRadius
-	
+
 	area2D.connect("area_entered", _on_Area2D_area_entered)
 	area2D.connect("area_exited", _on_Area2D_area_exited)
 
-	
 	speed = randf_range(maxSpeed / 2, maxSpeed)
 	velocity = randomVelocity()
-	
+
 	modulate = Color(randf(), randf(), randf(), 1)
 
 func _on_Area2D_area_entered(area):
@@ -56,13 +55,13 @@ func handle_borders():
 
 func _physics_process(delta):
 	handle_borders()
-	
+
 	velocity += randomVelocity() * randomForce
 	velocity += separation() * separationForce
 	velocity += alignment() * alignmentForce
 	velocity += cohesion() * cohesionForce
-	#velocity += borderForce()
-	
+	velocity += borderForce()
+
 	velocity = velocity.lerp(velocity + alignment() * alignmentForce, turnSpeed)
 	velocity = velocity.normalized() * min(velocity.length(), speed)
 
@@ -70,14 +69,14 @@ func _physics_process(delta):
 
 func separation():
 	var avoidVector = Vector2()
-	
+
 	for flockMate in flock:
 		var flockMatePosition = flockMate.global_position
-		
+
 		var distance = global_position.distance_to(flockMatePosition)
 		if (distance < avoidRadius and distance > 0):
 			avoidVector -= (flockMatePosition - global_position).normalized() * (avoidRadius / distance * speed)
-			
+
 	return avoidVector
 
 func alignment():
@@ -105,8 +104,8 @@ func cohesion():
 
 	if (numNeighbors):
 		centerVector /= numNeighbors
-		
-	return centerVector
+
+	return centerVector - global_position
 
 func randomVelocity():
 	return Vector2(randf_range(-1, 1), randf_range(-1, 1)).normalized() * speed
@@ -114,7 +113,7 @@ func randomVelocity():
 func borderForce():
 	var borderVelocity = Vector2()
 	var inset = 10
-	
+
 	var distance_to_left_border = global_position.x - (viewport_rect.position.x + inset)
 	var distance_to_right_border = (viewport_rect.position.x + viewport_rect.size.x - inset) - global_position.x
 	var distance_to_top_border = global_position.y - (viewport_rect.position.y + inset)
@@ -124,7 +123,7 @@ func borderForce():
 		borderVelocity.x = ((avoidRadius - distance_to_left_border) / avoidRadius) * speed
 	elif distance_to_right_border < avoidRadius:
 		borderVelocity.x = (-(avoidRadius - distance_to_right_border) / avoidRadius) * speed
-		
+
 	if distance_to_top_border < avoidRadius:
 		borderVelocity.y = ((avoidRadius - distance_to_top_border) / avoidRadius) * speed
 	elif distance_to_bottom_border < avoidRadius:

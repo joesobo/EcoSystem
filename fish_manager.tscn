@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://m3l74tktju12"]
+[gd_scene load_steps=3 format=3 uid="uid://m3l74tktju12"]
 
 [ext_resource type="Script" path="res://FishManager.gd" id="1_j5x7p"]
+[ext_resource type="PackedScene" uid="uid://dahto7bhai8pl" path="res://fish.tscn" id="2_wpgd5"]
 
 [node name="FishManager" type="Node2D"]
 script = ExtResource("1_j5x7p")
+fishScene = ExtResource("2_wpgd5")

@@ -2,7 +2,7 @@ extends Node2D
 
 @export var fishCount = 100
 
-var fishScene = preload("res://fish.tscn")
+@export var fishScene: PackedScene
 var viewport_rect
 
 func _ready():
