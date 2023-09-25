@@ -13,10 +13,10 @@ extends RigidBody2D
 @export var alignmentForce: = 0.05
 @export var separationForce: = 0.05
 
-var maxSize = 20
-var minSize = 5
+@export var maxSize = 10
+@export var minSize = 5
 
-var color_palette = [
+@export var color_palette = [
 	Color(0.0, 0.4, 0.8, 1.0),  # Blue
 	Color(0.0, 0.6, 0.9, 1.0),  # Lighter Blue
 	Color(0.0, 0.3, 0.6, 1.0),  # Darker Blue
@@ -28,7 +28,7 @@ var color_palette = [
 	Color(0.8, 0.3, 0.0, 1.0),  # Even Darker Orange
 	Color(0.7, 0.2, 0.0, 1.0)   # Darkest Orange
 ]
-var isBlue = false
+@export var type = 'Blue'
 
 var tail_positions: Array = []
 var max_tail_length = 12
@@ -54,13 +54,7 @@ func _ready():
 	speed = randf_range(maxSpeed / 2, maxSpeed)
 	velocity = randomVelocity()
 
-	isBlue = randi() % 2 == 0
-	var halfSize = color_palette.size() / 2
-
-	if isBlue:
-		modulate = color_palette[randi() % halfSize]
-	else:
-		modulate = color_palette[halfSize + randi() % halfSize]
+	modulate = color_palette[randi() % color_palette.size()]
 
 func get_interpolated_points(start, end, steps):
 	var points = []
@@ -72,7 +66,7 @@ func get_interpolated_points(start, end, steps):
 func _draw():
 	var velocityMagnitude = velocity.length()
 	var size = minSize + ((maxSize - minSize) * (velocityMagnitude / maxSpeed))
-	
+
 	var convex_offset = size + (size / 10)
 	var concave_offset = size - (size / 10)
 	var debug_point_radius = 3.0
@@ -184,7 +178,7 @@ func separation():
 	var avoidVector = Vector2()
 
 	for flockMate in flock:
-		if flockMate.isBlue != isBlue:
+		if flockMate.type != type:
 			continue
 
 		var flockMatePosition = flockMate.global_position
@@ -200,7 +194,7 @@ func alignment():
 	var alignVector = Vector2()
 
 	for flockMate in flock:
-		if flockMate.isBlue != isBlue:
+		if flockMate.type != type:
 			continue
 
 		if (global_position.distance_to(flockMate.global_position) < visualRange):
@@ -217,7 +211,7 @@ func cohesion():
 	var centerVector = Vector2()
 
 	for flockMate in flock:
-		if flockMate.isBlue != isBlue:
+		if flockMate.type != type:
 			continue
 
 		if (global_position.distance_to(flockMate.global_position) < visualRange):

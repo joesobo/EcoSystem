@@ -1,8 +1,8 @@
 extends Node2D
 
 @export var fishCount = 100
+@export var fishScenes: Array[PackedScene] = []
 
-@export var fishScene: PackedScene
 var viewport_rect
 
 func _ready():
@@ -12,8 +12,14 @@ func _ready():
 		spawn_fish()
 
 func spawn_fish():
+	if fishScenes.size() == 0:
+		return
+
 	randomize()
-	var newFish = fishScene.instantiate()
+	var randomIndex = randi() % fishScenes.size()
+	var selectedScene = fishScenes[randomIndex]
+
+	var newFish = selectedScene.instantiate()
 	newFish.global_position = Vector2(randf() * viewport_rect.size.x, randf() * viewport_rect.size.y)
 	add_child(newFish)
 

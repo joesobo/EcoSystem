@@ -1,0 +1,38 @@
+[gd_scene load_steps=5 format=3 uid="uid://bsa2i7a4mvxxs"]
+
+[ext_resource type="Script" path="res://Boid.gd" id="1_b831l"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_k5teq"]
+size = Vector2(1, 1)
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_huqkc"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_k81i3"]
+
+[node name="Fish" type="Node2D"]
+
+[node name="RigidBody2D" type="RigidBody2D" parent="."]
+gravity_scale = 0.0
+lock_rotation = true
+script = ExtResource("1_b831l")
+maxSpeed = 300
+color_palette = [Color(1, 0.5, 0, 1), Color(1, 0.6, 0.2, 1), Color(0.9, 0.4, 0, 1), Color(0.8, 0.3, 0, 1), Color(0.7, 0.2, 0, 1)]
+type = "Orange"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D"]
+visible = false
+position = Vector2(5, 5)
+scale = Vector2(10, 10)
+shape = SubResource("RectangleShape2D_k5teq")
+
+[node name="Sprite2D" type="Sprite2D" parent="RigidBody2D"]
+visible = false
+position = Vector2(5, 5)
+scale = Vector2(10, 10)
+texture = SubResource("CanvasTexture_huqkc")
+
+[node name="Area2D" type="Area2D" parent="RigidBody2D"]
+position = Vector2(5, 5)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D/Area2D"]
+shape = SubResource("CircleShape2D_k81i3")
