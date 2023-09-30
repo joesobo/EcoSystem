@@ -25,8 +25,10 @@ extends RigidBody2D
 @export var type = 'Blue'
 
 var flock = []
-
 var viewport_rect
+
+var debug_point_radius = 7.0
+var debug_point_color
 
 func _ready():
 	randomize()
@@ -43,16 +45,26 @@ func _ready():
 	speed = randf_range(maxSpeed / 2, maxSpeed)
 	velocity = randomVelocity()
 
-	modulate = color_palette[randi() % color_palette.size()]
+	debug_point_color = color_palette[randi() % color_palette.size()]
+	debug_point_color.a = 0.5
 
 func _draw():
-	var debug_point_radius = 5.0
-	var debug_point_color = Color.WHITE
-	debug_point_color.a = 0.5
 	draw_circle(Vector2.ZERO, debug_point_radius, debug_point_color)
 
 	# Draw vision cone
 	# drawCone()
+
+	# Draw velocity vector
+	# draw_line(Vector2.ZERO, velocity.normalized() * 10, Color.GREEN, 1)
+
+	# Draw flockmate connections
+	var lineColor = Color.BLACK
+	lineColor.a = 0.5
+	for flockMate in flock:
+		if flockMate.type != type:
+			continue
+
+		draw_line(Vector2.ZERO, flockMate.global_position - global_position, debug_point_color, 1)
 
 func drawCone():
 	var points: Array = []
@@ -77,7 +89,7 @@ func drawCone():
 	draw_colored_polygon(points, Color(1, 1, 1, 0.4))
 
 func _on_Area2D_area_entered(area):
-	if area != self and area not in flock && inVisionCone(area.global_position):
+	if area.get_parent() is RigidBody2D && area != self and area not in flock && inVisionCone(area.global_position):
 		flock.append(area.get_parent())
 
 func _on_Area2D_area_exited(area):
@@ -99,8 +111,8 @@ func _physics_process(delta):
 	newVelocity += cohesion() * cohesionForce
 	newVelocity += borderForce()
 
-	# velocity = velocity.lerp(newVelocity, turnSpeed)
-	velocity = newVelocity.normalized() * min(newVelocity.length(), speed)
+	velocity = velocity.lerp(newVelocity, turnSpeed)
+	velocity = velocity.normalized() * min(velocity.length(), speed)
 
 	set_linear_velocity(velocity)
 
@@ -142,20 +154,20 @@ func alignment():
 
 func cohesion():
 	var numNeighbors = 0
-	var centerVector = (viewport_rect.position + viewport_rect.size) / 2 - global_position
+	var centerVector = Vector2.ZERO
 
 	for flockMate in flock:
 		if flockMate.type != type:
 			continue
 
 		if (global_position.distance_to(flockMate.global_position) < visualRange):
-			centerVector += flockMate.global_position
+			centerVector += flockMate.global_position - global_position
 			numNeighbors += 1
 
 	if (numNeighbors):
 		centerVector /= numNeighbors
 
-	return centerVector - global_position
+	return centerVector
 
 func randomVelocity():
 	return Vector2(randf_range(-1, 1), randf_range(-1, 1)).normalized() * speed

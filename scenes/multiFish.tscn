@@ -1,8 +1,28 @@
-[gd_scene load_steps=3 format=3 uid="uid://m3l74tktju12"]
+[gd_scene load_steps=6 format=3 uid="uid://m3l74tktju12"]
 
 [ext_resource type="Script" path="res://scripts/FishManager.gd" id="1_qq4p2"]
 [ext_resource type="PackedScene" uid="uid://dahto7bhai8pl" path="res://scenes/fish.tscn" id="2_cssk5"]
+[ext_resource type="PackedScene" uid="uid://b55dmi7pjjwlv" path="res://scenes/test.tscn" id="3_uveyo"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_g4uut"]
+size = Vector2(0.979999, 1)
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_4f14f"]
 
 [node name="FishManager" type="Node2D"]
 script = ExtResource("1_qq4p2")
-fishScenes = Array[PackedScene]([ExtResource("2_cssk5")])
+fishCount = 200
+fishScenes = Array[PackedScene]([ExtResource("2_cssk5"), ExtResource("3_uveyo")])
+
+[node name="Obstacle" type="Area2D" parent="."]
+visible = false
+position = Vector2(547, 327)
+scale = Vector2(100, 100)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Obstacle"]
+visible = false
+shape = SubResource("RectangleShape2D_g4uut")
+
+[node name="Sprite2D" type="Sprite2D" parent="Obstacle"]
+visible = false
+texture = SubResource("CanvasTexture_4f14f")
