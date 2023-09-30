@@ -1,9 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://m3l74tktju12"]
+[gd_scene load_steps=3 format=3 uid="uid://m3l74tktju12"]
 
 [ext_resource type="Script" path="res://scripts/FishManager.gd" id="1_qq4p2"]
-[ext_resource type="PackedScene" uid="uid://dahto7bhai8pl" path="res://scenes/blueFish.tscn" id="2_ik153"]
-[ext_resource type="PackedScene" uid="uid://bsa2i7a4mvxxs" path="res://scenes/orangeFish.tscn" id="3_1eb38"]
+[ext_resource type="PackedScene" uid="uid://dahto7bhai8pl" path="res://scenes/fish.tscn" id="2_cssk5"]
 
 [node name="FishManager" type="Node2D"]
 script = ExtResource("1_qq4p2")
-fishScenes = Array[PackedScene]([ExtResource("2_ik153"), ExtResource("3_1eb38")])
+fishScenes = Array[PackedScene]([ExtResource("2_cssk5")])

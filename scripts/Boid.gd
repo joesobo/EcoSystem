@@ -30,11 +30,6 @@ extends RigidBody2D
 ]
 @export var type = 'Blue'
 
-var tail_positions: Array = []
-var max_tail_length = 12
-var frame_count = 0
-var frame_skip = 2
-
 var flock = []
 
 var viewport_rect
@@ -64,73 +59,10 @@ func get_interpolated_points(start, end, steps):
 	return points
 
 func _draw():
-	var velocityMagnitude = velocity.length()
-	var size = minSize + ((maxSize - minSize) * (velocityMagnitude / maxSpeed))
-
-	var convex_offset = size + (size / 10)
-	var concave_offset = size - (size / 10)
-	var debug_point_radius = 3.0
+	var debug_point_radius = 5.0
 	var debug_point_color = Color.WHITE
 	debug_point_color.a = 0.5
-
-	# Draw the tail
-	for i in range(tail_positions.size() - 1):
-		var start = tail_positions[i] - global_position
-		var end = tail_positions[i + 1] - global_position
-		# draw_circle(start, debug_point_radius, debug_point_color)
-
-	# Calculate front and back offsets based on velocity
-	var velocity_norm = velocity.normalized()
-	var front_offsets = [velocity_norm.rotated(deg_to_rad(90)) * size, velocity_norm.rotated(deg_to_rad(-90)) * size]
-	var back_offsets = [-velocity_norm.rotated(deg_to_rad(90)) * size, -velocity_norm.rotated(deg_to_rad(-90)) * size]
-
-	# Draw front points
-	var front_points = []
-	for offset in front_offsets:
-		var front_point = offset
-		front_points.append(front_point)
-
-	# Draw back points, based on the last tail_position if available
-	var back_points = []
-	if tail_positions.size() > 0:
-		var last_tail_position = tail_positions[tail_positions.size() - 1] - global_position
-		for offset in back_offsets:
-			var back_point = last_tail_position + offset
-			back_points.append(back_point)
-
-	# Calculate middle points based on the middle tail position
-	var middle_points = []
-	if tail_positions.size() > 2:
-		var mid_tail_position = tail_positions[tail_positions.size() / 2] - global_position
-		var turning_right = global_position.x > tail_positions[tail_positions.size() - 1].x
-
-		var left_offset_magnitude = convex_offset if turning_right else concave_offset
-		var right_offset_magnitude = concave_offset if turning_right else convex_offset
-
-		var mid_offsets = [
-			velocity_norm.rotated(deg_to_rad(90)) * left_offset_magnitude,
-			-velocity_norm.rotated(deg_to_rad(90)) * right_offset_magnitude
-		]
-
-		for offset in mid_offsets:
-			var middle_point = mid_tail_position + offset
-			middle_points.append(middle_point)
-
-		# Store the points
-	var polygon_points = []
-
-	if tail_positions.size() > 2:
-		polygon_points.append(front_points[0])
-		polygon_points.append(middle_points[0])
-		polygon_points.append(back_points[1])
-		polygon_points.append(back_points[0])
-		polygon_points.append(middle_points[1])
-		polygon_points.append(front_points[1])
-		polygon_points.append(front_points[0])
-
-		# Draw filled polygon
-		draw_colored_polygon(polygon_points, debug_point_color)
-		draw_polyline(polygon_points, Color.BLACK, 1, true)
+	draw_circle(Vector2.ZERO, debug_point_radius, debug_point_color)
 
 func _on_Area2D_area_entered(area):
 	if area != self and area not in flock:
@@ -164,13 +96,6 @@ func _physics_process(delta):
 	velocity = velocity.normalized() * min(velocity.length(), speed)
 
 	set_linear_velocity(velocity)
-
-	# Update tail positions only every `frame_skip` frames
-	frame_count += 1
-	if frame_count % frame_skip == 0:
-		tail_positions.insert(0, global_position)
-		if tail_positions.size() > max_tail_length:
-			tail_positions.pop_back()
 
 	queue_redraw()
 

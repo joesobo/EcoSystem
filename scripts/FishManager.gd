@@ -7,6 +7,7 @@ var viewport_rect
 
 func _ready():
 	viewport_rect = get_viewport_rect()
+	print(viewport_rect.size)
 
 	for i in range(fishCount):
 		spawn_fish()
