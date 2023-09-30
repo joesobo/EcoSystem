@@ -6,15 +6,14 @@ extends RigidBody2D
 
 @export var avoidRadius = 30
 @export var visualRange = 50
-@export var turnSpeed = 0.1
+@export var turnSpeed = 1
 
 @export var randomForce = 0.05
 @export var cohesionForce: = 0.005
 @export var alignmentForce: = 0.05
 @export var separationForce: = 0.05
 
-@export var maxSize = 10
-@export var minSize = 5
+@export var viewAngle = 45
 
 @export var color_palette = [
 	Color(0.0, 0.4, 0.8, 1.0),  # Blue
@@ -22,11 +21,6 @@ extends RigidBody2D
 	Color(0.0, 0.3, 0.6, 1.0),  # Darker Blue
 	Color(0.0, 0.2, 0.5, 1.0),  # Even Darker Blue
 	Color(0.0, 0.1, 0.3, 1.0),  # Darkest Blue
-	Color(1.0, 0.5, 0.0, 1.0),  # Orange
-	Color(1.0, 0.6, 0.2, 1.0),  # Lighter Orange
-	Color(0.9, 0.4, 0.0, 1.0),  # Darker Orange
-	Color(0.8, 0.3, 0.0, 1.0),  # Even Darker Orange
-	Color(0.7, 0.2, 0.0, 1.0)   # Darkest Orange
 ]
 @export var type = 'Blue'
 
@@ -51,51 +45,66 @@ func _ready():
 
 	modulate = color_palette[randi() % color_palette.size()]
 
-func get_interpolated_points(start, end, steps):
-	var points = []
-	for i in range(steps + 1):
-		var t = i / steps
-		points.append(start.linear_interpolate(end, t))
-	return points
-
 func _draw():
 	var debug_point_radius = 5.0
 	var debug_point_color = Color.WHITE
 	debug_point_color.a = 0.5
 	draw_circle(Vector2.ZERO, debug_point_radius, debug_point_color)
 
+	# Draw vision cone
+	# drawCone()
+
+func drawCone():
+	var points: Array = []
+	var direction_angle = atan2(velocity.y, velocity.x)
+	var start_angle = direction_angle - deg_to_rad(viewAngle / 2)
+	var end_angle = direction_angle + deg_to_rad(viewAngle / 2)
+	var step = deg_to_rad(1.0)  # 1 degree step
+	var angle = start_angle
+
+	while angle <= end_angle:
+		var x = cos(angle) * visualRange
+		var y = sin(angle) * visualRange
+		points.append(Vector2(x, y))
+		angle += step
+
+	# Draw vision boundary lines
+	draw_line(Vector2(0, 0), points[0], Color("fff"), 2)
+	draw_line(Vector2(0, 0), points[-1], Color("fff"), 2)
+
+	# Draw vision area
+	points.insert(0, Vector2(0, 0))
+	draw_colored_polygon(points, Color(1, 1, 1, 0.4))
+
 func _on_Area2D_area_entered(area):
-	if area != self and area not in flock:
+	if area != self and area not in flock && inVisionCone(area.global_position):
 		flock.append(area.get_parent())
 
 func _on_Area2D_area_exited(area):
 	if area.get_parent() in flock:
 		flock.erase(area.get_parent())
 
-func handle_borders():
-	if global_position.x < viewport_rect.position.x:
-		global_position.x = viewport_rect.position.x + viewport_rect.size.x
-	elif global_position.x > viewport_rect.position.x + viewport_rect.size.x:
-		global_position.x = viewport_rect.position.x
+func inVisionCone(position):
+	var direction_angle = atan2(velocity.y, velocity.x)
+	var angle = global_position.direction_to(position).angle()
+	var angle_difference = abs(angle - direction_angle)
 
-	if global_position.y < viewport_rect.position.y:
-		global_position.y = viewport_rect.position.y + viewport_rect.size.y
-	elif global_position.y > viewport_rect.position.y + viewport_rect.size.y:
-		global_position.y = viewport_rect.position.y
+	return angle_difference < deg_to_rad(viewAngle)
 
 func _physics_process(delta):
-	handle_borders()
+	var newVelocity = velocity
+	newVelocity += randomVelocity() * randomForce
+	newVelocity += separation() * separationForce
+	newVelocity += alignment() * alignmentForce
+	newVelocity += cohesion() * cohesionForce
+	newVelocity += borderForce()
 
-	velocity += randomVelocity() * randomForce
-	velocity += separation() * separationForce
-	velocity += alignment() * alignmentForce
-	velocity += cohesion() * cohesionForce
-	velocity += borderForce()
-
-	velocity = velocity.lerp(velocity + alignment() * alignmentForce, turnSpeed)
-	velocity = velocity.normalized() * min(velocity.length(), speed)
+	# velocity = velocity.lerp(newVelocity, turnSpeed)
+	velocity = newVelocity.normalized() * min(newVelocity.length(), speed)
 
 	set_linear_velocity(velocity)
+
+	handle_borders()
 
 	queue_redraw()
 
@@ -133,7 +142,7 @@ func alignment():
 
 func cohesion():
 	var numNeighbors = 0
-	var centerVector = Vector2()
+	var centerVector = (viewport_rect.position + viewport_rect.size) / 2 - global_position
 
 	for flockMate in flock:
 		if flockMate.type != type:
@@ -172,3 +181,14 @@ func borderForce():
 
 
 	return borderVelocity
+
+func handle_borders():
+	if global_position.x < viewport_rect.position.x:
+		global_position.x = viewport_rect.position.x + viewport_rect.size.x
+	elif global_position.x > viewport_rect.position.x + viewport_rect.size.x:
+		global_position.x = viewport_rect.position.x
+
+	if global_position.y < viewport_rect.position.y:
+		global_position.y = viewport_rect.position.y + viewport_rect.size.y
+	elif global_position.y > viewport_rect.position.y + viewport_rect.size.y:
+		global_position.y = viewport_rect.position.y
