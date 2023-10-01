@@ -13,6 +13,9 @@ extends RigidBody2D
 @export var alignmentForce: = 0.05
 @export var separationForce: = 0.05
 
+@export var attractionForce: = 0.005
+@export var attractionPoint: Vector2
+
 @export var viewAngle = 45
 
 @export var color_palette = [
@@ -38,6 +41,7 @@ func _ready():
 	randomize()
 
 	viewport_rect = get_viewport_rect()
+	attractionPoint = viewport_rect.position + viewport_rect.size / 2
 
 	area2D = get_child(2)
 	area2D.connect("area_entered", _on_Area2D_area_entered)
@@ -115,6 +119,7 @@ func _physics_process(delta):
 	newVelocity += separation() * separationForce
 	newVelocity += alignment() * alignmentForce
 	newVelocity += cohesion() * cohesionForce
+	newVelocity += (attractionPoint - global_position) * attractionForce
 	newVelocity += borderForce()
 	newVelocity += obstacleForce()
 
