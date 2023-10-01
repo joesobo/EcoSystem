@@ -65,10 +65,7 @@ func _draw():
 	var lineColor = Color.BLACK
 	lineColor.a = 0.5
 	for flockMate in flock:
-		if flockMate.type != type:
-			continue
-
-		draw_line(Vector2.ZERO, flockMate.global_position - global_position, debug_point_color, 1)
+		# draw_line(Vector2.ZERO, flockMate.global_position - global_position, debug_point_color, 1)
 
 func drawCone():
 	var points: Array = []
@@ -94,7 +91,8 @@ func drawCone():
 
 func _on_Area2D_area_entered(area):
 	if area.get_parent() is RigidBody2D && area != self and area not in flock && inVisionCone(area.global_position):
-		flock.append(area.get_parent())
+		if area.get_parent().type != type:
+			flock.append(area.get_parent())
 	elif area not in obstacles && "Obstacle" in area.name:
 		obstacles.append(area)
 
@@ -133,9 +131,6 @@ func separation():
 	var avoidVector = Vector2()
 
 	for flockMate in flock:
-		if flockMate.type != type:
-			continue
-
 		var flockMatePosition = flockMate.global_position
 
 		var distance = global_position.distance_to(flockMatePosition)
@@ -149,9 +144,6 @@ func alignment():
 	var alignVector = Vector2()
 
 	for flockMate in flock:
-		if flockMate.type != type:
-			continue
-
 		if (global_position.distance_to(flockMate.global_position) < visualRange):
 			alignVector += flockMate.velocity
 			numNeighbors += 1
@@ -166,9 +158,6 @@ func cohesion():
 	var centerVector = Vector2.ZERO
 
 	for flockMate in flock:
-		if flockMate.type != type:
-			continue
-
 		if (global_position.distance_to(flockMate.global_position) < visualRange):
 			centerVector += flockMate.global_position - global_position
 			numNeighbors += 1
