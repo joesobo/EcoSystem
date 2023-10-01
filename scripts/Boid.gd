@@ -64,7 +64,7 @@ func _draw():
 	# Draw flockmate connections
 	var lineColor = Color.BLACK
 	lineColor.a = 0.5
-	for flockMate in flock:
+	# for flockMate in flock:
 		# draw_line(Vector2.ZERO, flockMate.global_position - global_position, debug_point_color, 1)
 
 func drawCone():
