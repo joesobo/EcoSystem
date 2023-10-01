@@ -25,22 +25,26 @@ extends RigidBody2D
 @export var type = 'Blue'
 
 var flock = []
+var obstacles = []
 var viewport_rect
 
 var debug_point_radius = 7.0
 var debug_point_color
 
+var area2D: Area2D
+var collision_shape: CollisionShape2D
+
 func _ready():
 	randomize()
 
-	var area2D: Area2D = get_child(2)
 	viewport_rect = get_viewport_rect()
 
-	var collision_shape: CollisionShape2D = area2D.get_child(0)
-	collision_shape.shape.radius = avoidRadius
-
+	area2D = get_child(2)
 	area2D.connect("area_entered", _on_Area2D_area_entered)
 	area2D.connect("area_exited", _on_Area2D_area_exited)
+
+	collision_shape = area2D.get_child(0)
+	collision_shape.shape.radius = avoidRadius
 
 	speed = randf_range(maxSpeed / 2, maxSpeed)
 	velocity = randomVelocity()
@@ -91,10 +95,14 @@ func drawCone():
 func _on_Area2D_area_entered(area):
 	if area.get_parent() is RigidBody2D && area != self and area not in flock && inVisionCone(area.global_position):
 		flock.append(area.get_parent())
+	elif area not in obstacles && "Obstacle" in area.name:
+		obstacles.append(area)
 
 func _on_Area2D_area_exited(area):
 	if area.get_parent() in flock:
 		flock.erase(area.get_parent())
+	elif area in obstacles:
+		obstacles.erase(area)
 
 func inVisionCone(position):
 	var direction_angle = atan2(velocity.y, velocity.x)
@@ -110,6 +118,7 @@ func _physics_process(delta):
 	newVelocity += alignment() * alignmentForce
 	newVelocity += cohesion() * cohesionForce
 	newVelocity += borderForce()
+	newVelocity += obstacleForce()
 
 	velocity = velocity.lerp(newVelocity, turnSpeed)
 	velocity = velocity.normalized() * min(velocity.length(), speed)
@@ -174,12 +183,12 @@ func randomVelocity():
 
 func borderForce():
 	var borderVelocity = Vector2()
-	var inset = 10
+	var margin = 10
 
-	var distance_to_left_border = global_position.x - (viewport_rect.position.x + inset)
-	var distance_to_right_border = (viewport_rect.position.x + viewport_rect.size.x - inset) - global_position.x
-	var distance_to_top_border = global_position.y - (viewport_rect.position.y + inset)
-	var distance_to_bottom_border = (viewport_rect.position.y + viewport_rect.size.y - inset) - global_position.y
+	var distance_to_left_border = global_position.x - (viewport_rect.position.x + margin)
+	var distance_to_right_border = (viewport_rect.position.x + viewport_rect.size.x - margin) - global_position.x
+	var distance_to_top_border = global_position.y - (viewport_rect.position.y + margin)
+	var distance_to_bottom_border = (viewport_rect.position.y + viewport_rect.size.y - margin) - global_position.y
 
 	if distance_to_left_border < avoidRadius:
 		borderVelocity.x = ((avoidRadius - distance_to_left_border) / avoidRadius) * speed
@@ -191,8 +200,20 @@ func borderForce():
 	elif distance_to_bottom_border < avoidRadius:
 		borderVelocity.y = (-(avoidRadius - distance_to_bottom_border) / avoidRadius) * speed
 
-
 	return borderVelocity
+
+func obstacleForce():
+	var avoidVelocity = Vector2()
+	var area2D_position = area2D.global_position
+
+	for area in obstacles:
+		var distance = area.global_position.distance_to(area2D_position)
+		var direction = (area.global_position - area2D_position).normalized()
+		var force = ((avoidRadius - distance) / avoidRadius) * speed
+
+		avoidVelocity += direction * force
+
+	return avoidVelocity
 
 func handle_borders():
 	if global_position.x < viewport_rect.position.x:

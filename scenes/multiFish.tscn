@@ -11,18 +11,69 @@ size = Vector2(0.979999, 1)
 
 [node name="FishManager" type="Node2D"]
 script = ExtResource("1_qq4p2")
-fishCount = 200
+fishCount = 300
 fishScenes = Array[PackedScene]([ExtResource("2_cssk5"), ExtResource("3_uveyo")])
 
 [node name="Obstacle" type="Area2D" parent="."]
-visible = false
 position = Vector2(547, 327)
-scale = Vector2(100, 100)
+scale = Vector2(50, 450)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Obstacle"]
-visible = false
 shape = SubResource("RectangleShape2D_g4uut")
 
 [node name="Sprite2D" type="Sprite2D" parent="Obstacle"]
-visible = false
+texture = SubResource("CanvasTexture_4f14f")
+
+[node name="Obstacle6" type="Area2D" parent="."]
+position = Vector2(246, 641)
+scale = Vector2(50, 500)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Obstacle6"]
+shape = SubResource("RectangleShape2D_g4uut")
+
+[node name="Sprite2D" type="Sprite2D" parent="Obstacle6"]
+texture = SubResource("CanvasTexture_4f14f")
+
+[node name="Obstacle2" type="Area2D" parent="."]
+position = Vector2(58, 156)
+rotation = -2.53221
+scale = Vector2(50, 450)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Obstacle2"]
+shape = SubResource("RectangleShape2D_g4uut")
+
+[node name="Sprite2D" type="Sprite2D" parent="Obstacle2"]
+texture = SubResource("CanvasTexture_4f14f")
+
+[node name="Obstacle3" type="Area2D" parent="."]
+position = Vector2(1142, 52)
+rotation = -2.93142
+scale = Vector2(50, 450)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Obstacle3"]
+shape = SubResource("RectangleShape2D_g4uut")
+
+[node name="Sprite2D" type="Sprite2D" parent="Obstacle3"]
+texture = SubResource("CanvasTexture_4f14f")
+
+[node name="Obstacle4" type="Area2D" parent="."]
+position = Vector2(1066, -26)
+rotation = -2.00159
+scale = Vector2(50, 450)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Obstacle4"]
+shape = SubResource("RectangleShape2D_g4uut")
+
+[node name="Sprite2D" type="Sprite2D" parent="Obstacle4"]
+texture = SubResource("CanvasTexture_4f14f")
+
+[node name="Obstacle5" type="Area2D" parent="."]
+position = Vector2(1114, 28.9999)
+rotation = -0.96283
+scale = Vector2(50, 450)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Obstacle5"]
+shape = SubResource("RectangleShape2D_g4uut")
+
+[node name="Sprite2D" type="Sprite2D" parent="Obstacle5"]
 texture = SubResource("CanvasTexture_4f14f")
