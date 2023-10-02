@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://m3l74tktju12"]
+[gd_scene load_steps=7 format=3 uid="uid://m3l74tktju12"]
 
 [ext_resource type="Script" path="res://scripts/FishManager.gd" id="1_qq4p2"]
 [ext_resource type="PackedScene" uid="uid://dahto7bhai8pl" path="res://scenes/fish.tscn" id="2_cssk5"]
-[ext_resource type="PackedScene" uid="uid://b55dmi7pjjwlv" path="res://scenes/test.tscn" id="3_uveyo"]
+[ext_resource type="PackedScene" uid="uid://b55dmi7pjjwlv" path="res://scenes/orangeFish.tscn" id="3_fynnq"]
+[ext_resource type="PackedScene" uid="uid://leagyhwx46ol" path="res://scenes/predator.tscn" id="4_vv6sf"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g4uut"]
 size = Vector2(0.979999, 1)
@@ -12,7 +13,8 @@ size = Vector2(0.979999, 1)
 [node name="FishManager" type="Node2D"]
 script = ExtResource("1_qq4p2")
 fishCount = 300
-fishScenes = Array[PackedScene]([ExtResource("2_cssk5"), ExtResource("3_uveyo")])
+fishScenes = Array[PackedScene]([ExtResource("2_cssk5"), ExtResource("3_fynnq")])
+predator = ExtResource("4_vv6sf")
 
 [node name="Obstacle" type="Area2D" parent="."]
 position = Vector2(547, 327)

@@ -1,38 +1,33 @@
 extends RigidBody2D
 
-@export var maxSpeed = 250
+@export var maxSpeed = 125
 @export var speed = 0
 @export var velocity: Vector2
 
 @export var avoidRadius = 30
-@export var visualRange = 50
+@export var visualRange = 90
+@export var smellRange = 125
 @export var turnSpeed = 1
 
-@export var randomForce = 0.05
+@export var randomForce = 0.02
 @export var cohesionForce: = 0.005
-@export var alignmentForce: = 0.05
-@export var separationForce: = 0.05
 
-@export var attractionForce: = 0.005
-@export var attractionPoint: Vector2
-
-@export var viewAngle = 200
+@export var viewAngle = 90
 
 @export var color_palette = [
-	Color(0.0, 0.4, 0.8, 1.0),  # Blue
-	Color(0.0, 0.6, 0.9, 1.0),  # Lighter Blue
-	Color(0.0, 0.3, 0.6, 1.0),  # Darker Blue
-	Color(0.0, 0.2, 0.5, 1.0),  # Even Darker Blue
-	Color(0.0, 0.1, 0.3, 1.0),  # Darkest Blue
+	Color(0.8, 0.0, 0.0, 1.0),  # Red
+	Color(0.9, 0.0, 0.0, 1.0),  # Lighter Red
+	Color(0.6, 0.0, 0.0, 1.0),  # Darker Red
+	Color(0.5, 0.0, 0.0, 1.0),  # Even Darker Red
+	Color(0.3, 0.0, 0.0, 1.0),  # Darkest Red
 ]
-@export var type = 'Blue'
+@export var type = 'Predator'
 
-var flock = []
+var preys = []
 var obstacles = []
-var predators = []
 var viewport_rect
 
-var debug_point_radius = 7.0
+var debug_point_radius = 10.0
 var debug_point_color
 
 var area2D: Area2D
@@ -42,7 +37,6 @@ func _ready():
 	randomize()
 
 	viewport_rect = get_viewport_rect()
-	attractionPoint = viewport_rect.position + viewport_rect.size / 2
 
 	area2D = get_child(2)
 	area2D.connect("area_entered", _on_Area2D_area_entered)
@@ -69,8 +63,9 @@ func _draw():
 	# Draw flockmate connections
 	var lineColor = Color.BLACK
 	lineColor.a = 0.5
-	# for flockMate in flock:
-		# draw_line(Vector2.ZERO, flockMate.global_position - global_position, debug_point_color, 1)
+	for prey in preys:
+		if inVisionCone(prey.global_position):
+			draw_line(Vector2.ZERO, prey.global_position - global_position, debug_point_color, 1)
 
 func drawCone():
 	var points: Array = []
@@ -93,23 +88,16 @@ func drawCone():
 	# Draw vision area
 	points.insert(0, Vector2(0, 0))
 	draw_colored_polygon(points, Color(1, 1, 1, 0.4))
-
+#inVisionCone(area.global_position)
 func _on_Area2D_area_entered(area):
-	if area.get_parent() is RigidBody2D && area != self && inVisionCone(area.global_position):
-		if area.get_parent().type == type && area not in flock:
-			flock.append(area.get_parent())
-
-	if area.get_parent() is RigidBody2D && area != self && area.get_parent().type == 'Predator' && area not in predators && global_position.distance_to(position) < visualRange:
-		predators.append(area.get_parent())
-
-	if area not in obstacles && "Obstacle" in area.name:
+	if area.get_parent() is RigidBody2D && area != self and area not in preys && global_position.distance_to(position) < smellRange:
+		preys.append(area.get_parent())
+	elif area not in obstacles && "Obstacle" in area.name:
 		obstacles.append(area)
 
 func _on_Area2D_area_exited(area):
-	if area.get_parent() in flock:
-		flock.erase(area.get_parent())
-	elif area.get_parent() in predators:
-		predators.erase(area.get_parent())
+	if area.get_parent() in preys:
+		preys.erase(area.get_parent())
 	elif area in obstacles:
 		obstacles.erase(area)
 
@@ -127,14 +115,11 @@ func inVisionCone(position):
 func _physics_process(delta):
 	var newVelocity = velocity
 
-	if predators.size() > 0:
-		newVelocity += predatorForce()
+	if preys.size() > 0:
+		newVelocity += preyForce()
 	else:
 		newVelocity += randomVelocity() * randomForce
-		newVelocity += separation() * separationForce
-		newVelocity += alignment() * alignmentForce
 		newVelocity += cohesion() * cohesionForce
-		newVelocity += (attractionPoint - global_position) * attractionForce
 
 	newVelocity += borderForce()
 	newVelocity += obstacleForce()
@@ -148,37 +133,12 @@ func _physics_process(delta):
 
 	queue_redraw()
 
-func separation():
-	var avoidVector = Vector2()
-
-	for flockMate in flock:
-		var flockMatePosition = flockMate.global_position
-
-		var distance = global_position.distance_to(flockMatePosition)
-		if (distance < avoidRadius and distance > 0):
-			avoidVector -= (flockMatePosition - global_position).normalized() * (avoidRadius / distance * speed)
-
-	return avoidVector
-
-func alignment():
-	var numNeighbors = 0
-	var alignVector = Vector2()
-
-	for flockMate in flock:
-		alignVector += flockMate.velocity
-		numNeighbors += 1
-
-	if (numNeighbors > 0):
-		alignVector /= numNeighbors
-
-	return alignVector
-
 func cohesion():
 	var numNeighbors = 0
 	var centerVector = Vector2.ZERO
 
-	for flockMate in flock:
-		centerVector += flockMate.global_position - global_position
+	for prey in preys:
+		centerVector += prey.global_position - global_position
 		numNeighbors += 1
 
 	if (numNeighbors):
@@ -223,15 +183,16 @@ func obstacleForce():
 
 	return avoidVelocity
 
-func predatorForce():
-	var predatorVelocity = Vector2()
+func preyForce():
+	var preyVelocity = Vector2()
 
-	for predator in predators:
-		var direction = (global_position - predator.global_position).normalized()
+	for prey in preys:
+		if inVisionCone(prey.global_position):
+			var direction = (global_position - prey.global_position).normalized()
 
-		predatorVelocity += direction * maxSpeed
+			preyVelocity -= direction * maxSpeed
 
-	return predatorVelocity
+	return preyVelocity
 
 func handle_borders():
 	if global_position.x < viewport_rect.position.x:
