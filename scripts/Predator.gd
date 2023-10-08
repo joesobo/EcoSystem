@@ -30,20 +30,29 @@ var viewport_rect
 var debug_point_radius = 10.0
 var debug_point_color
 
-var area2D: Area2D
-var collision_shape: CollisionShape2D
+var siteArea: Area2D
+var siteCollisionShape: CollisionShape2D
+var avoidArea: Area2D
+var avoidCollisionShape: CollisionShape2D
 
 func _ready():
 	randomize()
 
 	viewport_rect = get_viewport_rect()
 
-	area2D = get_child(2)
-	area2D.connect("area_entered", _on_Area2D_area_entered)
-	area2D.connect("area_exited", _on_Area2D_area_exited)
+	siteArea = get_child(2)
+	siteCollisionShape = siteArea.get_child(0)
+	siteCollisionShape.shape.radius = smellRange
 
-	collision_shape = area2D.get_child(0)
-	collision_shape.shape.radius = avoidRadius
+	siteArea.connect("body_entered", _on_Area2D_site_body_entered)
+	siteArea.connect("body_exited", _on_Area2D_site_body_exited)
+
+	avoidArea = get_child(3)
+	avoidCollisionShape = avoidArea.get_child(0)
+	avoidCollisionShape.shape.radius = avoidRadius
+
+	avoidArea.connect("area_entered", _on_Area2D_avoid_area_entered)
+	avoidArea.connect("area_exited", _on_Area2D_avoid_area_exited)
 
 	speed = randf_range(maxSpeed / 2, maxSpeed)
 	velocity = randomVelocity()
@@ -54,6 +63,12 @@ func _ready():
 func _draw():
 	draw_circle(Vector2.ZERO, debug_point_radius, debug_point_color)
 
+	# var smellColor = Color(0.0, 1.0, 0.0, 0.5)
+	# draw_circle(Vector2.ZERO, smellRange, smellColor)
+
+	# var avoidColor = Color(1.0, 0.0, 0.0, 0.5)
+	# draw_circle(Vector2.ZERO, avoidRadius, avoidColor)
+
 	# Draw vision cone
 	# drawCone()
 
@@ -63,9 +78,11 @@ func _draw():
 	# Draw flockmate connections
 	var lineColor = Color.BLACK
 	lineColor.a = 0.5
-	for prey in preys:
-		if inVisionCone(prey.global_position):
-			draw_line(Vector2.ZERO, prey.global_position - global_position, debug_point_color, 1)
+	# for prey in preys:
+	# 	if inVisionCone(prey.global_position):
+	# 		draw_line(Vector2.ZERO, prey.global_position - global_position, debug_point_color, 1)
+		# else:
+		# 	draw_line(Vector2.ZERO, prey.global_position - global_position, lineColor, 1)
 
 func drawCone():
 	var points: Array = []
@@ -88,17 +105,21 @@ func drawCone():
 	# Draw vision area
 	points.insert(0, Vector2(0, 0))
 	draw_colored_polygon(points, Color(1, 1, 1, 0.4))
-#inVisionCone(area.global_position)
-func _on_Area2D_area_entered(area):
-	if area.get_parent() is RigidBody2D && area != self and area not in preys && global_position.distance_to(position) < smellRange:
-		preys.append(area.get_parent())
-	elif area not in obstacles && "Obstacle" in area.name:
+
+func _on_Area2D_site_body_entered(body):
+	if body != self and body not in preys && body.type != 'Predator':
+		preys.append(body)
+
+func _on_Area2D_site_body_exited(body):
+	if body in preys:
+		preys.erase(body)
+
+func _on_Area2D_avoid_area_entered(area):
+	if area not in obstacles && "Obstacle" in area.name:
 		obstacles.append(area)
 
-func _on_Area2D_area_exited(area):
-	if area.get_parent() in preys:
-		preys.erase(area.get_parent())
-	elif area in obstacles:
+func _on_Area2D_avoid_area_exited(area):
+	if area in obstacles:
 		obstacles.erase(area)
 
 func inVisionCone(position):
@@ -115,14 +136,16 @@ func inVisionCone(position):
 func _physics_process(delta):
 	var newVelocity = velocity
 
-	if preys.size() > 0:
-		newVelocity += preyForce()
+	var forceFromPrey = preyForce()
+
+	if inAvoidRange():
+		newVelocity += borderForce()
+		newVelocity += obstacleForce()
+	elif forceFromPrey != Vector2.ZERO:
+		newVelocity += forceFromPrey
 	else:
 		newVelocity += randomVelocity() * randomForce
 		newVelocity += cohesion() * cohesionForce
-
-	newVelocity += borderForce()
-	newVelocity += obstacleForce()
 
 	velocity = velocity.lerp(newVelocity, turnSpeed)
 	velocity = velocity.normalized() * min(velocity.length(), speed)
@@ -149,6 +172,16 @@ func cohesion():
 func randomVelocity():
 	return Vector2(randf_range(-1, 1), randf_range(-1, 1)).normalized() * speed
 
+func inAvoidRange():
+	var margin = 10
+
+	var distance_to_left_border = global_position.x - (viewport_rect.position.x + margin)
+	var distance_to_right_border = (viewport_rect.position.x + viewport_rect.size.x - margin) - global_position.x
+	var distance_to_top_border = global_position.y - (viewport_rect.position.y + margin)
+	var distance_to_bottom_border = (viewport_rect.position.y + viewport_rect.size.y - margin) - global_position.y
+
+	return obstacles.size() > 0 || distance_to_left_border < avoidRadius || distance_to_right_border < avoidRadius || distance_to_top_border < avoidRadius || distance_to_bottom_border < avoidRadius
+
 func borderForce():
 	var borderVelocity = Vector2()
 	var margin = 10
@@ -159,32 +192,32 @@ func borderForce():
 	var distance_to_bottom_border = (viewport_rect.position.y + viewport_rect.size.y - margin) - global_position.y
 
 	if distance_to_left_border < avoidRadius:
-		borderVelocity.x = ((avoidRadius - distance_to_left_border) / avoidRadius) * speed
+		borderVelocity.x = ((avoidRadius - distance_to_left_border) / avoidRadius)
 	elif distance_to_right_border < avoidRadius:
-		borderVelocity.x = (-(avoidRadius - distance_to_right_border) / avoidRadius) * speed
+		borderVelocity.x = (-(avoidRadius - distance_to_right_border) / avoidRadius)
 
 	if distance_to_top_border < avoidRadius:
-		borderVelocity.y = ((avoidRadius - distance_to_top_border) / avoidRadius) * speed
+		borderVelocity.y = ((avoidRadius - distance_to_top_border) / avoidRadius)
 	elif distance_to_bottom_border < avoidRadius:
-		borderVelocity.y = (-(avoidRadius - distance_to_bottom_border) / avoidRadius) * speed
+		borderVelocity.y = (-(avoidRadius - distance_to_bottom_border) / avoidRadius)
 
-	return borderVelocity
+	return borderVelocity * maxSpeed
 
 func obstacleForce():
 	var avoidVelocity = Vector2()
-	var area2D_position = area2D.global_position
+	var area2D_position = avoidArea.global_position
 
 	for area in obstacles:
 		var distance = area.global_position.distance_to(area2D_position)
 		var direction = (area.global_position - area2D_position).normalized()
-		var force = ((avoidRadius - distance) / avoidRadius) * speed
+		var force = ((avoidRadius - distance) / avoidRadius) * maxSpeed
 
 		avoidVelocity += direction * force
 
 	return avoidVelocity
 
 func preyForce():
-	var preyVelocity = Vector2()
+	var preyVelocity = Vector2.ZERO
 
 	for prey in preys:
 		if inVisionCone(prey.global_position):

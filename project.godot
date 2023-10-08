@@ -22,3 +22,10 @@ window/size/always_on_top.editor=true
 [dotnet]
 
 project/assembly_name="EcoSystem"
+
+[layer_names]
+
+2d_physics/layer_1="Walls"
+2d_physics/layer_2="BlueFish"
+2d_physics/layer_3="OrangeFish"
+2d_physics/layer_4="Predator"

@@ -2,6 +2,7 @@ extends Node2D
 
 @export var fishCount = 100
 @export var fishScenes: Array[PackedScene] = []
+@export var predatorCount = 1
 @export var predator: PackedScene
 
 var viewport_rect
@@ -12,8 +13,9 @@ func _ready():
 	for i in range(fishCount):
 		spawn_fish()
 
-	var predatorInstance = predator.instantiate()
-	add_child(predatorInstance)
+	for i in range(predatorCount):
+		var predatorInstance = predator.instantiate()
+		add_child(predatorInstance)
 
 func spawn_fish():
 	if fishScenes.size() == 0:

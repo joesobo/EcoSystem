@@ -14,11 +14,13 @@ size = Vector2(0.979999, 1)
 script = ExtResource("1_qq4p2")
 fishCount = 300
 fishScenes = Array[PackedScene]([ExtResource("2_cssk5"), ExtResource("3_fynnq")])
+predatorCount = 2
 predator = ExtResource("4_vv6sf")
 
 [node name="Obstacle" type="Area2D" parent="."]
 position = Vector2(547, 327)
 scale = Vector2(50, 450)
+collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Obstacle"]
 shape = SubResource("RectangleShape2D_g4uut")
@@ -29,6 +31,7 @@ texture = SubResource("CanvasTexture_4f14f")
 [node name="Obstacle6" type="Area2D" parent="."]
 position = Vector2(246, 641)
 scale = Vector2(50, 500)
+collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Obstacle6"]
 shape = SubResource("RectangleShape2D_g4uut")
@@ -40,6 +43,7 @@ texture = SubResource("CanvasTexture_4f14f")
 position = Vector2(58, 156)
 rotation = -2.53221
 scale = Vector2(50, 450)
+collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Obstacle2"]
 shape = SubResource("RectangleShape2D_g4uut")
@@ -51,6 +55,7 @@ texture = SubResource("CanvasTexture_4f14f")
 position = Vector2(1142, 52)
 rotation = -2.93142
 scale = Vector2(50, 450)
+collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Obstacle3"]
 shape = SubResource("RectangleShape2D_g4uut")
@@ -62,6 +67,7 @@ texture = SubResource("CanvasTexture_4f14f")
 position = Vector2(1066, -26)
 rotation = -2.00159
 scale = Vector2(50, 450)
+collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Obstacle4"]
 shape = SubResource("RectangleShape2D_g4uut")
@@ -73,6 +79,7 @@ texture = SubResource("CanvasTexture_4f14f")
 position = Vector2(1114, 28.9999)
 rotation = -0.96283
 scale = Vector2(50, 450)
+collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Obstacle5"]
 shape = SubResource("RectangleShape2D_g4uut")
