@@ -66,11 +66,13 @@ func _draw():
 	# Draw velocity vector
 	# draw_line(Vector2.ZERO, velocity.normalized() * 10, Color.GREEN, 1)
 
+	# draw_line(Vector2.ZERO, cohesion().normalized() * 20, Color.RED, 1)
+
 	# Draw flockmate connections
 	var lineColor = Color.BLACK
 	lineColor.a = 0.5
-	# for flockMate in flock:
-		# draw_line(Vector2.ZERO, flockMate.global_position - global_position, debug_point_color, 1)
+	for flockMate in flock:
+		draw_line(Vector2.ZERO, flockMate.global_position - global_position, debug_point_color, 1)
 
 func drawCone():
 	var points: Array = []
@@ -108,9 +110,9 @@ func _on_Area2D_area_entered(area):
 func _on_Area2D_area_exited(area):
 	if area.get_parent() in flock:
 		flock.erase(area.get_parent())
-	elif area.get_parent() in predators:
+	if area.get_parent() in predators:
 		predators.erase(area.get_parent())
-	elif area in obstacles:
+	if area in obstacles:
 		obstacles.erase(area)
 
 func inVisionCone(position):
@@ -152,11 +154,9 @@ func separation():
 	var avoidVector = Vector2()
 
 	for flockMate in flock:
-		var flockMatePosition = flockMate.global_position
-
-		var distance = global_position.distance_to(flockMatePosition)
+		var distance = global_position.distance_to(flockMate.global_position)
 		if (distance < avoidRadius and distance > 0):
-			avoidVector -= (flockMatePosition - global_position).normalized() * (avoidRadius / distance * speed)
+			avoidVector -= (flockMate.global_position - global_position).normalized() * (avoidRadius / distance * speed)
 
 	return avoidVector
 
@@ -199,14 +199,14 @@ func borderForce():
 	var distance_to_bottom_border = (viewport_rect.position.y + viewport_rect.size.y - margin) - global_position.y
 
 	if distance_to_left_border < avoidRadius:
-		borderVelocity.x = ((avoidRadius - distance_to_left_border) / avoidRadius) * speed
+		borderVelocity.x = ((avoidRadius - distance_to_left_border) / avoidRadius) * maxSpeed
 	elif distance_to_right_border < avoidRadius:
-		borderVelocity.x = (-(avoidRadius - distance_to_right_border) / avoidRadius) * speed
+		borderVelocity.x = (-(avoidRadius - distance_to_right_border) / avoidRadius) * maxSpeed
 
 	if distance_to_top_border < avoidRadius:
-		borderVelocity.y = ((avoidRadius - distance_to_top_border) / avoidRadius) * speed
+		borderVelocity.y = ((avoidRadius - distance_to_top_border) / avoidRadius) * maxSpeed
 	elif distance_to_bottom_border < avoidRadius:
-		borderVelocity.y = (-(avoidRadius - distance_to_bottom_border) / avoidRadius) * speed
+		borderVelocity.y = (-(avoidRadius - distance_to_bottom_border) / avoidRadius) * maxSpeed
 
 	return borderVelocity
 
@@ -217,7 +217,7 @@ func obstacleForce():
 	for area in obstacles:
 		var distance = area.global_position.distance_to(area2D_position)
 		var direction = (area.global_position - area2D_position).normalized()
-		var force = ((avoidRadius - distance) / avoidRadius) * speed
+		var force = ((avoidRadius - distance) / avoidRadius) * maxSpeed
 
 		avoidVelocity += direction * force
 

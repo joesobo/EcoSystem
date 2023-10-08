@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://leagyhwx46ol"]
+[gd_scene load_steps=5 format=3 uid="uid://dvut7wtxxf61w"]
 
 [ext_resource type="Script" path="res://scripts/Predator.gd" id="1_2n0ov"]
 
@@ -13,7 +13,9 @@ size = Vector2(1, 1)
 gravity_scale = 0.0
 lock_rotation = true
 script = ExtResource("1_2n0ov")
-cohesionForce = 0.01
+maxSpeed = 200
+smellRange = 150
+cohesionForce = 0.1
 color_palette = [Color(0.8, 0, 0, 1), Color(0.9, 0, 0, 1)]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -30,7 +32,6 @@ scale = Vector2(10, 10)
 texture = SubResource("CanvasTexture_huqkc")
 
 [node name="Area2D" type="Area2D" parent="."]
-position = Vector2(5, 5)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource("CircleShape2D_k81i3")

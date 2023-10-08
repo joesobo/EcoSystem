@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://b55dmi7pjjwlv"]
+[gd_scene load_steps=5 format=3 uid="uid://yc35bijsp2iy"]
 
 [ext_resource type="Script" path="res://scripts/Boid.gd" id="1_ycrld"]
 
@@ -13,7 +13,14 @@ size = Vector2(1, 1)
 gravity_scale = 0.0
 lock_rotation = true
 script = ExtResource("1_ycrld")
-viewAngle = 60
+maxSpeed = 200
+avoidRadius = 25
+randomForce = 0.02
+cohesionForce = 0.05
+alignmentForce = 0.1
+separationForce = 0.04
+attractionForce = 0.0
+viewAngle = 270
 color_palette = [Color(1, 0.6, 0, 1), Color(1, 0.7, 0.2, 1), Color(0.9, 0.5, 0, 1), Color(0.8, 0.4, 0, 1), Color(0.7, 0.3, 0, 1)]
 type = "Orange"
 
@@ -31,7 +38,6 @@ scale = Vector2(10, 10)
 texture = SubResource("CanvasTexture_huqkc")
 
 [node name="Area2D" type="Area2D" parent="."]
-position = Vector2(5, 5)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource("CircleShape2D_k81i3")
