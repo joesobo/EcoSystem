@@ -27,6 +27,7 @@ extends RigidBody2D
 ]
 @export var type = 'Blue'
 
+var food = []
 var flock = []
 var obstacles = []
 var predators = []
@@ -39,6 +40,8 @@ var siteArea: Area2D
 var siteCollisionShape: CollisionShape2D
 var avoidArea: Area2D
 var avoidCollisionShape: CollisionShape2D
+var bodyArea: Area2D
+var bodyCollisionShape: CollisionShape2D
 
 func _ready():
 	randomize()
@@ -57,8 +60,12 @@ func _ready():
 	avoidCollisionShape = avoidArea.get_child(0)
 	avoidCollisionShape.shape.radius = avoidRadius
 
-	avoidArea.connect("area_entered", _on_Area2D_avoid_area_entered)
-	avoidArea.connect("area_exited", _on_Area2D_avoid_area_exited)
+	avoidArea.connect("body_entered", _on_Area2D_avoid_body_entered)
+	avoidArea.connect("body_exited", _on_Area2D_avoid_body_exited)
+
+	bodyArea = get_child(4)
+
+	bodyArea.connect("body_entered", _on_Area2D_boid_body_entered)
 
 	speed = randf_range(maxSpeed / 2, maxSpeed)
 	velocity = randomVelocity()
@@ -69,8 +76,14 @@ func _ready():
 func _draw():
 	draw_circle(Vector2.ZERO, debug_point_radius, debug_point_color)
 
-	# var sightColor = Color(0.0, 1.0, 0.0, 0.5)
-	# draw_circle(Vector2.ZERO, visualRange, sightColor)
+	# var sightColor = Color(0.0, 1.0, 0.0, 0.25)
+	# draw_circle(Vector2.ZERO, siteCollisionShape.shape.radius, sightColor)
+
+	# var avoidColor = Color(1.0, 0.0, 0.0, 0.25)
+	# draw_circle(Vector2.ZERO, avoidCollisionShape.shape.radius, avoidColor)
+
+	# var bodyColor = Color(0.0, 0.0, 1.0, 0.25)
+	# draw_circle(Vector2.ZERO, bodyCollisionShape.shape.radius, bodyColor)
 
 	# Draw vision cone
 	# drawCone()
@@ -83,8 +96,8 @@ func _draw():
 	# Draw flockmate connections
 	var lineColor = Color.BLACK
 	lineColor.a = 0.5
-	# for flockMate in flock:
-	# 	draw_line(Vector2.ZERO, flockMate.global_position - global_position, debug_point_color, 1)
+	for flockMate in flock:
+		draw_line(Vector2.ZERO, flockMate.global_position - global_position, debug_point_color, 1)
 
 func drawCone():
 	var points: Array = []
@@ -108,26 +121,34 @@ func drawCone():
 	points.insert(0, Vector2(0, 0))
 	draw_colored_polygon(points, Color(1, 1, 1, 0.2))
 
+func _on_Area2D_boid_body_entered(body):
+	body.queue_free()
+
 func _on_Area2D_site_body_entered(body):
-	if body != self && inVisionCone(body.global_position) && body.type == type && body not in flock:
+	if body != self && inVisionCone(body.global_position) && body not in food && body.type == 'Food':
+		food.append(body)
+
+	elif body != self && inVisionCone(body.global_position) && body.type == type && body not in flock:
 		flock.append(body)
 
-	if body != self && body.type == 'Predator' && body not in predators:
+	elif body != self && body.type == 'Predator' && body not in predators:
 		predators.append(body)
 
 func _on_Area2D_site_body_exited(body):
-	if body in flock:
+	if body in food:
+		food.erase(body)
+	elif body in flock:
 		flock.erase(body)
 	elif body in predators:
 		predators.erase(body)
 
-func _on_Area2D_avoid_area_entered(area):
-	if area not in obstacles && "Obstacle" in area.name:
-		obstacles.append(area)
+func _on_Area2D_avoid_body_entered(body):
+	if body not in obstacles && "Obstacle" in body.name:
+		obstacles.append(body)
 
-func _on_Area2D_avoid_area_exited(area):
-	if area in obstacles:
-		obstacles.erase(area)
+func _on_Area2D_avoid_body_exited(body):
+	if body in obstacles:
+		obstacles.erase(body)
 
 func inVisionCone(pos):
 	var direction_angle = atan2(velocity.y, velocity.x)
@@ -146,6 +167,8 @@ func _physics_process(delta):
 		newVelocity += obstacleForce()
 	elif predators.size() > 0:
 		newVelocity += predatorForce()
+	elif food.size() > 0:
+		newVelocity += foodForce()
 	else:
 		newVelocity += randomVelocity() * randomForce
 		newVelocity += separation() * separationForce
@@ -254,6 +277,23 @@ func predatorForce():
 		predatorVelocity += direction * maxSpeed
 
 	return predatorVelocity
+
+func foodForce():
+	var closest_food: Node2D
+	var closest_distance: float = 1e10
+	var foodVelocity = Vector2()
+
+	for foodInstance in food:
+		var distance = global_position.distance_to(foodInstance.global_position)
+		if distance < closest_distance:
+			closest_distance = distance
+			closest_food = foodInstance
+
+	if closest_food:
+		var direction = (closest_food.global_position - global_position).normalized()
+		foodVelocity = direction * speed
+
+	return foodVelocity
 
 func handle_borders():
 	if global_position.x < viewport_rect.position.x:

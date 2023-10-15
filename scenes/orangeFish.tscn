@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://yc35bijsp2iy"]
+[gd_scene load_steps=7 format=3 uid="uid://yc35bijsp2iy"]
 
 [ext_resource type="Script" path="res://scripts/Boid.gd" id="1_ycrld"]
 
@@ -9,6 +9,8 @@
 [sub_resource type="CircleShape2D" id="CircleShape2D_mvau8"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_pncb7"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_7d1k5"]
 
 [node name="Fish" type="RigidBody2D"]
 collision_layer = 4
@@ -38,7 +40,7 @@ texture = SubResource("CanvasTexture_huqkc")
 
 [node name="SiteArea" type="Area2D" parent="."]
 collision_layer = 0
-collision_mask = 12
+collision_mask = 28
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SiteArea"]
 shape = SubResource("CircleShape2D_mvau8")
@@ -48,3 +50,10 @@ collision_layer = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AvoidArea"]
 shape = SubResource("CircleShape2D_pncb7")
+
+[node name="BodyArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 16
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BodyArea"]
+shape = SubResource("CircleShape2D_7d1k5")

@@ -1,14 +1,16 @@
-[gd_scene load_steps=6 format=3 uid="uid://dahto7bhai8pl"]
+[gd_scene load_steps=7 format=3 uid="uid://dahto7bhai8pl"]
 
 [ext_resource type="Script" path="res://scripts/Boid.gd" id="1_avtcq"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_o34bt"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_lor3c"]
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_huqkc"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_1p16u"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_jj1at"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_syuup"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_is660"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_4u12h"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_2vhjr"]
 
 [node name="Fish" type="RigidBody2D"]
 collision_layer = 2
@@ -23,23 +25,30 @@ attractionForce = 0.0
 viewAngle = 360
 
 [node name="BodyCollider" type="CollisionShape2D" parent="."]
-shape = SubResource("CircleShape2D_o34bt")
+shape = SubResource("CircleShape2D_lor3c")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 visible = false
 position = Vector2(5, 5)
 scale = Vector2(10, 10)
-texture = SubResource("CanvasTexture_huqkc")
+texture = SubResource("CanvasTexture_1p16u")
 
 [node name="SiteArea" type="Area2D" parent="."]
 collision_layer = 0
-collision_mask = 10
+collision_mask = 26
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SiteArea"]
-shape = SubResource("CircleShape2D_jj1at")
+shape = SubResource("CircleShape2D_syuup")
 
 [node name="AvoidArea" type="Area2D" parent="."]
 collision_layer = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AvoidArea"]
-shape = SubResource("CircleShape2D_is660")
+shape = SubResource("CircleShape2D_4u12h")
+
+[node name="BodyArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 16
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BodyArea"]
+shape = SubResource("CircleShape2D_2vhjr")
