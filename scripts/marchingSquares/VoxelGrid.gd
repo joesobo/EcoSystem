@@ -1,62 +1,71 @@
 extends Node
 
-@export var voxelSize = 1
-@export var voxelResolution = 8
-@export var chunkResolution = 2
-@export var voxelScene: PackedScene
+@export var voxel_size = 1
+@export var voxel_resolution = 8
+@export var chunk_resolution = 2
+@export var voxel_scene: PackedScene
 
-@export var staticBody: StaticBody2D
-var collisionShape: CollisionShape2D
+@export var static_body: StaticBody2D
+var collision_shape: CollisionShape2D
 
 var voxels = []
 
 func _ready():
-	collisionShape = staticBody.get_child(0)
-	staticBody.connect("input_event", _on_Area2D_input_event)
+	collision_shape = static_body.get_child(0)
+	static_body.connect("input_event", _on_Area2D_input_event)
 
-	for chunkY in range(chunkResolution):
-		for chunkX in range(chunkResolution):
-			CreateChunk(chunkX * voxelResolution, chunkY * voxelResolution)
+	for chunk_y in range(chunk_resolution):
+		for chunk_x in range(chunk_resolution):
+			create_chunk(chunk_x * voxel_resolution, chunk_y * voxel_resolution)
 
-func CreateChunk(startX, startY):
+func create_chunk(start_x, start_y):
 	var chunk = Node2D.new()
-	chunk.name = "Chunk (%d, %d)" % [startX, startY]
+	chunk.name = "Chunk (%d, %d)" % [start_x, start_y]
 	add_child(chunk)
 
-	for voxelY in range(voxelResolution):
-		for voxelX in range(voxelResolution):
-			CreateVoxel(chunk, startX + voxelX, startY + voxelY)
+	for voxel_y in range(voxel_resolution):
+		for voxel_x in range(voxel_resolution):
+			create_voxel(chunk, start_x + voxel_x, start_y + voxel_y)
 
-func CreateVoxel(parent, x, y):
-	var voxel = voxelScene.instantiate()
+func create_voxel(parent, x, y):
+	var voxel = voxel_scene.instantiate()
 	parent.add_child(voxel)
-	voxel.position = Vector2(x * voxelSize, y * voxelSize)
-	voxel.scale = Vector2(voxelSize, voxelSize)
+	voxel.position = Vector2(x * voxel_size, y * voxel_size)
+	voxel.scale = Vector2(voxel_size, voxel_size) * 0.9
 	voxel.name = "Voxel (%d, %d)" % [x, y]
 	voxels.append(voxel)
 
-func _on_Area2D_input_event(viewport, event, shape_idx):
+func _on_Area2D_input_event(_viewport, event, _shape_idx):
 	if event is InputEventMouseButton and event.pressed:
-		EditVoxel(event.position)
+		edit_voxel(event.position)
 
-func EditVoxel(point: Vector2):
-	var voxelX = floor(point.x / voxelSize)
-	var voxelY = floor(point.y / voxelSize)
+func edit_voxel(point: Vector2):
+	var voxel_x = floor(point.x / voxel_size)
+	var voxel_y = floor(point.y / voxel_size)
 
-	var chunkX = floor(voxelX / voxelResolution)
-	var chunkY = floor(voxelY / voxelResolution)
+	var chunk_x = floor(voxel_x / voxel_resolution)
+	var chunk_y = floor(voxel_y / voxel_resolution)
 
-	var index = voxelY * voxelResolution + voxelX + chunkX * chunkResolution * voxelResolution + chunkY * chunkResolution * voxelResolution * voxelResolution
+	var local_pos = Vector2(voxel_x - chunk_x * voxel_resolution, voxel_y - chunk_y * voxel_resolution)
 
-	# print("Voxel: ", Vector2(voxelX, voxelY), " Chunk: ", Vector2(chunkX, chunkY), " Index: ", index)
+	var index = (local_pos.x
+		+ local_pos.y * voxel_resolution
+		+ chunk_x * voxel_resolution * voxel_resolution
+		+ chunk_y * voxel_resolution * voxel_resolution * chunk_resolution)
 
-	SetVoxel(index, true)
+	print(point)
+	print("Voxel: ", Vector2(voxel_x, voxel_y), " Chunk: ", Vector2(chunk_x, chunk_y), " Index: ", index)
 
-func SetVoxel(index, state: bool):
-	SetVoxelColor(index, state if Color.BLACK else Color.WHITE)
+	set_voxel(index)
 
-func SetVoxelColor(index, color):
+func set_voxel(index):
+	toggle_voxel_color(index)
+
+func toggle_voxel_color(index):
 	if voxels.size() > index:
+		var color = Color.WHITE
 		var voxel = voxels[index]
-		voxel.modulate = Color.BLACK
-		print(voxel, voxel.modulate)
+
+		if voxel.modulate == Color.WHITE:
+			color = Color.BLACK
+		voxel.modulate = color
