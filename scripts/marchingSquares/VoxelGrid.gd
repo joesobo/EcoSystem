@@ -127,37 +127,37 @@ func triangulate_cell(a: Voxel, b: Voxel, c: Voxel, d: Voxel):
 		cell_type |= 8;
 
 	if cell_type == 1:
-		add_triangle(a.position, a.x_edge_pos, a.y_edge_pos)
+		add_triangle(a.x_edge_pos, a.position, a.y_edge_pos)
 	elif cell_type == 2:
-		add_triangle(b.position, a.x_edge_pos, b.y_edge_pos)
+		add_triangle(b.y_edge_pos, b.position, a.x_edge_pos)
 	elif cell_type == 4:
-		add_triangle(c.position, c.x_edge_pos, a.y_edge_pos)
+		add_triangle(a.y_edge_pos, c.position, c.x_edge_pos)
 	elif cell_type == 8:
-		add_triangle(d.position, b.y_edge_pos, c.x_edge_pos)
+		add_triangle(c.x_edge_pos, d.position, b.y_edge_pos)
 	elif cell_type == 3:
-		add_quad(a.position, a.y_edge_pos, b.y_edge_pos, b.position)
+		add_quad(b.y_edge_pos, b.position, a.position, a.y_edge_pos)
 	elif cell_type == 5:
-		add_quad(a.position, c.position, c.x_edge_pos, a.x_edge_pos)
+		add_quad(a.x_edge_pos, a.position, c.position, c.x_edge_pos)
 	elif cell_type == 10:
-		add_quad(a.x_edge_pos, c.x_edge_pos, d.position, b.position)
+		add_quad(c.x_edge_pos, d.position, b.position, a.x_edge_pos)
 	elif cell_type == 12:
 		add_quad(a.y_edge_pos, c.position, d.position, b.y_edge_pos)
 	elif cell_type == 15:
 		add_quad(a.position, c.position, d.position, b.position)
 	elif cell_type == 7:
-		add_pentagon(a.position, c.position, c.x_edge_pos, b.y_edge_pos, b.position)
+		add_pentagon(b.y_edge_pos, b.position, a.position, c.position, c.x_edge_pos)
 	elif cell_type == 11:
-		add_pentagon(b.position, a.position, a.y_edge_pos, c.x_edge_pos, d.position)
+		add_pentagon(c.x_edge_pos, d.position, b.position, a.position, a.y_edge_pos)
 	elif cell_type == 13:
-		add_pentagon(c.position, d.position, b.y_edge_pos, a.x_edge_pos, a.position)
+		add_pentagon(a.x_edge_pos, a.position, c.position, d.position, b.y_edge_pos)
 	elif cell_type == 14:
-		add_pentagon(d.position, b.position, a.x_edge_pos, a.y_edge_pos, c.position)
+		add_pentagon(a.y_edge_pos, c.position, d.position, b.position, a.x_edge_pos)
 	elif cell_type == 6:
-		add_triangle(b.position, a.x_edge_pos, b.y_edge_pos);
-		add_triangle(c.position, c.x_edge_pos, a.y_edge_pos);
+		add_triangle(b.y_edge_pos, b.position, a.x_edge_pos);
+		add_triangle(a.y_edge_pos, c.position, c.x_edge_pos);
 	elif cell_type == 9:
-		add_triangle(a.position, a.y_edge_pos, a.x_edge_pos);
-		add_triangle(d.position, b.y_edge_pos, c.x_edge_pos);
+		add_triangle(a.x_edge_pos, a.position, a.y_edge_pos);
+		add_triangle(c.x_edge_pos, d.position, b.y_edge_pos);
 
 func add_triangle(a: Vector2, b: Vector2, c: Vector2):
 	var vertex_index = vertices.size()
