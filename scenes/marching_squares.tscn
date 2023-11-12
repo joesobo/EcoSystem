@@ -11,7 +11,7 @@
 position = Vector2(16, 16)
 script = ExtResource("1_7sy1n")
 voxel_size = 32
-voxel_resolution = 16
+voxel_resolution = 32
 voxel_scene = ExtResource("2_4y4kx")
 static_body = NodePath("StaticBody2D")
 

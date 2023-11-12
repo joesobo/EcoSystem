@@ -18,6 +18,9 @@ var arrays = []
 
 var vertices
 var indices
+var triangle_dictionary
+var outlines: Array = [[]]
+var checked_vertices =  []
 
 func _ready():
 	viewport_rect = get_viewport_rect()
@@ -26,10 +29,10 @@ func _ready():
 	array_mesh = ArrayMesh.new()
 	arrays.resize(ArrayMesh.ARRAY_MAX)
 	mesh_instance.mesh = array_mesh
-	add_child(mesh_instance)
 
 	vertices = PackedVector2Array()
 	indices = PackedInt32Array()
+	triangle_dictionary = {}
 
 	collision_shape = static_body.get_child(0)
 	static_body.connect("input_event", _on_Area2D_input_event)
@@ -37,6 +40,11 @@ func _ready():
 	create_chunk()
 
 	triangulate()
+
+func _draw():
+	for outline in outlines:
+		for i in range(outline.size() - 1):
+			draw_line(vertices[outline[i]], vertices[outline[i + 1]], Color.BLACK, 5)
 
 func create_chunk():
 	var chunk = Node2D.new()
@@ -60,6 +68,7 @@ func create_voxel(parent, x, y):
 func _on_Area2D_input_event(_viewport, event, _shape_idx):
 	if event is InputEventMouseButton and event.pressed:
 		edit_voxel(event.position)
+		queue_redraw()
 
 func edit_voxel(point: Vector2):
 	var voxel_x = floor(point.x / voxel_size)
@@ -88,6 +97,9 @@ func toggle_voxel_color(index):
 func triangulate():
 	vertices.clear()
 	indices.clear()
+	triangle_dictionary.clear()
+	outlines.clear()
+	checked_vertices.clear()
 	array_mesh = ArrayMesh.new()
 
 	triangulate_chunk()
@@ -98,6 +110,8 @@ func triangulate():
 	array_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
 
 	mesh_instance.mesh = array_mesh
+
+	calculate_mesh_outlines()
 
 func triangulate_chunk():
 	var cells = voxel_resolution - 1
@@ -143,6 +157,10 @@ func triangulate_cell(a: Voxel, b: Voxel, c: Voxel, d: Voxel):
 	elif cell_type == 12:
 		add_quad(a.y_edge_pos, c.position, d.position, b.y_edge_pos)
 	elif cell_type == 15:
+		checked_vertices.append(a.position)
+		checked_vertices.append(c.position)
+		checked_vertices.append(d.position)
+		checked_vertices.append(b.position)
 		add_quad(a.position, c.position, d.position, b.position)
 	elif cell_type == 7:
 		add_pentagon(b.y_edge_pos, b.position, a.position, c.position, c.x_edge_pos)
@@ -159,14 +177,29 @@ func triangulate_cell(a: Voxel, b: Voxel, c: Voxel, d: Voxel):
 		add_triangle(a.x_edge_pos, a.position, a.y_edge_pos);
 		add_triangle(c.x_edge_pos, d.position, b.y_edge_pos);
 
+func triangle_indices(a_index: int, b_index: int, c_index: int):
+	indices.append(a_index)
+	indices.append(b_index)
+	indices.append(c_index)
+
+	var triangle = Triangle.new(a_index, b_index, c_index)
+
+	add_triangle_to_dictionary(vertices[a_index], triangle)
+	add_triangle_to_dictionary(vertices[b_index], triangle)
+	add_triangle_to_dictionary(vertices[c_index], triangle)
+
+func add_triangle_to_dictionary(vertice_key, triangle):
+	if triangle_dictionary.has(vertice_key):
+		triangle_dictionary[vertice_key].append(triangle)
+	else:
+		triangle_dictionary[vertice_key] = [triangle]
+
 func add_triangle(a: Vector2, b: Vector2, c: Vector2):
 	var vertex_index = vertices.size()
 	vertices.append(a)
 	vertices.append(b)
 	vertices.append(c)
-	indices.append(vertex_index)
-	indices.append(vertex_index + 1)
-	indices.append(vertex_index + 2)
+	triangle_indices(vertex_index, vertex_index + 1, vertex_index + 2)
 
 func add_quad(a: Vector2, b: Vector2, c: Vector2, d: Vector2):
 	var vertex_index = vertices.size()
@@ -174,12 +207,8 @@ func add_quad(a: Vector2, b: Vector2, c: Vector2, d: Vector2):
 	vertices.append(b)
 	vertices.append(c)
 	vertices.append(d)
-	indices.append(vertex_index)
-	indices.append(vertex_index + 1)
-	indices.append(vertex_index + 2)
-	indices.append(vertex_index)
-	indices.append(vertex_index + 2)
-	indices.append(vertex_index + 3)
+	triangle_indices(vertex_index, vertex_index + 1, vertex_index + 2)
+	triangle_indices(vertex_index, vertex_index + 2, vertex_index + 3)
 
 func add_pentagon(a: Vector2, b: Vector2, c: Vector2, d: Vector2, e: Vector2):
 	var vertex_index = vertices.size()
@@ -188,12 +217,61 @@ func add_pentagon(a: Vector2, b: Vector2, c: Vector2, d: Vector2, e: Vector2):
 	vertices.append(c)
 	vertices.append(d)
 	vertices.append(e)
-	indices.append(vertex_index)
-	indices.append(vertex_index + 1)
-	indices.append(vertex_index + 2)
-	indices.append(vertex_index)
-	indices.append(vertex_index + 2)
-	indices.append(vertex_index + 3)
-	indices.append(vertex_index)
-	indices.append(vertex_index + 3)
-	indices.append(vertex_index + 4)
+	triangle_indices(vertex_index, vertex_index + 1, vertex_index + 2)
+	triangle_indices(vertex_index, vertex_index + 2, vertex_index + 3)
+	triangle_indices(vertex_index, vertex_index + 3, vertex_index + 4)
+
+# determine if an edge is an outline edge
+func is_outline_edge(vertex_a: Vector2, vertex_b: Vector2):
+	var triangles_containing_a: Array = triangle_dictionary[vertex_a]
+	var shared_triangle_count = 0
+
+	for triangle in triangles_containing_a:
+		if (vertices[triangle.index_a] == vertex_b or
+			vertices[triangle.index_b] == vertex_b or
+			vertices[triangle.index_c] == vertex_b):
+			shared_triangle_count += 1
+
+			if shared_triangle_count > 1:
+				break
+
+	return shared_triangle_count == 1
+
+# get the vertex that is connected to the given vertex by an outline edge
+func get_connected_outline_index(vertex: Vector2):
+	var triangles_containing_vertex: Array = triangle_dictionary[vertex]
+
+	for triangle in triangles_containing_vertex:
+		for index in triangle.indices:
+			if (vertex != vertices[index] and
+				!checked_vertices.has(vertices[index]) and
+				is_outline_edge(vertex, vertices[index])):
+				return index
+
+	return -1
+
+func follow_outline(index, outline_index):
+	outlines[outline_index].append(index)
+	checked_vertices.append(vertices[index])
+	var next_vertex_index = get_connected_outline_index(vertices[index])
+
+	if next_vertex_index != -1:
+		follow_outline(next_vertex_index, outline_index)
+
+func calculate_mesh_outlines():
+	checked_vertices.clear()
+
+	for index in range(indices.size()):
+		var indice = indices[index]
+		var vertice = vertices[indice]
+		if !checked_vertices.has(vertice):
+			var new_outline_index = get_connected_outline_index(vertice)
+			if new_outline_index != -1:
+				checked_vertices.append(vertice)
+
+				var new_outline = []
+				new_outline.append(indice)
+				outlines.append(new_outline)
+
+				follow_outline(new_outline_index, outlines.size() - 1)
+				outlines[outlines.size() - 1].append(indice)

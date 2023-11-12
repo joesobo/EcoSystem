@@ -6,6 +6,7 @@ class_name Voxel
 @export var y_edge_pos: Vector2
 
 func _init(x, y, size):
+	state = randi() % 2 == 0
 	position = Vector2(x, y) * size
 
 	x_edge_pos = position;
