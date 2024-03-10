@@ -1,12 +1,12 @@
 class_name Voxel
 
-@export var state = false
+@export var state = 0
 @export var position: Vector2
 @export var x_edge_pos: Vector2
 @export var y_edge_pos: Vector2
 
-func _init(x, y, size):
-	state = randi() % 2 == 0
+func _init(x, y, size, initState):
+	state = initState
 	position = Vector2(x, y) * size
 
 	x_edge_pos = position;

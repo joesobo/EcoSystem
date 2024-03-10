@@ -79,8 +79,8 @@ func _draw():
 	# var sightColor = Color(0.0, 1.0, 0.0, 0.25)
 	# draw_circle(Vector2.ZERO, siteCollisionShape.shape.radius, sightColor)
 
-	# var avoidColor = Color(1.0, 0.0, 0.0, 0.25)
-	# draw_circle(Vector2.ZERO, avoidCollisionShape.shape.radius, avoidColor)
+	#var avoidColor = Color(1.0, 0.0, 0.0, 0.25)
+	#draw_circle(Vector2.ZERO, avoidCollisionShape.shape.radius, avoidColor)
 
 	# var bodyColor = Color(0.0, 0.0, 1.0, 0.25)
 	# draw_circle(Vector2.ZERO, bodyCollisionShape.shape.radius, bodyColor)
@@ -94,10 +94,10 @@ func _draw():
 	# draw_line(Vector2.ZERO, cohesion().normalized() * 20, Color.RED, 1)
 
 	# Draw flockmate connections
-	var lineColor = Color.BLACK
-	lineColor.a = 0.5
-	for flockMate in flock:
-		draw_line(Vector2.ZERO, flockMate.global_position - global_position, debug_point_color, 1)
+	#var lineColor = Color.BLACK
+	#lineColor.a = 0.5
+	#for flockMate in flock:
+		#draw_line(Vector2.ZERO, flockMate.global_position - global_position, debug_point_color, 1)
 
 func drawCone():
 	var points: Array = []
@@ -143,12 +143,26 @@ func _on_Area2D_site_body_exited(body):
 		predators.erase(body)
 
 func _on_Area2D_avoid_body_entered(body):
-	if body not in obstacles && "Obstacle" in body.name:
+	if body not in obstacles && body.get_child(0) is CollisionPolygon2D:
 		obstacles.append(body)
-
+		
 func _on_Area2D_avoid_body_exited(body):
 	if body in obstacles:
 		obstacles.erase(body)
+
+func calculate_collision_point(area2d, collisionPolygon2d):
+	var closest_point = Vector2.ZERO
+	var min_distance = INF
+
+	for point in collisionPolygon2d.polygon:
+		var global_point = collisionPolygon2d.to_global(point)
+		var distance = global_point.distance_to(global_position)
+		
+		if distance < min_distance:
+			min_distance = distance
+			closest_point = global_point
+
+	return closest_point
 
 func inVisionCone(pos):
 	var direction_angle = atan2(velocity.y, velocity.x)
@@ -257,16 +271,100 @@ func borderForce():
 
 func obstacleForce():
 	var avoidVelocity = Vector2()
-	var area2D_position = avoidArea.global_position
 
 	for area in obstacles:
-		var distance = area.global_position.distance_to(area2D_position)
-		var direction = (area.global_position - area2D_position).normalized()
-		var force = ((avoidRadius - distance) / avoidRadius) * maxSpeed
-
-		avoidVelocity += direction * force
+		var collision_polygon_2d = area.get_child(0)
+		
+		var result = find_intersection(collision_polygon_2d.polygon)
+		var intersection_point = result[0]
+		var normal = result[1]
+		
+		if !intersection_point || !normal:
+			continue
+			
+		avoidVelocity += normal * maxSpeed
 
 	return avoidVelocity
+
+func find_intersection(wall_points):
+	for i in range(wall_points.size() - 1):
+		var P1 = wall_points[i]
+		var P2 = wall_points[i + 1]
+		
+		var intersection_point = get_intersection(P1, P2)
+		if intersection_point != null:
+			var unit_normal = calculate_normal(P1, P2, intersection_point, true)
+			return [intersection_point, unit_normal]
+
+	return [null, null]
+
+func get_intersection(P1, P2):
+	var dx = P2.x - P1.x
+	var dy = P2.y - P1.y
+	var m_b = calculate_slope_intercept(P1, P2, dx, dy)
+	var m = m_b[0]
+	var b = m_b[1]
+
+	var intersections = solve_quadratic_for_circle_and_line(m, b, dx, dy, P1)
+
+	for point in intersections:
+		if is_point_on_line_segment(P1, P2, point):
+			return point
+
+	return null
+	
+func calculate_slope_intercept(P1, P2, dx, dy):
+	if dx == 0:
+		return [null, null]  # Vertical line case
+	else:
+		var m = dy / dx
+		var b = P1.y - m * P1.x
+		return [m, b]
+		
+func solve_quadratic_for_circle_and_line(m, b, dx, dy, P1):
+	var intersections = []
+	if m != null:
+		# Standard case
+		var A = 1 + m * m
+		var B = 2 * m * b - 2 * global_position.x - 2 * m * global_position.y
+		var C = global_position.x * global_position.x + b * b - 2 * b * global_position.y + global_position.y * global_position.y - avoidRadius * avoidRadius
+		var discriminant = B * B - 4 * A * C
+		if discriminant >= 0:
+			var root_discriminant = sqrt(discriminant)
+			var x1 = (-B + root_discriminant) / (2 * A)
+			intersections.append(Vector2(x1, m * x1 + b))
+			if discriminant > 0:
+				var x2 = (-B - root_discriminant) / (2 * A)
+				intersections.append(Vector2(x2, m * x2 + b))
+	else:
+		# Vertical line case
+		var x = P1.x
+		var y_range = sqrt(avoidRadius * avoidRadius - (x - global_position.x) * (x - global_position.x))
+		intersections.append(Vector2(x, y_range + global_position.y))
+		intersections.append(Vector2(x, -y_range + global_position.y))
+
+	return intersections
+	
+func is_point_on_line_segment(P1, P2, point):
+	var minX = min(P1.x, P2.x)
+	var maxX = max(P1.x, P2.x)
+	var minY = min(P1.y, P2.y)
+	var maxY = max(P1.y, P2.y)
+	return minX <= point.x and point.x <= maxX and minY <= point.y and point.y <= maxY
+
+func calculate_normal(P1, P2, intersection_point, clockwise):
+	var dx = P2.x - P1.x
+	var dy = P2.y - P1.y
+	var normal = Vector2.ZERO
+	if clockwise:
+		normal = Vector2(dy, -dx)
+	else:
+		normal = Vector2(-dy, dx)
+	
+	# Normalize the normal vector
+	var normal_length = normal.length()
+	var unit_normal = normal / normal_length
+	return unit_normal
 
 func predatorForce():
 	var predatorVelocity = Vector2()

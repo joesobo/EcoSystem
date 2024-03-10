@@ -12,7 +12,7 @@ config_version=5
 
 config/name="EcoSystem"
 run/main_scene="res://scenes/marching_squares.tscn"
-config/features=PackedStringArray("4.1", "Forward Plus")
+config/features=PackedStringArray("4.2", "Forward Plus")
 config/icon="res://icon.svg"
 
 [display]
@@ -30,7 +30,3 @@ project/assembly_name="EcoSystem"
 2d_physics/layer_3="OrangeFish"
 2d_physics/layer_4="Predator"
 2d_physics/layer_5="Food"
-
-[rendering]
-
-environment/defaults/default_clear_color=Color(0.0470588, 0.521569, 0.772549, 1)

@@ -1,0 +1,36 @@
+[gd_scene load_steps=5 format=3 uid="uid://bcvobu8heqjy1"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_jc5l2"]
+bounce = 0.5
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_daw30"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_22m6e"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_ehwmj"]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="Floor" type="StaticBody2D" parent="."]
+position = Vector2(591, 628)
+scale = Vector2(57.88, 1)
+physics_material_override = SubResource("PhysicsMaterial_jc5l2")
+
+[node name="Sprite2D" type="Sprite2D" parent="Floor"]
+scale = Vector2(20, 20)
+texture = SubResource("CanvasTexture_daw30")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Floor"]
+position = Vector2(2.08165e-12, 2.08165e-12)
+polygon = PackedVector2Array(-9.05322, -437, -9.05322, -381, 8.81134, -359, 8.72495, -437)
+
+[node name="Ball" type="RigidBody2D" parent="."]
+position = Vector2(618, 15)
+scale = Vector2(0.2, 0.2)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ball"]
+shape = SubResource("RectangleShape2D_22m6e")
+
+[node name="Sprite2D" type="Sprite2D" parent="Ball"]
+scale = Vector2(20, 20)
+texture = SubResource("CanvasTexture_ehwmj")

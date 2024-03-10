@@ -1,27 +1,42 @@
-[gd_scene load_steps=5 format=3 uid="uid://bwfe30h2s655f"]
+[gd_scene load_steps=8 format=3 uid="uid://bwfe30h2s655f"]
 
 [ext_resource type="Script" path="res://scripts/marchingSquares/VoxelGrid.gd" id="1_7sy1n"]
 [ext_resource type="PackedScene" uid="uid://bltijxvovh1q" path="res://scenes/voxel.tscn" id="2_4y4kx"]
+[ext_resource type="Script" path="res://scripts/FishManager.gd" id="3_qhq6a"]
+[ext_resource type="PackedScene" uid="uid://yc35bijsp2iy" path="res://scenes/orangeFish.tscn" id="4_q7dbu"]
+[ext_resource type="PackedScene" uid="uid://dvut7wtxxf61w" path="res://scenes/predator.tscn" id="5_y87ho"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6mmkp"]
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_1l0eq"]
 
-[node name="MarchingSquares" type="Node2D" node_paths=PackedStringArray("static_body")]
-position = Vector2(16, 16)
+[node name="Node2D" type="Node2D"]
+
+[node name="MarchingSquares" type="Node2D" parent="." node_paths=PackedStringArray("static_body")]
+position = Vector2(21, 20)
 script = ExtResource("1_7sy1n")
 voxel_size = 32
-voxel_resolution = 32
+voxel_resolution_x = 36
+voxel_resolution_y = 20
 voxel_scene = ExtResource("2_4y4kx")
 static_body = NodePath("StaticBody2D")
 
-[node name="StaticBody2D" type="StaticBody2D" parent="."]
+[node name="StaticBody2D" type="StaticBody2D" parent="MarchingSquares"]
 position = Vector2(580, 314)
 scale = Vector2(59.76, -33.406)
+collision_layer = 2
+collision_mask = 2
 input_pickable = true
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MarchingSquares/StaticBody2D"]
 shape = SubResource("RectangleShape2D_6mmkp")
+debug_color = Color(0, 0.6, 0.701961, 0.419608)
 
-[node name="MeshInstance2D" type="MeshInstance2D" parent="."]
+[node name="MeshInstance2D" type="MeshInstance2D" parent="MarchingSquares"]
 texture = SubResource("CanvasTexture_1l0eq")
+
+[node name="FishManager" type="Node2D" parent="."]
+script = ExtResource("3_qhq6a")
+fishScenes = Array[PackedScene]([ExtResource("4_q7dbu")])
+predatorCount = 0
+predator = ExtResource("5_y87ho")

@@ -1,7 +1,8 @@
 extends Node2D
 
 @export var voxel_size = 1
-@export var voxel_resolution = 8
+@export var voxel_resolution_x = 8
+@export var voxel_resolution_y = 8
 @export var voxel_scene: PackedScene
 
 @export var static_body: StaticBody2D
@@ -45,14 +46,29 @@ func _draw():
 	for outline in outlines:
 		for i in range(outline.size() - 1):
 			draw_line(vertices[outline[i]], vertices[outline[i + 1]], Color.BLACK, 5)
+	
+	#for outline in outlines:
+		#for i in range(outline.size() - 1):
+			#var p1 = vertices[outline[i]]
+			#var p2 = vertices[outline[i + 1]]
+#
+			## Draw lines between the points for debugging
+			#draw_line(p1, p2, Color(1, 0, 0), 10) # Red color for visibility
+#
+			## Optional: Draw normals for debugging
+			#var mid_point = (p1 + p2) / 2
+			#var normal = (p2 - p1).rotated(PI / 2).normalized() * 10
+			##if p1.x == 0 || p2.x == 0:
+				##normal = -normal
+			#draw_line(mid_point, mid_point + normal, Color(0, 1, 0), 10) # Green color for normals
 
 func create_chunk():
 	var chunk = Node2D.new()
 	chunk.name = "Chunk (0,0)"
 	add_child(chunk)
 
-	for voxel_y in range(voxel_resolution):
-		for voxel_x in range(voxel_resolution):
+	for voxel_y in range(voxel_resolution_y):
+		for voxel_x in range(voxel_resolution_x):
 			create_voxel(chunk, voxel_x, voxel_y)
 
 func create_voxel(parent, x, y):
@@ -61,8 +77,14 @@ func create_voxel(parent, x, y):
 	voxel.position = Vector2(x * voxel_size, y * voxel_size)
 	voxel.scale = Vector2(voxel_size, voxel_size) * 0.1
 	voxel.name = "Voxel (%d, %d)" % [x, y]
+	
+	var state = 0
+	if (x == 0 || y == 0 || x == voxel_resolution_x-1 || y == voxel_resolution_y-1):
+		state = 2
+		var index = x + y * voxel_resolution_x
+		voxel.modulate = Color.BLACK
 
-	voxels.append(Voxel.new(x, y, voxel_size))
+	voxels.append(Voxel.new(x, y, voxel_size, state))
 	voxel_pos_indicators.append(voxel)
 
 func _on_Area2D_input_event(_viewport, event, _shape_idx):
@@ -76,7 +98,7 @@ func edit_voxel(point: Vector2):
 
 	var local_pos = Vector2(voxel_x, voxel_y)
 
-	var index = local_pos.x+ local_pos.y * voxel_resolution
+	var index = local_pos.x + local_pos.y * voxel_resolution_x
 
 	set_voxel(index)
 
@@ -85,12 +107,13 @@ func set_voxel(index):
 	triangulate()
 
 func toggle_voxel_color(index):
-	if voxels.size() > index:
-		var color = Color.WHITE
-		voxels[index].state = !voxels[index].state
-
-		if voxels[index].state:
-			color = Color.BLACK
+	if voxels.size() > index && voxels[index].state != 2:
+		var color = Color.BLACK
+		if voxels[index].state == 0:
+			voxels[index].state = 1
+		elif voxels[index].state == 1:
+			voxels[index].state = 0
+			color = Color.WHITE
 
 		voxel_pos_indicators[index].modulate = color
 
@@ -101,6 +124,12 @@ func triangulate():
 	outlines.clear()
 	checked_vertices.clear()
 	array_mesh = ArrayMesh.new()
+	
+	# remove old child colliders
+	while mesh_instance.get_child_count() > 0:
+		var child = mesh_instance.get_child(0)
+		mesh_instance.remove_child(child)
+		child.queue_free()
 
 	triangulate_chunk()
 
@@ -113,20 +142,32 @@ func triangulate():
 
 	calculate_mesh_outlines()
 
+	for outline in outlines:
+		var collider_points = []
+		for i in range(outline.size() - 1):
+			collider_points.append(vertices[outline[i]])
+		collider_points.append(vertices[outline[0]])
+		#collider_points.reverse()
+		
+		var static_body_2d = StaticBody2D.new()
+		var collision_polygon = CollisionPolygon2D.new()
+		collision_polygon.build_mode = CollisionPolygon2D.BUILD_SEGMENTS
+		collision_polygon.polygon = collider_points
+		static_body_2d.add_child(collision_polygon)
+		mesh_instance.add_child(static_body_2d)
+	
 func triangulate_chunk():
-	var cells = voxel_resolution - 1
-
-	for cell_y in range(cells):
-		for cell_x in range(cells):
+	for cell_y in range(voxel_resolution_y - 1):
+		for cell_x in range(voxel_resolution_x - 1):
 			var local_pos = Vector2(cell_x, cell_y)
 
-			var index = local_pos.x + local_pos.y * voxel_resolution
+			var index = local_pos.x + local_pos.y * voxel_resolution_x
 
 			triangulate_cell(
 				voxels[index],
 				voxels[index + 1],
-				voxels[index + voxel_resolution],
-				voxels[index + voxel_resolution + 1]
+				voxels[index + voxel_resolution_x],
+				voxels[index + voxel_resolution_x + 1]
 			)
 
 func triangulate_cell(a: Voxel, b: Voxel, c: Voxel, d: Voxel):
