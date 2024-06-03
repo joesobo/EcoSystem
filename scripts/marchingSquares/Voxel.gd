@@ -1,6 +1,6 @@
 class_name Voxel
 
-@export var state = 0
+@export var state: float = 0.0
 @export var position: Vector2
 @export var x_edge_pos: Vector2
 @export var y_edge_pos: Vector2

@@ -14,12 +14,14 @@ var voxel_pos_indicators = []
 var viewport_rect
 
 var mesh_instance
-var array_mesh
+var image = Image.new()
+var image_texture = ImageTexture.new()
+var array_mesh = ArrayMesh.new()
 var arrays = []
 
-var vertices
-var indices
-var triangle_dictionary
+var vertices = PackedVector2Array()
+var indices = PackedInt32Array()
+var triangle_dictionary = {}
 var outlines: Array = [[]]
 var checked_vertices =  []
 
@@ -27,13 +29,16 @@ func _ready():
 	viewport_rect = get_viewport_rect()
 
 	mesh_instance = get_child(1)
-	array_mesh = ArrayMesh.new()
 	arrays.resize(ArrayMesh.ARRAY_MAX)
+	
+	image = Image.create(voxel_resolution_x, voxel_resolution_y, false, Image.FORMAT_RGBA8)
+	image.set_pixel(0, 0, Color(0.0, 0, 0, 1))
+	image.set_pixel(0, 1, Color(1.0 / 255.0, 0, 0, 1))
+	image.set_pixel(0, 2, Color(2.0 / 255.0, 0, 0, 1))
+	image_texture = ImageTexture.create_from_image(image)
+	
+	mesh_instance.material.set_shader_parameter("state_texture", image_texture)
 	mesh_instance.mesh = array_mesh
-
-	vertices = PackedVector2Array()
-	indices = PackedInt32Array()
-	triangle_dictionary = {}
 
 	collision_shape = static_body.get_child(0)
 	static_body.connect("input_event", _on_Area2D_input_event)
@@ -70,6 +75,8 @@ func create_chunk():
 	for voxel_y in range(voxel_resolution_y):
 		for voxel_x in range(voxel_resolution_x):
 			create_voxel(chunk, voxel_x, voxel_y)
+	#image_texture = ImageTexture.create_from_image(image)
+	#mesh_instance.material.set_shader_parameter("state_texture", image_texture)
 
 func create_voxel(parent, x, y):
 	var voxel = voxel_scene.instantiate()
@@ -78,12 +85,13 @@ func create_voxel(parent, x, y):
 	voxel.scale = Vector2(voxel_size, voxel_size) * 0.1
 	voxel.name = "Voxel (%d, %d)" % [x, y]
 	
-	var state = 0
+	var state = 0.0
 	if (x == 0 || y == 0 || x == voxel_resolution_x-1 || y == voxel_resolution_y-1):
-		state = 2
+		state = 2.0
 		var index = x + y * voxel_resolution_x
 		voxel.modulate = Color.BLACK
-
+		#image.set_pixel(x, y, Color(2.0 / 255.0, 0, 0, 1))
+#
 	voxels.append(Voxel.new(x, y, voxel_size, state))
 	voxel_pos_indicators.append(voxel)
 
@@ -96,26 +104,28 @@ func edit_voxel(point: Vector2):
 	var voxel_x = floor(point.x / voxel_size)
 	var voxel_y = floor(point.y / voxel_size)
 
-	var local_pos = Vector2(voxel_x, voxel_y)
+	set_voxel(Vector2(voxel_x, voxel_y))
 
-	var index = local_pos.x + local_pos.y * voxel_resolution_x
-
-	set_voxel(index)
-
-func set_voxel(index):
-	toggle_voxel_color(index)
+func set_voxel(local_pos: Vector2):
+	toggle_voxel_color(local_pos)
 	triangulate()
 
-func toggle_voxel_color(index):
-	if voxels.size() > index && voxels[index].state != 2:
+func toggle_voxel_color(local_pos: Vector2):
+	var index = local_pos.x + local_pos.y * voxel_resolution_x
+	
+	if voxels.size() > index && voxels[index].state != 2.0:
 		var color = Color.BLACK
-		if voxels[index].state == 0:
-			voxels[index].state = 1
-		elif voxels[index].state == 1:
-			voxels[index].state = 0
+		if voxels[index].state == 0.0:
+			voxels[index].state = 1.0
+		elif voxels[index].state == 1.0:
+			voxels[index].state = 0.0
 			color = Color.WHITE
 
 		voxel_pos_indicators[index].modulate = color
+	
+	image.set_pixel(local_pos.x, local_pos.y, Color(voxels[index].state / 255.0, 0, 0, 1))
+	image_texture = ImageTexture.create_from_image(image)
+	mesh_instance.material.set_shader_parameter("state_texture", image_texture)
 
 func triangulate():
 	vertices.clear()

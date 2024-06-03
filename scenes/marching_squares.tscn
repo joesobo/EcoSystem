@@ -1,12 +1,19 @@
-[gd_scene load_steps=8 format=3 uid="uid://bwfe30h2s655f"]
+[gd_scene load_steps=10 format=3 uid="uid://bwfe30h2s655f"]
 
 [ext_resource type="Script" path="res://scripts/marchingSquares/VoxelGrid.gd" id="1_7sy1n"]
 [ext_resource type="PackedScene" uid="uid://bltijxvovh1q" path="res://scenes/voxel.tscn" id="2_4y4kx"]
 [ext_resource type="Script" path="res://scripts/FishManager.gd" id="3_qhq6a"]
+[ext_resource type="Shader" path="res://shaders/marching_squares.gdshader" id="3_srn0q"]
 [ext_resource type="PackedScene" uid="uid://yc35bijsp2iy" path="res://scenes/orangeFish.tscn" id="4_q7dbu"]
 [ext_resource type="PackedScene" uid="uid://dvut7wtxxf61w" path="res://scenes/predator.tscn" id="5_y87ho"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6mmkp"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mi3id"]
+shader = ExtResource("3_srn0q")
+shader_parameter/x_size = 36
+shader_parameter/y_size = 36
+shader_parameter/offset = Vector2(27, 28)
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_1l0eq"]
 
@@ -33,6 +40,7 @@ shape = SubResource("RectangleShape2D_6mmkp")
 debug_color = Color(0, 0.6, 0.701961, 0.419608)
 
 [node name="MeshInstance2D" type="MeshInstance2D" parent="MarchingSquares"]
+material = SubResource("ShaderMaterial_mi3id")
 texture = SubResource("CanvasTexture_1l0eq")
 
 [node name="FishManager" type="Node2D" parent="."]
