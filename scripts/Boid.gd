@@ -27,6 +27,8 @@ extends RigidBody2D
 ]
 @export var type = 'Blue'
 
+@export var fish: Fish
+
 var food = []
 var flock = []
 var obstacles = []
@@ -145,7 +147,7 @@ func _on_Area2D_site_body_exited(body):
 func _on_Area2D_avoid_body_entered(body):
 	if body not in obstacles && body.get_child(0) is CollisionPolygon2D:
 		obstacles.append(body)
-		
+
 func _on_Area2D_avoid_body_exited(body):
 	if body in obstacles:
 		obstacles.erase(body)
@@ -157,7 +159,7 @@ func calculate_collision_point(area2d, collisionPolygon2d):
 	for point in collisionPolygon2d.polygon:
 		var global_point = collisionPolygon2d.to_global(point)
 		var distance = global_point.distance_to(global_position)
-		
+
 		if distance < min_distance:
 			min_distance = distance
 			closest_point = global_point
@@ -274,14 +276,14 @@ func obstacleForce():
 
 	for area in obstacles:
 		var collision_polygon_2d = area.get_child(0)
-		
+
 		var result = find_intersection(collision_polygon_2d.polygon)
 		var intersection_point = result[0]
 		var normal = result[1]
-		
+
 		if !intersection_point || !normal:
 			continue
-			
+
 		avoidVelocity += normal * maxSpeed
 
 	return avoidVelocity
@@ -290,7 +292,7 @@ func find_intersection(wall_points):
 	for i in range(wall_points.size() - 1):
 		var P1 = wall_points[i]
 		var P2 = wall_points[i + 1]
-		
+
 		var intersection_point = get_intersection(P1, P2)
 		if intersection_point != null:
 			var unit_normal = calculate_normal(P1, P2, intersection_point, true)
@@ -312,7 +314,7 @@ func get_intersection(P1, P2):
 			return point
 
 	return null
-	
+
 func calculate_slope_intercept(P1, P2, dx, dy):
 	if dx == 0:
 		return [null, null]  # Vertical line case
@@ -320,7 +322,7 @@ func calculate_slope_intercept(P1, P2, dx, dy):
 		var m = dy / dx
 		var b = P1.y - m * P1.x
 		return [m, b]
-		
+
 func solve_quadratic_for_circle_and_line(m, b, dx, dy, P1):
 	var intersections = []
 	if m != null:
@@ -344,7 +346,7 @@ func solve_quadratic_for_circle_and_line(m, b, dx, dy, P1):
 		intersections.append(Vector2(x, -y_range + global_position.y))
 
 	return intersections
-	
+
 func is_point_on_line_segment(P1, P2, point):
 	var minX = min(P1.x, P2.x)
 	var maxX = max(P1.x, P2.x)
@@ -360,7 +362,7 @@ func calculate_normal(P1, P2, intersection_point, clockwise):
 		normal = Vector2(dy, -dx)
 	else:
 		normal = Vector2(-dy, dx)
-	
+
 	# Normalize the normal vector
 	var normal_length = normal.length()
 	var unit_normal = normal / normal_length

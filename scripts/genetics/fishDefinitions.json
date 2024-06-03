@@ -1,0 +1,64 @@
+{
+	"fishSpecies": [
+		{
+			"name": "red",
+			"sprite": "/fish/red.png",
+			"products": [
+				{
+					"type": "red_wax",
+					"count": 1,
+					"chance": 0.2
+				}
+			]
+		},
+		{
+			"name": "blue",
+			"sprite": "/fish/blue.png",
+			"products": [
+				{
+					"type": "blue_wax",
+					"count": 1,
+					"chance": 0.2
+				}
+			]
+		},
+		{
+			"name": "purple",
+			"sprite": "/fish/purple.png",
+			"mutations": [
+				{
+					"parent1": "red",
+					"parent2": "blue",
+					"chance": 0.5
+				}
+			],
+			"products": [
+				{
+					"type": "purple_wax",
+					"count": 1,
+					"chance": 0.2
+				}
+			],
+			"alleles": [
+				{
+					"speed": "slow"
+				},
+				{
+					"lifespan": "long"
+				},
+				{
+					"size": "small"
+				},
+				{
+					"reproduction": "low"
+				}
+			],
+			"restrictions": [
+				{
+					"biome": "shallow_ocean",
+					"temperature": "warm"
+				}
+			]
+		}
+	]
+}
