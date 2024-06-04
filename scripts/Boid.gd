@@ -18,14 +18,10 @@ extends RigidBody2D
 
 @export var viewAngle = 200
 
-@export var type = 'Blue'
-
 @export var fish: Fish
 
-var food = []
 var flock = []
 var obstacles = []
-var predators = []
 var viewport_rect
 
 var debug_point_radius = 7.0
@@ -122,22 +118,12 @@ func _on_Area2D_boid_body_entered(body):
 	body.queue_free()
 
 func _on_Area2D_site_body_entered(body):
-	if body != self && inVisionCone(body.global_position) && body not in food && body.type == 'Food':
-		food.append(body)
-
-	elif body != self && inVisionCone(body.global_position) && body not in flock && body.fish.name == fish.name:
+	if body != self && inVisionCone(body.global_position) && body not in flock && body.fish.name == fish.name:
 		flock.append(body)
 
-	elif body != self && body.type == 'Predator' && body not in predators:
-		predators.append(body)
-
 func _on_Area2D_site_body_exited(body):
-	if body in food:
-		food.erase(body)
-	elif body in flock:
+	if body in flock:
 		flock.erase(body)
-	elif body in predators:
-		predators.erase(body)
 
 func _on_Area2D_avoid_body_entered(body):
 	if body not in obstacles && body.get_child(0) is CollisionPolygon2D:
@@ -176,10 +162,6 @@ func _physics_process(delta):
 	if inAvoidRange():
 		newVelocity += borderForce()
 		newVelocity += obstacleForce()
-	elif predators.size() > 0:
-		newVelocity += predatorForce()
-	elif food.size() > 0:
-		newVelocity += foodForce()
 	else:
 		newVelocity += randomVelocity() * randomForce
 		newVelocity += separation() * separationForce
@@ -362,33 +344,6 @@ func calculate_normal(P1, P2, intersection_point, clockwise):
 	var normal_length = normal.length()
 	var unit_normal = normal / normal_length
 	return unit_normal
-
-func predatorForce():
-	var predatorVelocity = Vector2()
-
-	for predator in predators:
-		var direction = (global_position - predator.global_position).normalized()
-
-		predatorVelocity += direction * maxSpeed
-
-	return predatorVelocity
-
-func foodForce():
-	var closest_food: Node2D
-	var closest_distance: float = 1e10
-	var foodVelocity = Vector2()
-
-	for foodInstance in food:
-		var distance = global_position.distance_to(foodInstance.global_position)
-		if distance < closest_distance:
-			closest_distance = distance
-			closest_food = foodInstance
-
-	if closest_food:
-		var direction = (closest_food.global_position - global_position).normalized()
-		foodVelocity = direction * speed
-
-	return foodVelocity
 
 func handle_borders():
 	if global_position.x < viewport_rect.position.x:

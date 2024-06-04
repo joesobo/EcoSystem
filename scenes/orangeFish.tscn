@@ -26,7 +26,6 @@ alignmentForce = 0.1
 separationForce = 0.04
 attractionForce = 0.0
 viewAngle = 270
-type = "Orange"
 
 [node name="BodyCollider" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_ahor8")
