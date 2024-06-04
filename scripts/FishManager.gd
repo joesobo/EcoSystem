@@ -30,6 +30,6 @@ func spawn_fish():
 	newFish.global_position = center + Vector2(cos(angle), sin(angle)) * radius
 
 	add_child(newFish)
-	var fish_template = FishDefinition.find_template_by_index(randf() * 3)
+	var fish_template = FishDefinition.find_template_by_index(randf() * FishDefinition.fishList.size())
 	newFish.fish = fish_template
 	newFish.setup()

@@ -1,11 +1,11 @@
 {
 	"fishSpecies": [
 		{
-			"name": "red",
-			"sprite": "/fish/red.png",
+			"name": "orange",
+			"sprite": "/fish/orange.png",
 			"products": [
 				{
-					"type": "red_wax",
+					"type": "orange",
 					"count": 1,
 					"chance": 0.2
 				}
@@ -16,6 +16,24 @@
 				[0.9, 0.4, 0.0, 1.0],
 				[0.8, 0.4, 0.0, 1.0],
 				[0.7, 0.3, 0.0, 1.0]
+			]
+		},
+		{
+			"name": "red",
+			"sprite": "/fish/red.png",
+			"products": [
+				{
+					"type": "red",
+					"count": 1,
+					"chance": 0.2
+				}
+			],
+			"colors": [
+				[1.0, 0.2, 0.2, 1.0],
+        [0.9, 0.3, 0.3, 1.0],
+        [0.8, 0.2, 0.2, 1.0],
+        [0.7, 0.1, 0.1, 1.0],
+        [0.6, 0.0, 0.0, 1.0]
 			]
 		},
 		{
