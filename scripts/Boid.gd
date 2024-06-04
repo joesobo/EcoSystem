@@ -18,13 +18,6 @@ extends RigidBody2D
 
 @export var viewAngle = 200
 
-@export var color_palette = [
-	Color(0.0, 0.4, 0.8, 1.0),  # Blue
-	Color(0.0, 0.6, 0.9, 1.0),  # Lighter Blue
-	Color(0.0, 0.3, 0.6, 1.0),  # Darker Blue
-	Color(0.0, 0.2, 0.5, 1.0),  # Even Darker Blue
-	Color(0.0, 0.1, 0.3, 1.0),  # Darkest Blue
-]
 @export var type = 'Blue'
 
 @export var fish: Fish
@@ -72,8 +65,10 @@ func _ready():
 	speed = randf_range(maxSpeed / 2, maxSpeed)
 	velocity = randomVelocity()
 
-	debug_point_color = color_palette[randi() % color_palette.size()]
-	debug_point_color.a = 0.5
+func setup():
+	var random_color_index = randi() % fish.colors.size()
+	var fish_color = fish.colors[random_color_index]
+	debug_point_color = Color(fish_color[0], fish_color[1], fish_color[2], 0.5)
 
 func _draw():
 	draw_circle(Vector2.ZERO, debug_point_radius, debug_point_color)
@@ -130,7 +125,7 @@ func _on_Area2D_site_body_entered(body):
 	if body != self && inVisionCone(body.global_position) && body not in food && body.type == 'Food':
 		food.append(body)
 
-	elif body != self && inVisionCone(body.global_position) && body.type == type && body not in flock:
+	elif body != self && inVisionCone(body.global_position) && body.type == type && body not in flock && body.fish.name == fish.name:
 		flock.append(body)
 
 	elif body != self && body.type == 'Predator' && body not in predators:

@@ -4,20 +4,14 @@ extends Node2D
 @export var fishScenes: Array[PackedScene] = []
 
 var viewport_rect
-var fish_data = {}
 
 func _ready():
 	viewport_rect = get_viewport_rect()
 
-	load_fish_data()
+	FishDefinition.load_fish_data()
 
 	for i in range(fishCount):
 		spawn_fish()
-
-func load_fish_data():
-	var file = "res://scripts/genetics/fishDefinitions.json"
-	var json_as_text = FileAccess.get_file_as_string(file)
-	fish_data = JSON.parse_string(json_as_text)
 
 func spawn_fish():
 	if fishScenes.size() == 0:
@@ -35,16 +29,7 @@ func spawn_fish():
 	var radius = sqrt(randf()) * max_radius # Random radius, sqrt for even distribution
 	newFish.global_position = center + Vector2(cos(angle), sin(angle)) * radius
 
-	var selectedFishSpecies = fish_data.fishSpecies[0]
-	var fish = Fish.new(
-		selectedFishSpecies["name"],
-		selectedFishSpecies["sprite"],
-		selectedFishSpecies.get("products", []),
-		selectedFishSpecies.get("mutations", []),
-		selectedFishSpecies.get("alleles", {}),
-		selectedFishSpecies.get("restrictions", {})
-	)
-
 	add_child(newFish)
-	newFish.fish = fish
-	print(newFish.fish.name)
+	var fish_template = FishDefinition.find_template_by_index(randf() * 3)
+	newFish.fish = fish_template
+	newFish.setup()

@@ -9,8 +9,9 @@ name = ""
 sprite = ""
 products = []
 mutations = []
-alleles = {}
-restrictions = {}
+alleles = []
+restrictions = []
+colors = []
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_lor3c"]
 
