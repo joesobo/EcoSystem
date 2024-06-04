@@ -125,7 +125,7 @@ func _on_Area2D_site_body_entered(body):
 	if body != self && inVisionCone(body.global_position) && body not in food && body.type == 'Food':
 		food.append(body)
 
-	elif body != self && inVisionCone(body.global_position) && body.type == type && body not in flock && body.fish.name == fish.name:
+	elif body != self && inVisionCone(body.global_position) && body not in flock && body.fish.name == fish.name:
 		flock.append(body)
 
 	elif body != self && body.type == 'Predator' && body not in predators:

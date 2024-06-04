@@ -1,0 +1,39 @@
+[gd_scene load_steps=3 format=3 uid="uid://8gnwrljkkfu3"]
+
+[ext_resource type="Script" path="res://scripts/ui/breeding_ui.gd" id="1_hw3y1"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_lseh1"]
+font_size = 24
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource("1_hw3y1")
+
+[node name="BreedingUI" type="CanvasLayer" parent="."]
+
+[node name="Control" type="Control" parent="BreedingUI"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="BreedingUI/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 32
+
+[node name="Label" type="Label" parent="BreedingUI/Control/MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Total Fish: 0"
+label_settings = SubResource("LabelSettings_lseh1")

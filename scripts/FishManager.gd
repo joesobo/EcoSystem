@@ -1,9 +1,13 @@
 extends Node2D
 
 @export var fishCount = 100
-@export var fishScenes: Array[PackedScene] = []
+@export var fishScene: PackedScene
+@export var breedingUIScene: PackedScene
+
+var fishScenes: Array = []
 
 var viewport_rect
+var breedingUIInstance: Node = null
 
 func _ready():
 	viewport_rect = get_viewport_rect()
@@ -13,15 +17,17 @@ func _ready():
 	for i in range(fishCount):
 		spawn_fish()
 
+func _process(delta):
+	if Input.is_action_just_pressed("toggle_menu"):
+		if breedingUIInstance == null:
+			open_breeding_ui()
+		else:
+			close_breeding_ui()
+
 func spawn_fish():
-	if fishScenes.size() == 0:
-		return
-
 	randomize()
-	var randomIndex = randi() % fishScenes.size()
-	var selectedScene = fishScenes[randomIndex]
 
-	var newFish = selectedScene.instantiate()
+	var newFish = fishScene.instantiate()
 
 	var center = viewport_rect.size * 0.5
 	var max_radius = min(viewport_rect.size.x, viewport_rect.size.y) / 4 # Adjust this value as needed
@@ -33,3 +39,14 @@ func spawn_fish():
 	var fish_template = FishDefinition.find_template_by_index(randf() * FishDefinition.fishList.size())
 	newFish.fish = fish_template
 	newFish.setup()
+	fishScenes.append(newFish)
+
+func open_breeding_ui():
+	breedingUIInstance = breedingUIScene.instantiate()
+	add_child(breedingUIInstance)
+	breedingUIInstance.update_label(fishScenes.size())
+
+func close_breeding_ui():
+	if breedingUIInstance != null:
+		breedingUIInstance.queue_free()
+		breedingUIInstance = null
