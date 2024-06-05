@@ -24,7 +24,7 @@ var flock = []
 var obstacles = []
 var viewport_rect
 
-var debug_point_radius = 7.0
+var debug_point_radius = 5.0
 var debug_point_color
 
 var siteArea: Area2D

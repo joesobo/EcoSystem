@@ -30,13 +30,13 @@ func _ready():
 
 	mesh_instance = get_child(1)
 	arrays.resize(ArrayMesh.ARRAY_MAX)
-	
+
 	image = Image.create(voxel_resolution_x, voxel_resolution_y, false, Image.FORMAT_RGBA8)
 	image.set_pixel(0, 0, Color(0.0, 0, 0, 1))
 	image.set_pixel(0, 1, Color(1.0 / 255.0, 0, 0, 1))
 	image.set_pixel(0, 2, Color(2.0 / 255.0, 0, 0, 1))
 	image_texture = ImageTexture.create_from_image(image)
-	
+
 	mesh_instance.material.set_shader_parameter("state_texture", image_texture)
 	mesh_instance.mesh = array_mesh
 
@@ -50,8 +50,8 @@ func _ready():
 func _draw():
 	for outline in outlines:
 		for i in range(outline.size() - 1):
-			draw_line(vertices[outline[i]], vertices[outline[i + 1]], Color.BLACK, 5)
-	
+			draw_line(vertices[outline[i]], vertices[outline[i + 1]], Color.BLACK, 1)
+
 	#for outline in outlines:
 		#for i in range(outline.size() - 1):
 			#var p1 = vertices[outline[i]]
@@ -84,7 +84,7 @@ func create_voxel(parent, x, y):
 	voxel.position = Vector2(x * voxel_size, y * voxel_size)
 	voxel.scale = Vector2(voxel_size, voxel_size) * 0.1
 	voxel.name = "Voxel (%d, %d)" % [x, y]
-	
+
 	var state = 0.0
 	if (x == 0 || y == 0 || x == voxel_resolution_x-1 || y == voxel_resolution_y-1):
 		state = 2.0
@@ -112,7 +112,7 @@ func set_voxel(local_pos: Vector2):
 
 func toggle_voxel_color(local_pos: Vector2):
 	var index = local_pos.x + local_pos.y * voxel_resolution_x
-	
+
 	if voxels.size() > index && voxels[index].state != 2.0:
 		var color = Color.BLACK
 		if voxels[index].state == 0.0:
@@ -122,7 +122,7 @@ func toggle_voxel_color(local_pos: Vector2):
 			color = Color.WHITE
 
 		voxel_pos_indicators[index].modulate = color
-	
+
 	image.set_pixel(local_pos.x, local_pos.y, Color(voxels[index].state / 255.0, 0, 0, 1))
 	image_texture = ImageTexture.create_from_image(image)
 	mesh_instance.material.set_shader_parameter("state_texture", image_texture)
@@ -134,7 +134,7 @@ func triangulate():
 	outlines.clear()
 	checked_vertices.clear()
 	array_mesh = ArrayMesh.new()
-	
+
 	# remove old child colliders
 	while mesh_instance.get_child_count() > 0:
 		var child = mesh_instance.get_child(0)
@@ -158,14 +158,14 @@ func triangulate():
 			collider_points.append(vertices[outline[i]])
 		collider_points.append(vertices[outline[0]])
 		#collider_points.reverse()
-		
+
 		var static_body_2d = StaticBody2D.new()
 		var collision_polygon = CollisionPolygon2D.new()
 		collision_polygon.build_mode = CollisionPolygon2D.BUILD_SEGMENTS
 		collision_polygon.polygon = collider_points
 		static_body_2d.add_child(collision_polygon)
 		mesh_instance.add_child(static_body_2d)
-	
+
 func triangulate_chunk():
 	for cell_y in range(voxel_resolution_y - 1):
 		for cell_x in range(voxel_resolution_x - 1):

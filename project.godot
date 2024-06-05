@@ -21,6 +21,11 @@ FishDefinition="*res://scripts/genetics/FishDefinition.gd"
 
 [display]
 
+window/size/viewport_width=640
+window/size/viewport_height=360
+window/size/window_width_override=1280
+window/size/window_height_override=720
+window/stretch/mode="canvas_items"
 window/size/always_on_top.editor=true
 
 [dotnet]
@@ -42,3 +47,8 @@ toggle_menu={
 2d_physics/layer_3="OrangeFish"
 2d_physics/layer_4="Predator"
 2d_physics/layer_5="Food"
+
+[rendering]
+
+textures/canvas_textures/default_texture_filter=3
+viewport/transparent_background=true

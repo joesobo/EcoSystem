@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://8gnwrljkkfu3"]
+[gd_scene load_steps=4 format=3 uid="uid://8gnwrljkkfu3"]
 
 [ext_resource type="Script" path="res://scripts/ui/breeding_ui.gd" id="1_hw3y1"]
+[ext_resource type="Texture2D" uid="uid://77th07mx1pwf" path="res://sprites/StorageUI.png" id="2_puq0v"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_lseh1"]
 font_size = 24
@@ -37,3 +38,7 @@ size_flags_horizontal = 0
 size_flags_vertical = 0
 text = "Total Fish: 0"
 label_settings = SubResource("LabelSettings_lseh1")
+
+[node name="Sprite2D" type="Sprite2D" parent="BreedingUI"]
+position = Vector2(240, 148)
+texture = ExtResource("2_puq0v")
