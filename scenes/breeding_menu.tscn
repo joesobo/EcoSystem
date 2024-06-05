@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://dwdylq2aseboa"]
+
+[ext_resource type="PackedScene" uid="uid://b314d4arovyk" path="res://scenes/root_menu.tscn" id="1_rw11e"]
+[ext_resource type="Texture2D" uid="uid://77th07mx1pwf" path="res://sprites/StorageUI.png" id="2_ao5vw"]
+
+[node name="Root" instance=ExtResource("1_rw11e")]
+menu_name = 1
+
+[node name="Sprite2D" parent="Menu" index="0"]
+position = Vector2(52, 34)
+texture = ExtResource("2_ao5vw")
