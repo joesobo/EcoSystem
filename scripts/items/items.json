@@ -1,0 +1,13 @@
+{
+	"red_wax": {
+		"name": "Red Wax",
+		"icon": "wax.png",
+		"stackable": false
+	},
+	"apple": {
+		"name": "Test",
+		"icon": "test.png",
+		"stackable": true,
+		"quantity": 10
+	}
+}
