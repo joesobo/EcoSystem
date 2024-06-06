@@ -4,8 +4,9 @@ extends RigidBody2D
 @export var speed = 0
 @export var velocity: Vector2
 
-@export var avoidRadius = 30
-@export var visualRange = 50
+@export var avoidRadius = 25
+@export var wallRadius = 4
+@export var visualRange = 30
 @export var turnSpeed = 1
 
 @export var randomForce = 0.05
@@ -24,7 +25,7 @@ var flock = []
 var obstacles = []
 var viewport_rect
 
-var debug_point_radius = 5.0
+var debug_point_radius = 4.0
 var debug_point_color
 
 var siteArea: Area2D
@@ -225,7 +226,7 @@ func inAvoidRange():
 	var distance_to_top_border = global_position.y - (viewport_rect.position.y + margin)
 	var distance_to_bottom_border = (viewport_rect.position.y + viewport_rect.size.y - margin) - global_position.y
 
-	return obstacles.size() > 0 || distance_to_left_border < avoidRadius || distance_to_right_border < avoidRadius || distance_to_top_border < avoidRadius || distance_to_bottom_border < avoidRadius
+	return obstacles.size() > 0 || distance_to_left_border < wallRadius || distance_to_right_border < wallRadius || distance_to_top_border < wallRadius || distance_to_bottom_border < wallRadius
 
 func borderForce():
 	var borderVelocity = Vector2()
@@ -236,15 +237,15 @@ func borderForce():
 	var distance_to_top_border = global_position.y - (viewport_rect.position.y + margin)
 	var distance_to_bottom_border = (viewport_rect.position.y + viewport_rect.size.y - margin) - global_position.y
 
-	if distance_to_left_border < avoidRadius:
-		borderVelocity.x = ((avoidRadius - distance_to_left_border) / avoidRadius)
-	elif distance_to_right_border < avoidRadius:
-		borderVelocity.x = (-(avoidRadius - distance_to_right_border) / avoidRadius)
+	if distance_to_left_border < wallRadius:
+		borderVelocity.x = ((wallRadius - distance_to_left_border) / wallRadius)
+	elif distance_to_right_border < wallRadius:
+		borderVelocity.x = (-(wallRadius - distance_to_right_border) / wallRadius)
 
-	if distance_to_top_border < avoidRadius:
-		borderVelocity.y = ((avoidRadius - distance_to_top_border) / avoidRadius)
-	elif distance_to_bottom_border < avoidRadius:
-		borderVelocity.y = (-(avoidRadius - distance_to_bottom_border) / avoidRadius)
+	if distance_to_top_border < wallRadius:
+		borderVelocity.y = ((wallRadius - distance_to_top_border) / wallRadius)
+	elif distance_to_bottom_border < wallRadius:
+		borderVelocity.y = (-(wallRadius - distance_to_bottom_border) / wallRadius)
 
 	return borderVelocity * maxSpeed
 
@@ -306,7 +307,7 @@ func solve_quadratic_for_circle_and_line(m, b, dx, dy, P1):
 		# Standard case
 		var A = 1 + m * m
 		var B = 2 * m * b - 2 * global_position.x - 2 * m * global_position.y
-		var C = global_position.x * global_position.x + b * b - 2 * b * global_position.y + global_position.y * global_position.y - avoidRadius * avoidRadius
+		var C = global_position.x * global_position.x + b * b - 2 * b * global_position.y + global_position.y * global_position.y - wallRadius * wallRadius
 		var discriminant = B * B - 4 * A * C
 		if discriminant >= 0:
 			var root_discriminant = sqrt(discriminant)
@@ -318,7 +319,7 @@ func solve_quadratic_for_circle_and_line(m, b, dx, dy, P1):
 	else:
 		# Vertical line case
 		var x = P1.x
-		var y_range = sqrt(avoidRadius * avoidRadius - (x - global_position.x) * (x - global_position.x))
+		var y_range = sqrt(wallRadius * wallRadius - (x - global_position.x) * (x - global_position.x))
 		intersections.append(Vector2(x, y_range + global_position.y))
 		intersections.append(Vector2(x, -y_range + global_position.y))
 

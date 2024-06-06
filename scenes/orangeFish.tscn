@@ -19,7 +19,6 @@ gravity_scale = 0.0
 lock_rotation = true
 script = ExtResource("1_ycrld")
 maxSpeed = 200
-avoidRadius = 25
 randomForce = 0.02
 cohesionForce = 0.05
 alignmentForce = 0.1

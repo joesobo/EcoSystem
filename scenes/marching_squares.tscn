@@ -51,6 +51,7 @@ texture = SubResource("CanvasTexture_1l0eq")
 
 [node name="FishManager" type="Node2D" parent="."]
 script = ExtResource("3_qhq6a")
+fishCount = 50
 fishScene = ExtResource("4_q7dbu")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]

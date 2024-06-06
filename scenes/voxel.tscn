@@ -3,4 +3,5 @@
 [sub_resource type="CanvasTexture" id="CanvasTexture_s7i7m"]
 
 [node name="Voxel" type="Sprite2D"]
+visible = false
 texture = SubResource("CanvasTexture_s7i7m")
