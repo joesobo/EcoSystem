@@ -4,6 +4,7 @@ extends Node2D
 @export var voxel_resolution_x = 8
 @export var voxel_resolution_y = 8
 @export var voxel_scene: PackedScene
+@onready var ui_manager = %"UI Manager"
 
 @export var static_body: StaticBody2D
 var collision_shape: CollisionShape2D
@@ -24,6 +25,9 @@ var indices = PackedInt32Array()
 var triangle_dictionary = {}
 var outlines: Array = [[]]
 var checked_vertices =  []
+
+@export var storage_scene = preload("res://scenes/storage.tscn")
+var storage_map: Dictionary = {}
 
 func _ready():
 	viewport_rect = get_viewport_rect()
@@ -87,7 +91,7 @@ func create_voxel(parent, x, y):
 
 	var state = 0.0
 	if (x == 0 || y == 0 || x == voxel_resolution_x-1 || y == voxel_resolution_y-1):
-		state = 2.0
+		state = 1.0
 		var index = x + y * voxel_resolution_x
 		voxel.modulate = Color.BLACK
 		#image.set_pixel(x, y, Color(2.0 / 255.0, 0, 0, 1))
@@ -97,7 +101,26 @@ func create_voxel(parent, x, y):
 
 func _on_Area2D_input_event(_viewport, event, _shape_idx):
 	if event is InputEventMouseButton and event.pressed:
-		edit_voxel(event.position)
+		var voxel_x = floor(event.position.x / voxel_size)
+		var voxel_y = floor(event.position.y / voxel_size)
+		var index = voxel_x + voxel_y * voxel_resolution_x
+		if Input.is_action_pressed("place_storage") && voxels[index].state == 0.0:
+			var storage = storage_scene.instantiate()
+			storage.position = Vector2(voxel_x, voxel_y) * voxel_size
+
+			add_child(storage)
+
+			voxels[index].state = 2.0
+			storage_map[index] = storage
+		elif Input.is_action_pressed("place_storage") && voxels[index].state == 2.0:
+			storage_map[index].queue_free()
+			voxels[index].state = 0.0
+			storage_map.erase(index)
+		elif voxels[index].state == 2.0:
+			# open UI
+			ui_manager.toggle_menu(UISingleton.MenuType.Storage, index)
+		elif !storage_map.has(index):
+			edit_voxel(event.position)
 		queue_redraw()
 
 func edit_voxel(point: Vector2):
@@ -182,13 +205,13 @@ func triangulate_chunk():
 
 func triangulate_cell(a: Voxel, b: Voxel, c: Voxel, d: Voxel):
 	var cell_type = 0
-	if a.state:
+	if a.state == 1:
 		cell_type |= 1;
-	if b.state:
+	if b.state == 1:
 		cell_type |= 2;
-	if c.state:
+	if c.state == 1:
 		cell_type |= 4;
-	if d.state:
+	if d.state == 1:
 		cell_type |= 8;
 
 	if cell_type == 1:

@@ -1,9 +1,10 @@
-[gd_scene load_steps=13 format=3 uid="uid://bwfe30h2s655f"]
+[gd_scene load_steps=14 format=3 uid="uid://bwfe30h2s655f"]
 
 [ext_resource type="Script" path="res://scripts/marchingSquares/VoxelGrid.gd" id="1_7sy1n"]
 [ext_resource type="PackedScene" uid="uid://bltijxvovh1q" path="res://scenes/voxel.tscn" id="2_4y4kx"]
 [ext_resource type="Script" path="res://scripts/FishManager.gd" id="3_qhq6a"]
 [ext_resource type="Shader" path="res://shaders/marching_squares.gdshader" id="3_srn0q"]
+[ext_resource type="Texture2D" uid="uid://cgbueytyqf3ak" path="res://sprites/white.png" id="4_fjbr0"]
 [ext_resource type="PackedScene" uid="uid://yc35bijsp2iy" path="res://scenes/orangeFish.tscn" id="4_q7dbu"]
 [ext_resource type="Script" path="res://scripts/ui/ui_manager.gd" id="7_1w7gj"]
 [ext_resource type="PackedScene" uid="uid://dbmstijr060bk" path="res://scenes/storage_menu.tscn" id="7_425o1"]
@@ -17,6 +18,7 @@ shader = ExtResource("3_srn0q")
 shader_parameter/x_size = 36
 shader_parameter/y_size = 36
 shader_parameter/offset = Vector2(27, 28)
+shader_parameter/state_texture = ExtResource("4_fjbr0")
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_1l0eq"]
 

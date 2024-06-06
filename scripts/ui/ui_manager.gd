@@ -8,26 +8,24 @@ var active_menu = null
 var menus = {
 	UISingleton.MenuType.Storage: {
 		"scene": storage_menu_scene,
-		"instance": null
+		"instances": {}
 	},
 	UISingleton.MenuType.Breeding: {
 		"scene": breeding_menu_scene,
-		"instance": null
+		"instances": {}
 	}
 }
 
 func _input(event):
-	if event.is_action_pressed("toggle_storage"):
-		toggle_menu(UISingleton.MenuType.Storage)
-	elif event.is_action_pressed("toggle_breeding"):
-		toggle_menu(UISingleton.MenuType.Breeding)
+	if event.is_action_pressed("toggle_breeding"):
+		toggle_menu(UISingleton.MenuType.Breeding, 0)
 
-func toggle_menu(menu_name: UISingleton.MenuType):
+func toggle_menu(menu_name: UISingleton.MenuType, index: int):
 	var menu_info = menus[menu_name]
-	if menu_info["instance"]:
-		close_menu(menu_name)
+	if menu_info["instances"].has(index):
+		close_menu(menu_name, index)
 	else:
-		menu_info["instance"] = open_menu(menu_info["scene"])
+		menu_info["instances"][index] = open_menu(menu_info["scene"])
 
 func open_menu(menu_scene):
 	var menu_instance = menu_scene.instantiate()
@@ -37,11 +35,11 @@ func open_menu(menu_scene):
 	_on_menu_activated(menu_instance)
 	return menu_instance
 
-func close_menu(menu_name: UISingleton.MenuType):
+func close_menu(menu_name: UISingleton.MenuType, index: int):
 	var menu_info = menus[menu_name]
-	if menu_info["instance"]:
-		menu_info["instance"].queue_free()
-		menu_info["instance"] = null
+	if menu_info["instances"].has(index):
+		menu_info["instances"][index].queue_free()
+		menu_info["instances"].erase(index)
 
 func _on_menu_activated(menu):
 	active_menu = menu
