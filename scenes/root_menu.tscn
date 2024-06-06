@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://b314d4arovyk"]
+[gd_scene load_steps=12 format=3 uid="uid://b314d4arovyk"]
 
 [ext_resource type="Script" path="res://scripts/ui/root_menu.gd" id="1_6jow1"]
 [ext_resource type="Texture2D" uid="uid://b6i36wv7622d7" path="res://sprites/Close.png" id="2_l453u"]
@@ -13,6 +13,10 @@
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_gwel2"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_02f48"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0wfl5"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ge7gn"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ali7a"]
 
@@ -41,6 +45,8 @@ offset_top = 15.0
 offset_bottom = 28.0
 theme_override_styles/normal = SubResource("StyleBoxEmpty_gwel2")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_02f48")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_0wfl5")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ge7gn")
 action_mode = 0
 icon = ExtResource("3_xj31v")
 
