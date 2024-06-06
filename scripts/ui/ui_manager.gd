@@ -42,12 +42,15 @@ func open_menu(key: String):
 	var menu = UISingleton.get_menu_by_key(key)
 
 	menu.opened = true
+	UISingleton.clear_active_menu()
+	menu.focused = true
 	menu.instance.show()
 
 func close_menu(key: String):
 	var menu = UISingleton.get_menu_by_key(key)
 
 	menu.opened = false
+	menu.focused = false
 	menu.instance.hide()
 
 	UISingleton.next_active_menu(key)

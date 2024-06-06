@@ -10,7 +10,7 @@ var drag_offset = Vector2.ZERO
 var items = []
 
 @export var menu_name: UISingleton.MenuType = UISingleton.MenuType.Storage
-@export var index: int
+var index: int
 
 @onready var close_button = %Close
 @onready var move_button = %Move

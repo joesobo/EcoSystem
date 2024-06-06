@@ -23,13 +23,18 @@ func get_menu_by_key(key: String):
 	return null
 
 func create_menu(key: String, instance: Node):
-	var new_menu = Menu.new(key, instance.position, 0, [], true, true, instance)
+	var new_menu = Menu.new(key, instance.position, [], true, true, instance)
 
 	for menu in menus:
 		if menu.focused:
 			menu.focused = false
 
 	menus.append(new_menu)
+
+func clear_active_menu():
+	for menu in menus:
+		if menu.focused:
+			menu.focused = false
 
 func next_active_menu(key: String):
 	var index = -1
@@ -40,9 +45,15 @@ func next_active_menu(key: String):
 			break
 
 	if index != -1:
-		menus[index].focused = false
-
+		var found_previous = false
 		for i in range(index - 1, -1, -1):  # Counts backwards from index - 1 to 0
 			if menus[i].opened:
 				menus[i].focused = true
+				found_previous = true
 				break
+
+		if !found_previous:
+			for menu in menus:
+				if menu.opened:
+					menu.focused = true
+					break
