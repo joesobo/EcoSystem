@@ -1,9 +1,12 @@
 extends Panel
 
+signal menu_closed(menu_name, index)
+
 var is_dragging = false
 var drag_offset = Vector2.ZERO
 
 @export var menu_name: UISingleton.MenuType = UISingleton.MenuType.Storage
+@export var index: int
 
 @onready var close_button = %Close
 @onready var move_button = %Move
@@ -13,7 +16,7 @@ func _ready():
 	move_button.connect("gui_input", Callable(self, "_on_move_button_pressed"))
 
 func _on_close_button_pressed():
-	get_parent().call("close_menu", menu_name)
+	emit_signal("menu_closed", menu_name, index)
 
 func _on_move_button_pressed(event):
 	if event is InputEventMouseButton:
