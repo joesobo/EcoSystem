@@ -1,8 +1,8 @@
 [gd_scene load_steps=12 format=3 uid="uid://b314d4arovyk"]
 
 [ext_resource type="Script" path="res://scripts/ui/root_menu.gd" id="1_6jow1"]
-[ext_resource type="Texture2D" uid="uid://b6i36wv7622d7" path="res://sprites/Close.png" id="2_l453u"]
-[ext_resource type="Texture2D" uid="uid://dchoncvs1hdlv" path="res://sprites/Move.png" id="3_xj31v"]
+[ext_resource type="Texture2D" uid="uid://b6i36wv7622d7" path="res://sprites/ui/Close.png" id="2_vbngy"]
+[ext_resource type="Texture2D" uid="uid://dchoncvs1hdlv" path="res://sprites/ui/Move.png" id="3_xccdw"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5hkve"]
 
@@ -35,7 +35,7 @@ offset_bottom = 15.0
 theme_override_styles/normal = SubResource("StyleBoxEmpty_53glm")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_hmi31")
 action_mode = 0
-icon = ExtResource("2_l453u")
+icon = ExtResource("2_vbngy")
 
 [node name="Move" type="Button" parent="."]
 unique_name_in_owner = true
@@ -48,7 +48,7 @@ theme_override_styles/hover = SubResource("StyleBoxEmpty_02f48")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_0wfl5")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_ge7gn")
 action_mode = 0
-icon = ExtResource("3_xj31v")
+icon = ExtResource("3_xccdw")
 
 [node name="Menu" type="Panel" parent="."]
 unique_name_in_owner = true

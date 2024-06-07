@@ -26,7 +26,7 @@ var triangle_dictionary = {}
 var outlines: Array = [[]]
 var checked_vertices =  []
 
-@export var storage_scene = preload("res://scenes/storage.tscn")
+@export var storage_scene = preload("res://scenes/storage_block.tscn")
 var storage_map: Dictionary = {}
 
 func _ready():

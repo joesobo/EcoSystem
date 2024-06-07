@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cgbueytyqf3ak"
-path="res://.godot/imported/white.png-5ae32056d3cf4dc8fdf3bad7b4b49d90.ctex"
+uid="uid://dchoncvs1hdlv"
+path="res://.godot/imported/Move.png-e6db2e8b571a68d47d19ef5a8ee8aa1c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprites/white.png"
-dest_files=["res://.godot/imported/white.png-5ae32056d3cf4dc8fdf3bad7b4b49d90.ctex"]
+source_file="res://sprites/ui/Move.png"
+dest_files=["res://.godot/imported/Move.png-e6db2e8b571a68d47d19ef5a8ee8aa1c.ctex"]
 
 [params]
 
