@@ -6,11 +6,13 @@ signal items_changed(indexes)
 var is_dragging = false
 var drag_offset = Vector2.ZERO
 
-@export var slots: Array[Node] = []
+@export var slot_size: int = 0
+var slots: Array[Node] = []
 var items: Array = []
 
 @export var menu_name: UISingleton.MenuType = UISingleton.MenuType.Storage
 var index: int
+var menu: Menu
 
 @onready var close_button = %Close
 @onready var move_button = %Move
@@ -19,8 +21,20 @@ func _ready():
 	close_button.connect("pressed", Callable(self, "_on_close_button_pressed"))
 	move_button.connect("gui_input", Callable(self, "_on_move_button_pressed"))
 
-	for i in range(slots.size()):
+	for i in range(slot_size):
+		slots.append(%Menu.get_child(0).get_child(i))
 		items.append({})
+
+func set_menu(menu: Menu):
+	self.menu = menu
+
+	for i in range(menu.items.size()):
+		var item = menu.items[i]
+		items[i] = item
+
+	for i in range(items.size()):
+		var item = items[i]
+		set_slot(i, item)
 
 func _on_close_button_pressed():
 	emit_signal("menu_closed", UISingleton.get_menu_key(menu_name, index))
@@ -58,8 +72,14 @@ func add_item_quantity(item_index: int, amount: int):
 	else:
 		emit_signal("items_changed", [item_index])
 
-func set_slot(item_index: int, item: Item):
-	slots[item_index].get_child(1).texture = load("res://sprites/item/%s" % item.icon)
+func set_slot(item_index: int, item):
+	var slot = slots[item_index]
+
+	if item is Item:
+		slot.set_slot_texture(item)
+		slot.set_slot_quantity(item.quantity)
+	else:
+		slot.clear_slot()
 
 func ensure_within_viewport(new_position: Vector2):
 	var viewport_rect = get_viewport_rect()

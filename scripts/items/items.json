@@ -8,6 +8,6 @@
 		"label": "Test Item 2",
 		"icon": "Item2.png",
 		"stackable": true,
-		"quantity": 10
+		"max_quantity": 10
 	}
 }

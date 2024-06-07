@@ -38,10 +38,11 @@ func create_menu(menu_name: UISingleton.MenuType, index: int):
 
 	var new_menu = UISingleton.create_menu(key, menu_instance)
 
-	for item_index in range(new_menu.items.size()):
-		var item = new_menu.items[item_index]
-		if item:
-			menu_instance.set_item(item_index, item)
+	menu_instance.set_menu(new_menu)
+
+	# for item_index in range(new_menu.items.size()):
+	# 	var item = new_menu.items[item_index]
+	# 	menu_instance.set_item(item_index, item)
 
 func open_menu(key: String):
 	var menu = UISingleton.get_menu_by_key(key)

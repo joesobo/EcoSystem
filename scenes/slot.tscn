@@ -1,0 +1,110 @@
+[gd_scene load_steps=15 format=3 uid="uid://ixyduxobwoxs"]
+
+[ext_resource type="Script" path="res://scripts/ui/slot.gd" id="1_rj73i"]
+[ext_resource type="Texture2D" uid="uid://e4bxuh6mvjke" path="res://sprites/ui/numbers-Sheet.png" id="2_q732m"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hjvni"]
+size = Vector2(12, 12)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gkqay"]
+atlas = ExtResource("2_q732m")
+region = Rect2(0, 0, 5, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2gbne"]
+atlas = ExtResource("2_q732m")
+region = Rect2(6, 0, 5, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fgcm8"]
+atlas = ExtResource("2_q732m")
+region = Rect2(12, 0, 5, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_82uk1"]
+atlas = ExtResource("2_q732m")
+region = Rect2(18, 0, 5, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_75hpw"]
+atlas = ExtResource("2_q732m")
+region = Rect2(24, 0, 5, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8cvew"]
+atlas = ExtResource("2_q732m")
+region = Rect2(30, 0, 5, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_878f5"]
+atlas = ExtResource("2_q732m")
+region = Rect2(36, 0, 5, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xd2ii"]
+atlas = ExtResource("2_q732m")
+region = Rect2(42, 0, 5, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ln178"]
+atlas = ExtResource("2_q732m")
+region = Rect2(48, 0, 5, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kgvnd"]
+atlas = ExtResource("2_q732m")
+region = Rect2(54, 0, 5, 7)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_y04p7"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gkqay")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2gbne")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fgcm8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_82uk1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_75hpw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8cvew")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_878f5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xd2ii")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ln178")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kgvnd")
+}],
+"loop": true,
+"name": &"count",
+"speed": 5.0
+}]
+
+[node name="Slot" type="Area2D"]
+position = Vector2(2.08165e-12, 2.08165e-12)
+script = ExtResource("1_rj73i")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(2.08165e-12, 2.08165e-12)
+shape = SubResource("RectangleShape2D_hjvni")
+
+[node name="Item Texture" type="Sprite2D" parent="."]
+unique_name_in_owner = true
+
+[node name="Count Texture (Tens)" type="AnimatedSprite2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(7, 8)
+sprite_frames = SubResource("SpriteFrames_y04p7")
+animation = &"count"
+offset = Vector2(0.5, 0.5)
+
+[node name="Count Texture (Ones)" type="AnimatedSprite2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(11, 8)
+sprite_frames = SubResource("SpriteFrames_y04p7")
+animation = &"count"
+offset = Vector2(0.5, 0.5)
