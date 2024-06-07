@@ -5,7 +5,13 @@
 [ext_resource type="PackedScene" uid="uid://ixyduxobwoxs" path="res://scenes/slot.tscn" id="3_jbst8"]
 
 [node name="Root" instance=ExtResource("1_qlx3b")]
+offset_right = 2.08165e-12
+offset_bottom = 2.08165e-12
 slot_size = 15
+
+[node name="Menu" parent="." index="2"]
+offset_right = 104.0
+offset_bottom = 67.0
 
 [node name="Sprite2D" parent="Menu" index="0"]
 position = Vector2(52, 34)
@@ -18,7 +24,7 @@ position = Vector2(-38, -19.5)
 position = Vector2(-19, -19.5)
 
 [node name="Slot3" parent="Menu/Sprite2D" index="2" instance=ExtResource("3_jbst8")]
-position = Vector2(2.08165e-12, -19.5)
+position = Vector2(0, -19.5)
 
 [node name="Slot4" parent="Menu/Sprite2D" index="3" instance=ExtResource("3_jbst8")]
 position = Vector2(19, -19.5)
@@ -33,7 +39,7 @@ position = Vector2(-38, -0.5)
 position = Vector2(-19, -0.5)
 
 [node name="Slot8" parent="Menu/Sprite2D" index="7" instance=ExtResource("3_jbst8")]
-position = Vector2(2.08165e-12, -0.5)
+position = Vector2(0, -0.5)
 
 [node name="Slot9" parent="Menu/Sprite2D" index="8" instance=ExtResource("3_jbst8")]
 position = Vector2(19, -0.5)
@@ -48,7 +54,7 @@ position = Vector2(-38, 18.5)
 position = Vector2(-19, 18.5)
 
 [node name="Slot13" parent="Menu/Sprite2D" index="12" instance=ExtResource("3_jbst8")]
-position = Vector2(2.08165e-12, 18.5)
+position = Vector2(0, 18.5)
 
 [node name="Slot14" parent="Menu/Sprite2D" index="13" instance=ExtResource("3_jbst8")]
 position = Vector2(19, 18.5)
