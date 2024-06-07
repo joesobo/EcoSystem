@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://bwfe30h2s655f"]
+[gd_scene load_steps=12 format=3 uid="uid://bwfe30h2s655f"]
 
 [ext_resource type="Script" path="res://scripts/marchingSquares/VoxelGrid.gd" id="1_7sy1n"]
 [ext_resource type="PackedScene" uid="uid://bltijxvovh1q" path="res://scenes/voxel.tscn" id="2_4y4kx"]
@@ -7,8 +7,6 @@
 [ext_resource type="Texture2D" uid="uid://cgbueytyqf3ak" path="res://sprites/ui/white.png" id="4_fjbr0"]
 [ext_resource type="PackedScene" uid="uid://yc35bijsp2iy" path="res://scenes/orangeFish.tscn" id="4_q7dbu"]
 [ext_resource type="Script" path="res://scripts/ui/ui_manager.gd" id="7_1w7gj"]
-[ext_resource type="PackedScene" uid="uid://dbmstijr060bk" path="res://scenes/storage_menu.tscn" id="7_425o1"]
-[ext_resource type="PackedScene" uid="uid://dwdylq2aseboa" path="res://scenes/breeding_menu.tscn" id="8_du5x6"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6mmkp"]
 size = Vector2(11.6232, 11.5267)
@@ -66,5 +64,3 @@ texture = SubResource("CanvasTexture_6n80m")
 [node name="UI Manager" type="Node" parent="."]
 unique_name_in_owner = true
 script = ExtResource("7_1w7gj")
-storage_menu_scene = ExtResource("7_425o1")
-breeding_menu_scene = ExtResource("8_du5x6")
