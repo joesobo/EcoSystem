@@ -1,12 +1,12 @@
 {
-	"red_wax": {
-		"name": "Red Wax",
-		"icon": "wax.png",
+	"item1": {
+		"label": "Test Item 1",
+		"icon": "item1.png",
 		"stackable": false
 	},
-	"apple": {
-		"name": "Test",
-		"icon": "test.png",
+	"item2": {
+		"label": "Test Item 2",
+		"icon": "item2.png",
 		"stackable": true,
 		"quantity": 10
 	}

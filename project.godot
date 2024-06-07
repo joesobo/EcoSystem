@@ -19,7 +19,7 @@ config/icon="res://icon.svg"
 
 FishDefinition="*res://scripts/genetics/FishDefinition.gd"
 UISingleton="*res://scripts/ui/ui_singleton.gd"
-Items="*res://scripts/items/Items.gd"
+ItemDefinition="*res://scripts/items/ItemDefinition.gd"
 
 [display]
 
