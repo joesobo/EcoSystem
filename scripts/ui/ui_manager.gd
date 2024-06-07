@@ -24,9 +24,9 @@ func toggle_menu(menu_name: UISingleton.MenuType, index: int):
 	elif menu and !menu.opened:
 		open_menu(key)
 	else:
-		new_menu(menu_name, index)
+		create_menu(menu_name, index)
 
-func new_menu(menu_name: UISingleton.MenuType, index: int):
+func create_menu(menu_name: UISingleton.MenuType, index: int):
 	var key = UISingleton.get_menu_key(menu_name, index)
 
 	var menu_instance = menu_types[menu_name].instantiate()
@@ -36,7 +36,12 @@ func new_menu(menu_name: UISingleton.MenuType, index: int):
 	add_child(menu_instance)
 	menu_instance.connect("menu_closed", Callable(self, "close_menu"))
 
-	UISingleton.create_menu(key, menu_instance)
+	var new_menu = UISingleton.create_menu(key, menu_instance)
+
+	for item_index in range(new_menu.items.size()):
+		var item = new_menu.items[item_index]
+		if item:
+			menu_instance.set_item(item_index, item)
 
 func open_menu(key: String):
 	var menu = UISingleton.get_menu_by_key(key)

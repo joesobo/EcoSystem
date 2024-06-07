@@ -6,8 +6,8 @@ signal items_changed(indexes)
 var is_dragging = false
 var drag_offset = Vector2.ZERO
 
-@export var slots = 15
-var items = []
+@export var slots: Array[Node] = []
+var items: Array = []
 
 @export var menu_name: UISingleton.MenuType = UISingleton.MenuType.Storage
 var index: int
@@ -19,7 +19,7 @@ func _ready():
 	close_button.connect("pressed", Callable(self, "_on_close_button_pressed"))
 	move_button.connect("gui_input", Callable(self, "_on_move_button_pressed"))
 
-	for i in range(slots):
+	for i in range(slots.size()):
 		items.append({})
 
 func _on_close_button_pressed():
@@ -37,25 +37,29 @@ func _on_move_button_pressed(event):
 		var new_position = global_position + (event.position - drag_offset)
 		ensure_within_viewport(new_position)
 
-func set_item(index, item):
-	var previous_item = items[index]
-	items[index] = item
-	emit_signal("items_changed", [index])
+func set_item(item_index: int, item: Item):
+	var previous_item = items[item_index]
+	items[item_index] = item
+	emit_signal("items_changed", [item_index])
+	set_slot(item_index, item)
 	return previous_item
 
-func remove_item(index):
-	var previous_item = items[index].duplicate()
-	items[index].clear()
-	emit_signal("items_changed", [index])
+func remove_item(item_index: int):
+	var previous_item = items[item_index].duplicate()
+	items[item_index].clear()
+	emit_signal("items_changed", [item_index])
 	return previous_item
 
-func add_item_quantity(index, amount):
-	items[index].quantity += amount
+func add_item_quantity(item_index: int, amount: int):
+	items[item_index].quantity += amount
 
-	if items[index].quantity <= 0:
-		remove_item(index)
+	if items[item_index].quantity <= 0:
+		remove_item(item_index)
 	else:
-		emit_signal("items_changed", [index])
+		emit_signal("items_changed", [item_index])
+
+func set_slot(item_index: int, item: Item):
+	slots[item_index].get_child(1).texture = load("res://sprites/item/%s" % item.icon)
 
 func ensure_within_viewport(new_position: Vector2):
 	var viewport_rect = get_viewport_rect()

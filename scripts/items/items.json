@@ -1,12 +1,12 @@
 {
 	"item1": {
 		"label": "Test Item 1",
-		"icon": "item1.png",
+		"icon": "Item1.png",
 		"stackable": false
 	},
 	"item2": {
 		"label": "Test Item 2",
-		"icon": "item2.png",
+		"icon": "Item2.png",
 		"stackable": true,
 		"quantity": 10
 	}

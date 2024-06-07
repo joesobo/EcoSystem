@@ -6,7 +6,8 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hjvni"]
 size = Vector2(12, 12)
 
-[node name="Root" instance=ExtResource("1_qlx3b")]
+[node name="Root" node_paths=PackedStringArray("slots") instance=ExtResource("1_qlx3b")]
+slots = [NodePath("Menu/Sprite2D/Slot1"), NodePath("Menu/Sprite2D/Slot2"), NodePath("Menu/Sprite2D/Slot3"), NodePath("Menu/Sprite2D/Slot4"), NodePath("Menu/Sprite2D/Slot5"), NodePath("Menu/Sprite2D/Slot6"), NodePath("Menu/Sprite2D/Slot7"), NodePath("Menu/Sprite2D/Slot8"), NodePath("Menu/Sprite2D/Slot9"), NodePath("Menu/Sprite2D/Slot10"), NodePath("Menu/Sprite2D/Slot11"), NodePath("Menu/Sprite2D/Slot12"), NodePath("Menu/Sprite2D/Slot13"), NodePath("Menu/Sprite2D/Slot14"), NodePath("Menu/Sprite2D/Slot15")]
 
 [node name="Sprite2D" parent="Menu" index="0"]
 position = Vector2(52, 34)
@@ -19,12 +20,16 @@ position = Vector2(-38, -19.5)
 position = Vector2(2.08165e-12, 2.08165e-12)
 shape = SubResource("RectangleShape2D_hjvni")
 
+[node name="Sprite2D" type="Sprite2D" parent="Menu/Sprite2D/Slot1" index="1"]
+
 [node name="Slot2" type="Area2D" parent="Menu/Sprite2D" index="1"]
 position = Vector2(-19, -19.5)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Menu/Sprite2D/Slot2" index="0"]
 position = Vector2(2.08165e-12, 2.08165e-12)
 shape = SubResource("RectangleShape2D_hjvni")
+
+[node name="Sprite2D" type="Sprite2D" parent="Menu/Sprite2D/Slot2" index="1"]
 
 [node name="Slot3" type="Area2D" parent="Menu/Sprite2D" index="2"]
 position = Vector2(0, -19.5)
@@ -33,12 +38,16 @@ position = Vector2(0, -19.5)
 position = Vector2(2.08165e-12, 2.08165e-12)
 shape = SubResource("RectangleShape2D_hjvni")
 
+[node name="Sprite2D" type="Sprite2D" parent="Menu/Sprite2D/Slot3" index="1"]
+
 [node name="Slot4" type="Area2D" parent="Menu/Sprite2D" index="3"]
 position = Vector2(19, -19.5)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Menu/Sprite2D/Slot4" index="0"]
 position = Vector2(2.08165e-12, 2.08165e-12)
 shape = SubResource("RectangleShape2D_hjvni")
+
+[node name="Sprite2D" type="Sprite2D" parent="Menu/Sprite2D/Slot4" index="1"]
 
 [node name="Slot5" type="Area2D" parent="Menu/Sprite2D" index="4"]
 position = Vector2(38, -19.5)
@@ -47,12 +56,16 @@ position = Vector2(38, -19.5)
 position = Vector2(2.08165e-12, 2.08165e-12)
 shape = SubResource("RectangleShape2D_hjvni")
 
+[node name="Sprite2D" type="Sprite2D" parent="Menu/Sprite2D/Slot5" index="1"]
+
 [node name="Slot6" type="Area2D" parent="Menu/Sprite2D" index="5"]
 position = Vector2(-38, -0.5)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Menu/Sprite2D/Slot6" index="0"]
 position = Vector2(2.08165e-12, 2.08165e-12)
 shape = SubResource("RectangleShape2D_hjvni")
+
+[node name="Sprite2D" type="Sprite2D" parent="Menu/Sprite2D/Slot6" index="1"]
 
 [node name="Slot7" type="Area2D" parent="Menu/Sprite2D" index="6"]
 position = Vector2(-19, -0.5)
@@ -61,12 +74,16 @@ position = Vector2(-19, -0.5)
 position = Vector2(2.08165e-12, 2.08165e-12)
 shape = SubResource("RectangleShape2D_hjvni")
 
+[node name="Sprite2D" type="Sprite2D" parent="Menu/Sprite2D/Slot7" index="1"]
+
 [node name="Slot8" type="Area2D" parent="Menu/Sprite2D" index="7"]
 position = Vector2(0, -0.5)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Menu/Sprite2D/Slot8" index="0"]
 position = Vector2(2.08165e-12, 2.08165e-12)
 shape = SubResource("RectangleShape2D_hjvni")
+
+[node name="Sprite2D" type="Sprite2D" parent="Menu/Sprite2D/Slot8" index="1"]
 
 [node name="Slot9" type="Area2D" parent="Menu/Sprite2D" index="8"]
 position = Vector2(19, -0.5)
@@ -75,12 +92,16 @@ position = Vector2(19, -0.5)
 position = Vector2(2.08165e-12, 2.08165e-12)
 shape = SubResource("RectangleShape2D_hjvni")
 
+[node name="Sprite2D" type="Sprite2D" parent="Menu/Sprite2D/Slot9" index="1"]
+
 [node name="Slot10" type="Area2D" parent="Menu/Sprite2D" index="9"]
 position = Vector2(38, -0.5)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Menu/Sprite2D/Slot10" index="0"]
 position = Vector2(2.08165e-12, 2.08165e-12)
 shape = SubResource("RectangleShape2D_hjvni")
+
+[node name="Sprite2D" type="Sprite2D" parent="Menu/Sprite2D/Slot10" index="1"]
 
 [node name="Slot11" type="Area2D" parent="Menu/Sprite2D" index="10"]
 position = Vector2(-38, 18.5)
@@ -89,12 +110,16 @@ position = Vector2(-38, 18.5)
 position = Vector2(2.08165e-12, 2.08165e-12)
 shape = SubResource("RectangleShape2D_hjvni")
 
+[node name="Sprite2D" type="Sprite2D" parent="Menu/Sprite2D/Slot11" index="1"]
+
 [node name="Slot12" type="Area2D" parent="Menu/Sprite2D" index="11"]
 position = Vector2(-19, 18.5)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Menu/Sprite2D/Slot12" index="0"]
 position = Vector2(2.08165e-12, 2.08165e-12)
 shape = SubResource("RectangleShape2D_hjvni")
+
+[node name="Sprite2D" type="Sprite2D" parent="Menu/Sprite2D/Slot12" index="1"]
 
 [node name="Slot13" type="Area2D" parent="Menu/Sprite2D" index="12"]
 position = Vector2(0, 18.5)
@@ -103,6 +128,8 @@ position = Vector2(0, 18.5)
 position = Vector2(2.08165e-12, 2.08165e-12)
 shape = SubResource("RectangleShape2D_hjvni")
 
+[node name="Sprite2D" type="Sprite2D" parent="Menu/Sprite2D/Slot13" index="1"]
+
 [node name="Slot14" type="Area2D" parent="Menu/Sprite2D" index="13"]
 position = Vector2(19, 18.5)
 
@@ -110,9 +137,13 @@ position = Vector2(19, 18.5)
 position = Vector2(2.08165e-12, 2.08165e-12)
 shape = SubResource("RectangleShape2D_hjvni")
 
+[node name="Sprite2D" type="Sprite2D" parent="Menu/Sprite2D/Slot14" index="1"]
+
 [node name="Slot15" type="Area2D" parent="Menu/Sprite2D" index="14"]
 position = Vector2(38, 18.5)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Menu/Sprite2D/Slot15" index="0"]
 position = Vector2(2.08165e-12, 2.08165e-12)
 shape = SubResource("RectangleShape2D_hjvni")
+
+[node name="Sprite2D" type="Sprite2D" parent="Menu/Sprite2D/Slot15" index="1"]
