@@ -1,8 +1,7 @@
-[gd_scene load_steps=13 format=3 uid="uid://bwfe30h2s655f"]
+[gd_scene load_steps=12 format=3 uid="uid://bwfe30h2s655f"]
 
 [ext_resource type="Script" path="res://scripts/marchingSquares/VoxelGrid.gd" id="1_7sy1n"]
 [ext_resource type="PackedScene" uid="uid://bltijxvovh1q" path="res://scenes/voxel.tscn" id="2_4y4kx"]
-[ext_resource type="PackedScene" uid="uid://pirifwv1hjhi" path="res://scenes/storage_block.tscn" id="3_jof3s"]
 [ext_resource type="Script" path="res://scripts/FishManager.gd" id="3_qhq6a"]
 [ext_resource type="Shader" path="res://shaders/marching_squares.gdshader" id="3_srn0q"]
 [ext_resource type="Texture2D" uid="uid://cgbueytyqf3ak" path="res://sprites/ui/white.png" id="4_fjbr0"]
@@ -33,7 +32,6 @@ voxel_resolution_x = 41
 voxel_resolution_y = 24
 voxel_scene = ExtResource("2_4y4kx")
 static_body = NodePath("StaticBody2D")
-storage_scene = ExtResource("3_jof3s")
 
 [node name="StaticBody2D" type="StaticBody2D" parent="MarchingSquares"]
 position = Vector2(580, 314)

@@ -1,63 +1,165 @@
-[gd_scene load_steps=4 format=3 uid="uid://dbmstijr060bk"]
+[gd_scene load_steps=13 format=3 uid="uid://dbmstijr060bk"]
 
-[ext_resource type="PackedScene" uid="uid://b314d4arovyk" path="res://scenes/root_menu.tscn" id="1_qlx3b"]
+[ext_resource type="Script" path="res://scripts/ui/root_menu.gd" id="1_54qcq"]
 [ext_resource type="Texture2D" uid="uid://77th07mx1pwf" path="res://sprites/ui/StorageUI.png" id="2_gjsh3"]
+[ext_resource type="Texture2D" uid="uid://b6i36wv7622d7" path="res://sprites/ui/Close.png" id="2_utptb"]
+[ext_resource type="Texture2D" uid="uid://dchoncvs1hdlv" path="res://sprites/ui/Move.png" id="3_7sqvi"]
 [ext_resource type="PackedScene" uid="uid://ixyduxobwoxs" path="res://scenes/slot.tscn" id="3_jbst8"]
 
-[node name="Root" instance=ExtResource("1_qlx3b")]
-offset_right = 2.08165e-12
-offset_bottom = 2.08165e-12
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_53glm"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hmi31"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_gwel2"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_02f48"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0wfl5"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ge7gn"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ali7a"]
+
+[node name="Root" type="Node2D"]
+script = ExtResource("1_54qcq")
 slot_size = 15
 
-[node name="Menu" parent="." index="2"]
+[node name="Close" type="Button" parent="."]
+unique_name_in_owner = true
+offset_left = -13.0
+offset_top = 2.0
+offset_bottom = 15.0
+theme_override_styles/normal = SubResource("StyleBoxEmpty_53glm")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_hmi31")
+action_mode = 0
+icon = ExtResource("2_utptb")
+
+[node name="Move" type="Button" parent="."]
+unique_name_in_owner = true
+offset_left = -13.0
+offset_top = 15.0
+offset_bottom = 28.0
+theme_override_styles/normal = SubResource("StyleBoxEmpty_gwel2")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_02f48")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_0wfl5")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ge7gn")
+action_mode = 0
+icon = ExtResource("3_7sqvi")
+
+[node name="Menu" type="Panel" parent="."]
+unique_name_in_owner = true
 offset_right = 104.0
 offset_bottom = 67.0
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxEmpty_ali7a")
 
-[node name="Sprite2D" parent="Menu" index="0"]
-position = Vector2(52, 34)
+[node name="TextureRect" type="TextureRect" parent="Menu"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
 texture = ExtResource("2_gjsh3")
 
-[node name="Slot" parent="Menu/Sprite2D" index="0" instance=ExtResource("3_jbst8")]
-position = Vector2(-38, -19.5)
+[node name="Slot" parent="Menu/TextureRect" instance=ExtResource("3_jbst8")]
+layout_mode = 0
+offset_left = 14.0
+offset_top = 14.5
+offset_right = 14.0
+offset_bottom = 14.5
 
-[node name="Slot2" parent="Menu/Sprite2D" index="1" instance=ExtResource("3_jbst8")]
-position = Vector2(-19, -19.5)
+[node name="Slot2" parent="Menu/TextureRect" instance=ExtResource("3_jbst8")]
+layout_mode = 0
+offset_left = 33.0
+offset_top = 14.5
+offset_right = 33.0
+offset_bottom = 14.5
 
-[node name="Slot3" parent="Menu/Sprite2D" index="2" instance=ExtResource("3_jbst8")]
-position = Vector2(0, -19.5)
+[node name="Slot3" parent="Menu/TextureRect" instance=ExtResource("3_jbst8")]
+layout_mode = 0
+offset_left = 52.0
+offset_top = 14.5
+offset_right = 52.0
+offset_bottom = 14.5
 
-[node name="Slot4" parent="Menu/Sprite2D" index="3" instance=ExtResource("3_jbst8")]
-position = Vector2(19, -19.5)
+[node name="Slot4" parent="Menu/TextureRect" instance=ExtResource("3_jbst8")]
+layout_mode = 0
+offset_left = 71.0
+offset_top = 14.5
+offset_right = 71.0
+offset_bottom = 14.5
 
-[node name="Slot5" parent="Menu/Sprite2D" index="4" instance=ExtResource("3_jbst8")]
-position = Vector2(38, -19.5)
+[node name="Slot5" parent="Menu/TextureRect" instance=ExtResource("3_jbst8")]
+layout_mode = 0
+offset_left = 90.0
+offset_top = 14.5
+offset_right = 90.0
+offset_bottom = 14.5
 
-[node name="Slot6" parent="Menu/Sprite2D" index="5" instance=ExtResource("3_jbst8")]
-position = Vector2(-38, -0.5)
+[node name="Slot6" parent="Menu/TextureRect" instance=ExtResource("3_jbst8")]
+layout_mode = 0
+offset_left = 14.0
+offset_top = 33.5
+offset_right = 14.0
+offset_bottom = 33.5
 
-[node name="Slot7" parent="Menu/Sprite2D" index="6" instance=ExtResource("3_jbst8")]
-position = Vector2(-19, -0.5)
+[node name="Slot7" parent="Menu/TextureRect" instance=ExtResource("3_jbst8")]
+layout_mode = 0
+offset_left = 33.0
+offset_top = 33.5
+offset_right = 33.0
+offset_bottom = 33.5
 
-[node name="Slot8" parent="Menu/Sprite2D" index="7" instance=ExtResource("3_jbst8")]
-position = Vector2(0, -0.5)
+[node name="Slot8" parent="Menu/TextureRect" instance=ExtResource("3_jbst8")]
+layout_mode = 0
+offset_left = 52.0
+offset_top = 33.5
+offset_right = 52.0
+offset_bottom = 33.5
 
-[node name="Slot9" parent="Menu/Sprite2D" index="8" instance=ExtResource("3_jbst8")]
-position = Vector2(19, -0.5)
+[node name="Slot9" parent="Menu/TextureRect" instance=ExtResource("3_jbst8")]
+layout_mode = 0
+offset_left = 71.0
+offset_top = 33.5
+offset_right = 71.0
+offset_bottom = 33.5
 
-[node name="Slot10" parent="Menu/Sprite2D" index="9" instance=ExtResource("3_jbst8")]
-position = Vector2(38, -0.5)
+[node name="Slot10" parent="Menu/TextureRect" instance=ExtResource("3_jbst8")]
+layout_mode = 0
+offset_left = 90.0
+offset_top = 33.5
+offset_right = 90.0
+offset_bottom = 33.5
 
-[node name="Slot11" parent="Menu/Sprite2D" index="10" instance=ExtResource("3_jbst8")]
-position = Vector2(-38, 18.5)
+[node name="Slot11" parent="Menu/TextureRect" instance=ExtResource("3_jbst8")]
+layout_mode = 0
+offset_left = 14.0
+offset_top = 52.5
+offset_right = 14.0
+offset_bottom = 52.5
 
-[node name="Slot12" parent="Menu/Sprite2D" index="11" instance=ExtResource("3_jbst8")]
-position = Vector2(-19, 18.5)
+[node name="Slot12" parent="Menu/TextureRect" instance=ExtResource("3_jbst8")]
+layout_mode = 0
+offset_left = 33.0
+offset_top = 52.5
+offset_right = 33.0
+offset_bottom = 52.5
 
-[node name="Slot13" parent="Menu/Sprite2D" index="12" instance=ExtResource("3_jbst8")]
-position = Vector2(0, 18.5)
+[node name="Slot13" parent="Menu/TextureRect" instance=ExtResource("3_jbst8")]
+layout_mode = 0
+offset_left = 52.0
+offset_top = 52.5
+offset_right = 52.0
+offset_bottom = 52.5
 
-[node name="Slot14" parent="Menu/Sprite2D" index="13" instance=ExtResource("3_jbst8")]
-position = Vector2(19, 18.5)
+[node name="Slot14" parent="Menu/TextureRect" instance=ExtResource("3_jbst8")]
+layout_mode = 0
+offset_left = 71.0
+offset_top = 52.5
+offset_right = 71.0
+offset_bottom = 52.5
 
-[node name="Slot15" parent="Menu/Sprite2D" index="14" instance=ExtResource("3_jbst8")]
-position = Vector2(38, 18.5)
+[node name="Slot15" parent="Menu/TextureRect" instance=ExtResource("3_jbst8")]
+layout_mode = 0
+offset_left = 90.0
+offset_top = 52.5
+offset_right = 90.0
+offset_bottom = 52.5

@@ -1,4 +1,4 @@
-extends Panel
+extends Node2D
 
 signal menu_closed(menu_name, index)
 signal items_changed(indexes)
@@ -53,13 +53,14 @@ func _on_move_button_pressed(event):
 		var new_position = global_position + (event.position - drag_offset)
 		ensure_within_viewport(new_position)
 
-func _on_slot_pressed(slot_index: int):
+func _on_slot_pressed(slot_index: int, event: InputEvent):
 	if menu.items[slot_index]:
 		follow_mouse_object = menu.items[slot_index].duplicate() as Node2D
 		menu.items[slot_index] = {}
 	elif follow_mouse_object:
 		menu.items[slot_index] = follow_mouse_object
 		follow_mouse_object = null
+
 	set_slot(slot_index, menu.items[slot_index])
 
 func set_item(item_index: int, item: Item):

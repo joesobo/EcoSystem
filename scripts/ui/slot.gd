@@ -1,6 +1,6 @@
-extends Area2D
+extends Panel
 
-signal slot_pressed(slotIndex)
+signal slot_pressed(slot_index: int, event: InputEvent)
 
 @onready var itemTexture = %"Item Texture"
 @onready var tensCounter = %"Count Texture (Tens)"
@@ -9,13 +9,13 @@ signal slot_pressed(slotIndex)
 var slotIndex: int
 
 func _ready():
-	connect("input_event", Callable(self, "_on_input_event"))
+	connect("gui_input", Callable(self, "_on_gui_input"))
 
-func _input_event(_viewport, event, _shape_idx):
+func _on_gui_input(event):
 	if event is InputEventMouseButton and event.pressed:
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			print(slotIndex)
-			emit_signal("slot_pressed", slotIndex)
+			emit_signal("slot_pressed", slotIndex, event)
 
 func clear_slot():
 	tensCounter.frame = 0

@@ -1,10 +1,7 @@
-[gd_scene load_steps=15 format=3 uid="uid://ixyduxobwoxs"]
+[gd_scene load_steps=14 format=3 uid="uid://ixyduxobwoxs"]
 
 [ext_resource type="Script" path="res://scripts/ui/slot.gd" id="1_rj73i"]
 [ext_resource type="Texture2D" uid="uid://e4bxuh6mvjke" path="res://sprites/ui/numbers-Sheet.png" id="2_q732m"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_hjvni"]
-size = Vector2(12, 12)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_gkqay"]
 atlas = ExtResource("2_q732m")
@@ -84,16 +81,15 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Slot" type="Area2D"]
-position = Vector2(2.08165e-12, 2.08165e-12)
+[node name="Slot" type="Panel"]
 script = ExtResource("1_rj73i")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(2.08165e-12, 2.08165e-12)
-shape = SubResource("RectangleShape2D_hjvni")
-
-[node name="Item Texture" type="Sprite2D" parent="."]
+[node name="Item Texture" type="TextureRect" parent="."]
 unique_name_in_owner = true
+offset_left = -6.0
+offset_top = -6.0
+offset_right = 6.0
+offset_bottom = 6.0
 
 [node name="Count Texture (Tens)" type="AnimatedSprite2D" parent="."]
 unique_name_in_owner = true
