@@ -5,6 +5,7 @@ signal items_changed(indexes)
 
 @onready var close_button = %Close
 @onready var move_button = %Move
+@onready var slot_scene = preload("res://scenes/slot.tscn")
 
 @export var slot_size: int = 0
 @export var menu_name: UISingleton.MenuType = UISingleton.MenuType.Storage
@@ -12,7 +13,7 @@ signal items_changed(indexes)
 var slots: Array[Node] = []
 var index: int
 var menu: Menu
-var follow_mouse_object: Node2D
+var follow_mouse_object: Panel
 
 var is_dragging = false
 var drag_offset = Vector2.ZERO
@@ -54,12 +55,16 @@ func _on_move_button_pressed(event):
 		ensure_within_viewport(new_position)
 
 func _on_slot_pressed(slot_index: int, event: InputEvent):
-	if menu.items[slot_index]:
-		follow_mouse_object = menu.items[slot_index].duplicate() as Node2D
+	if menu.items[slot_index] is Item:
+		follow_mouse_object = slot_scene.instantiate()
+		add_child(follow_mouse_object)
+		follow_mouse_object.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		follow_mouse_object.get_child(0).mouse_filter = Control.MOUSE_FILTER_IGNORE
+		follow_mouse_object.set_item(menu.items[slot_index])
 		menu.items[slot_index] = {}
-	elif follow_mouse_object:
-		menu.items[slot_index] = follow_mouse_object
-		follow_mouse_object = null
+	elif follow_mouse_object && menu.items[slot_index] == {}:
+		menu.items[slot_index] = follow_mouse_object.item
+		follow_mouse_object.queue_free()
 
 	set_slot(slot_index, menu.items[slot_index])
 
@@ -89,8 +94,7 @@ func set_slot(item_index: int, item):
 	slot.slotIndex = item_index
 
 	if item is Item:
-		slot.set_slot_texture(item)
-		slot.set_slot_quantity(item.quantity)
+		slot.set_item(item)
 	else:
 		slot.clear_slot()
 
