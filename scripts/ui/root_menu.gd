@@ -73,6 +73,11 @@ func _on_slot_pressed(slot_index: int, event: InputEvent):
 		menu.items[slot_index].quantity += follow_mouse_object.item.quantity
 		follow_mouse_object.queue_free()
 		follow_mouse_object = null
+	# item in hand and different item in slot
+	elif follow_mouse_object and follow_mouse_object.item.key != menu.items[slot_index].key:
+		var temp = menu.items[slot_index]
+		menu.items[slot_index] = follow_mouse_object.item
+		follow_mouse_object.set_item(temp)
 
 	set_slot(slot_index, menu.items[slot_index])
 
