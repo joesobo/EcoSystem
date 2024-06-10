@@ -1,7 +1,6 @@
 extends Node2D
 
 signal menu_closed(menu_name, index)
-signal items_changed(indexes)
 
 @onready var close_button = %Close
 @onready var move_button = %Move
@@ -55,71 +54,65 @@ func _on_move_button_pressed(event):
 		ensure_within_viewport(new_position)
 
 func _on_slot_pressed(slot_index: int, event: InputEvent):
-	var left_click_held = event.button_index == MOUSE_BUTTON_LEFT
-	var right_click_held = event.button_index == MOUSE_BUTTON_RIGHT
-
-	# empty hand and item in slot
-	if menu.items[slot_index] is Item and !follow_mouse_object:
-		# half stack
-		if right_click_held and menu.items[slot_index].quantity > 1:
-			var half_quantity = int(ceil(menu.items[slot_index].quantity / 2))
-			var remaining_quantity = menu.items[slot_index].quantity - half_quantity
-
-			follow_mouse_object = slot_scene.instantiate()
-			add_child(follow_mouse_object)
-			follow_mouse_object.mouse_filter = Control.MOUSE_FILTER_IGNORE
-			follow_mouse_object.get_child(0).mouse_filter = Control.MOUSE_FILTER_IGNORE
-
-			var cloned_item = menu.items[slot_index].clone()
-			cloned_item.quantity = remaining_quantity
-			follow_mouse_object.set_item(cloned_item)
-
-			menu.items[slot_index].quantity = half_quantity
-		elif left_click_held:
-			follow_mouse_object = slot_scene.instantiate()
-			add_child(follow_mouse_object)
-			follow_mouse_object.mouse_filter = Control.MOUSE_FILTER_IGNORE
-			follow_mouse_object.get_child(0).mouse_filter = Control.MOUSE_FILTER_IGNORE
-			follow_mouse_object.set_item(menu.items[slot_index])
-			menu.items[slot_index] = {}
-	# item in hand and empty slot
-	elif follow_mouse_object and !menu.items[slot_index] is Item and left_click_held:
-		menu.items[slot_index] = follow_mouse_object.item
-		follow_mouse_object.queue_free()
-		follow_mouse_object = null
-	# item in hand and same item in slot
-	elif follow_mouse_object and follow_mouse_object.item.key == menu.items[slot_index].key and left_click_held:
-		menu.items[slot_index].quantity += follow_mouse_object.item.quantity
-		follow_mouse_object.queue_free()
-		follow_mouse_object = null
-	# item in hand and different item in slot
-	elif follow_mouse_object and follow_mouse_object.item.key != menu.items[slot_index].key and left_click_held:
-		var temp = menu.items[slot_index]
-		menu.items[slot_index] = follow_mouse_object.item
-		follow_mouse_object.set_item(temp)
+	if follow_mouse_object:
+		handle_item_drop(slot_index, event)
+	else:
+		handle_item_pickup(slot_index, event)
 
 	set_slot(slot_index, menu.items[slot_index])
 
-func set_item(item_index: int, item: Item):
-	var previous_item = menu.items[item_index]
-	menu.items[item_index] = item
-	emit_signal("items_changed", [item_index])
-	set_slot(item_index, item)
-	return previous_item
+func handle_item_pickup(slot_index: int, event: InputEvent):
+	if event.button_index == MOUSE_BUTTON_RIGHT and menu.items[slot_index].quantity > 1:
+		pickup_half_stack(slot_index)
+	elif event.button_index == MOUSE_BUTTON_LEFT:
+		pickup_stack(slot_index)
 
-func remove_item(item_index: int):
-	var previous_item = menu.items[item_index].duplicate()
-	menu.items[item_index].clear()
-	emit_signal("items_changed", [item_index])
-	return previous_item
+func handle_item_drop(slot_index: int, event: InputEvent):
+	if event.button_index == MOUSE_BUTTON_LEFT:
+		if !menu.items[slot_index] is Item:
+			place_item_in_empty_slot(slot_index)
+		elif follow_mouse_object.item.key == menu.items[slot_index].key:
+			merge_items(slot_index)
+		else:
+			swap_items(slot_index)
 
-func add_item_quantity(item_index: int, amount: int):
-	menu.items[item_index].quantity += amount
+func place_item_in_empty_slot(slot_index: int):
+	menu.items[slot_index] = follow_mouse_object.item
+	follow_mouse_object.queue_free()
+	follow_mouse_object = null
 
-	if menu.items[item_index].quantity <= 0:
-		remove_item(item_index)
-	else:
-		emit_signal("items_changed", [item_index])
+func merge_items(slot_index: int):
+	menu.items[slot_index].quantity += follow_mouse_object.item.quantity
+	follow_mouse_object.queue_free()
+	follow_mouse_object = null
+
+func swap_items(slot_index: int):
+	var temp = menu.items[slot_index]
+	menu.items[slot_index] = follow_mouse_object.item
+	follow_mouse_object.set_item(temp)
+
+func pickup_half_stack(slot_index: int):
+	var half_quantity = int(ceil(menu.items[slot_index].quantity / 2))
+	var remaining_quantity = menu.items[slot_index].quantity - half_quantity
+
+	follow_mouse_object = slot_scene.instantiate()
+	add_child(follow_mouse_object)
+	follow_mouse_object.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	follow_mouse_object.get_child(0).mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+	var cloned_item = menu.items[slot_index].clone()
+	cloned_item.quantity = remaining_quantity
+	follow_mouse_object.set_item(cloned_item)
+
+	menu.items[slot_index].quantity = half_quantity
+
+func pickup_stack(slot_index: int):
+	follow_mouse_object = slot_scene.instantiate()
+	add_child(follow_mouse_object)
+	follow_mouse_object.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	follow_mouse_object.get_child(0).mouse_filter = Control.MOUSE_FILTER_IGNORE
+	follow_mouse_object.set_item(menu.items[slot_index])
+	menu.items[slot_index] = {}
 
 func set_slot(item_index: int, item):
 	var slot = slots[item_index]
