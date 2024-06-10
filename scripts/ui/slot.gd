@@ -14,8 +14,7 @@ func _ready():
 
 func _on_gui_input(event):
 	if event is InputEventMouseButton and event.pressed:
-		if event.button_index == MOUSE_BUTTON_LEFT:
-			emit_signal("slot_pressed", slotIndex, event)
+		emit_signal("slot_pressed", slotIndex, event)
 
 func clear_slot():
 	tensCounter.frame = 0

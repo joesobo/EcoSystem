@@ -55,26 +55,45 @@ func _on_move_button_pressed(event):
 		ensure_within_viewport(new_position)
 
 func _on_slot_pressed(slot_index: int, event: InputEvent):
+	var left_click_held = event.button_index == MOUSE_BUTTON_LEFT
+	var right_click_held = event.button_index == MOUSE_BUTTON_RIGHT
+
 	# empty hand and item in slot
 	if menu.items[slot_index] is Item and !follow_mouse_object:
-		follow_mouse_object = slot_scene.instantiate()
-		add_child(follow_mouse_object)
-		follow_mouse_object.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		follow_mouse_object.get_child(0).mouse_filter = Control.MOUSE_FILTER_IGNORE
-		follow_mouse_object.set_item(menu.items[slot_index])
-		menu.items[slot_index] = {}
+		# half stack
+		if right_click_held and menu.items[slot_index].quantity > 1:
+			var half_quantity = int(ceil(menu.items[slot_index].quantity / 2))
+			var remaining_quantity = menu.items[slot_index].quantity - half_quantity
+
+			follow_mouse_object = slot_scene.instantiate()
+			add_child(follow_mouse_object)
+			follow_mouse_object.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			follow_mouse_object.get_child(0).mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+			var cloned_item = menu.items[slot_index].clone()
+			cloned_item.quantity = remaining_quantity
+			follow_mouse_object.set_item(cloned_item)
+
+			menu.items[slot_index].quantity = half_quantity
+		elif left_click_held:
+			follow_mouse_object = slot_scene.instantiate()
+			add_child(follow_mouse_object)
+			follow_mouse_object.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			follow_mouse_object.get_child(0).mouse_filter = Control.MOUSE_FILTER_IGNORE
+			follow_mouse_object.set_item(menu.items[slot_index])
+			menu.items[slot_index] = {}
 	# item in hand and empty slot
-	elif follow_mouse_object and !menu.items[slot_index] is Item:
+	elif follow_mouse_object and !menu.items[slot_index] is Item and left_click_held:
 		menu.items[slot_index] = follow_mouse_object.item
 		follow_mouse_object.queue_free()
 		follow_mouse_object = null
 	# item in hand and same item in slot
-	elif follow_mouse_object and follow_mouse_object.item.key == menu.items[slot_index].key:
+	elif follow_mouse_object and follow_mouse_object.item.key == menu.items[slot_index].key and left_click_held:
 		menu.items[slot_index].quantity += follow_mouse_object.item.quantity
 		follow_mouse_object.queue_free()
 		follow_mouse_object = null
 	# item in hand and different item in slot
-	elif follow_mouse_object and follow_mouse_object.item.key != menu.items[slot_index].key:
+	elif follow_mouse_object and follow_mouse_object.item.key != menu.items[slot_index].key and left_click_held:
 		var temp = menu.items[slot_index]
 		menu.items[slot_index] = follow_mouse_object.item
 		follow_mouse_object.set_item(temp)
