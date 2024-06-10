@@ -24,6 +24,7 @@ func clear_slot():
 	tensCounter.hide()
 	onesCounter.hide()
 
+	item = null
 	itemTexture.texture = null
 
 func set_item(item: Item):

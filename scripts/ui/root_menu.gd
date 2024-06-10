@@ -55,16 +55,24 @@ func _on_move_button_pressed(event):
 		ensure_within_viewport(new_position)
 
 func _on_slot_pressed(slot_index: int, event: InputEvent):
-	if menu.items[slot_index] is Item:
+	# empty hand and item in slot
+	if menu.items[slot_index] is Item and !follow_mouse_object:
 		follow_mouse_object = slot_scene.instantiate()
 		add_child(follow_mouse_object)
 		follow_mouse_object.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		follow_mouse_object.get_child(0).mouse_filter = Control.MOUSE_FILTER_IGNORE
 		follow_mouse_object.set_item(menu.items[slot_index])
 		menu.items[slot_index] = {}
-	elif follow_mouse_object && menu.items[slot_index] == {}:
+	# item in hand and empty slot
+	elif follow_mouse_object and !menu.items[slot_index] is Item:
 		menu.items[slot_index] = follow_mouse_object.item
 		follow_mouse_object.queue_free()
+		follow_mouse_object = null
+	# item in hand and same item in slot
+	elif follow_mouse_object and follow_mouse_object.item.key == menu.items[slot_index].key:
+		menu.items[slot_index].quantity += follow_mouse_object.item.quantity
+		follow_mouse_object.queue_free()
+		follow_mouse_object = null
 
 	set_slot(slot_index, menu.items[slot_index])
 

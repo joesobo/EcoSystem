@@ -23,7 +23,20 @@ func get_menu_by_key(key: String):
 	return null
 
 func create_menu(key: String, instance: Node) -> Menu:
-	var new_menu = Menu.new(key, instance.position, [ItemDefinition.items[0], ItemDefinition.items[0], ItemDefinition.items[0], ItemDefinition.items[1]], true, true, instance)
+	var new_menu = Menu.new(
+		key,
+		instance.position,
+		[
+			ItemDefinition.items[0].clone(),
+			ItemDefinition.items[0].clone(),
+			ItemDefinition.items[0].clone(),
+			ItemDefinition.items[1].clone(),
+			ItemDefinition.items[0].clone()
+		],
+		true,
+		true,
+		instance
+	)
 
 	for menu in menus:
 		if menu.focused:
