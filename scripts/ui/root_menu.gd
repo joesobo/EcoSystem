@@ -75,11 +75,38 @@ func handle_item_drop(slot_index: int, event: InputEvent):
 			merge_items(slot_index)
 		else:
 			swap_items(slot_index)
+	elif event.button_index == MOUSE_BUTTON_RIGHT:
+		if menu.items[slot_index] is Item and follow_mouse_object.item.key == menu.items[slot_index].key:
+			increment_single_item(slot_index)
+		else:
+			place_single_item_in_empty_slot(slot_index)
+
+		if follow_mouse_object:
+			follow_mouse_object.set_item(follow_mouse_object.item)
 
 func place_item_in_empty_slot(slot_index: int):
 	menu.items[slot_index] = follow_mouse_object.item
 	follow_mouse_object.queue_free()
 	follow_mouse_object = null
+
+func place_single_item_in_empty_slot(slot_index: int):
+	follow_mouse_object.item.quantity -= 1
+
+	menu.items[slot_index] = follow_mouse_object.item.clone()
+	menu.items[slot_index].quantity = 1
+
+	if follow_mouse_object.item.quantity == 0:
+		follow_mouse_object.queue_free()
+		follow_mouse_object = null
+
+func increment_single_item(slot_index: int):
+	follow_mouse_object.item.quantity -= 1
+
+	menu.items[slot_index].quantity += 1
+
+	if follow_mouse_object.item.quantity == 0:
+		follow_mouse_object.queue_free()
+		follow_mouse_object = null
 
 func merge_items(slot_index: int):
 	menu.items[slot_index].quantity += follow_mouse_object.item.quantity
