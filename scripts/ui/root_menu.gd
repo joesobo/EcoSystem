@@ -60,11 +60,17 @@ func _on_slot_pressed(slot_index: int, event: InputEvent):
 		handle_scroll_up(slot_index)
 
 	elif follow_mouse_object:
-		handle_item_drop(slot_index, event)
+		handle_item_place(slot_index, event)
 	else:
 		handle_item_pickup(slot_index, event)
 
 	set_slot(slot_index, menu.items[slot_index])
+
+func init_follow_mouse_slot():
+	follow_mouse_object = slot_scene.instantiate()
+	add_child(follow_mouse_object)
+	follow_mouse_object.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	follow_mouse_object.get_child(0).mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 func handle_item_pickup(slot_index: int, event: InputEvent):
 	if event.button_index == MOUSE_BUTTON_RIGHT and menu.items[slot_index].quantity > 1:
@@ -72,7 +78,7 @@ func handle_item_pickup(slot_index: int, event: InputEvent):
 	elif event.button_index == MOUSE_BUTTON_LEFT:
 		pickup_stack(slot_index)
 
-func handle_item_drop(slot_index: int, event: InputEvent):
+func handle_item_place(slot_index: int, event: InputEvent):
 	if event.button_index == MOUSE_BUTTON_LEFT:
 		if !menu.items[slot_index] is Item:
 			place_item_in_empty_slot(slot_index)
@@ -128,10 +134,7 @@ func pickup_half_stack(slot_index: int):
 	var half_quantity = int(ceil(menu.items[slot_index].quantity / 2))
 	var remaining_quantity = menu.items[slot_index].quantity - half_quantity
 
-	follow_mouse_object = slot_scene.instantiate()
-	add_child(follow_mouse_object)
-	follow_mouse_object.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	follow_mouse_object.get_child(0).mouse_filter = Control.MOUSE_FILTER_IGNORE
+	init_follow_mouse_slot()
 
 	var cloned_item = menu.items[slot_index].clone()
 	cloned_item.quantity = remaining_quantity
@@ -140,10 +143,8 @@ func pickup_half_stack(slot_index: int):
 	menu.items[slot_index].quantity = half_quantity
 
 func pickup_stack(slot_index: int):
-	follow_mouse_object = slot_scene.instantiate()
-	add_child(follow_mouse_object)
-	follow_mouse_object.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	follow_mouse_object.get_child(0).mouse_filter = Control.MOUSE_FILTER_IGNORE
+	init_follow_mouse_slot()
+
 	follow_mouse_object.set_item(menu.items[slot_index])
 	menu.items[slot_index] = {}
 
@@ -165,10 +166,7 @@ func handle_scroll_up(slot_index: int):
 		if (menu.items[slot_index].quantity == 0):
 			menu.items[slot_index] = {}
 	elif !follow_mouse_object:
-		follow_mouse_object = slot_scene.instantiate()
-		add_child(follow_mouse_object)
-		follow_mouse_object.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		follow_mouse_object.get_child(0).mouse_filter = Control.MOUSE_FILTER_IGNORE
+		init_follow_mouse_slot()
 
 		var cloned_item = menu.items[slot_index].clone()
 		cloned_item.quantity = 1
