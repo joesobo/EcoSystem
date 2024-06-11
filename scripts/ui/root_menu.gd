@@ -89,8 +89,10 @@ func handle_item_place(slot_index: int, event: InputEvent):
 	elif event.button_index == MOUSE_BUTTON_RIGHT:
 		if menu.items[slot_index] is Item and follow_mouse_object.item.key == menu.items[slot_index].key:
 			increment_single_item(slot_index)
-		else:
+		elif !menu.items[slot_index] is Item:
 			place_single_item_in_empty_slot(slot_index)
+		else:
+			swap_items(slot_index)
 
 		if follow_mouse_object:
 			follow_mouse_object.set_item(follow_mouse_object.item)
