@@ -42,7 +42,7 @@ func _on_close_button_pressed():
 	emit_signal("menu_closed", UISingleton.get_menu_key(menu_name, index))
 
 func _on_move_button_pressed(event):
-	if event is InputEventMouseButton:
+	if event is InputEventMouseButton and event.pressed:
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			if event.pressed:
 				is_dragging = true
@@ -54,7 +54,12 @@ func _on_move_button_pressed(event):
 		ensure_within_viewport(new_position)
 
 func _on_slot_pressed(slot_index: int, event: InputEvent):
-	if follow_mouse_object:
+	if event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+		handle_scroll_down(slot_index)
+	elif event.button_index == MOUSE_BUTTON_WHEEL_UP:
+		handle_scroll_up(slot_index)
+
+	elif follow_mouse_object:
 		handle_item_drop(slot_index, event)
 	else:
 		handle_item_pickup(slot_index, event)
@@ -101,6 +106,7 @@ func place_single_item_in_empty_slot(slot_index: int):
 
 func increment_single_item(slot_index: int):
 	follow_mouse_object.item.quantity -= 1
+	follow_mouse_object.set_slot_quantity()
 
 	menu.items[slot_index].quantity += 1
 
@@ -140,6 +146,35 @@ func pickup_stack(slot_index: int):
 	follow_mouse_object.get_child(0).mouse_filter = Control.MOUSE_FILTER_IGNORE
 	follow_mouse_object.set_item(menu.items[slot_index])
 	menu.items[slot_index] = {}
+
+# places 1 item into the slot
+func handle_scroll_down(slot_index: int):
+	if follow_mouse_object:
+		if menu.items[slot_index] is Item and follow_mouse_object.item.key == menu.items[slot_index].key:
+			increment_single_item(slot_index)
+		else:
+			place_single_item_in_empty_slot(slot_index)
+
+# removes 1 item from the slot
+func handle_scroll_up(slot_index: int):
+	if follow_mouse_object and menu.items[slot_index] is Item and follow_mouse_object.item.key == menu.items[slot_index].key:
+		follow_mouse_object.item.quantity += 1
+		follow_mouse_object.set_slot_quantity()
+		menu.items[slot_index].quantity -= 1
+
+		if (menu.items[slot_index].quantity == 0):
+			menu.items[slot_index] = {}
+	elif !follow_mouse_object:
+		follow_mouse_object = slot_scene.instantiate()
+		add_child(follow_mouse_object)
+		follow_mouse_object.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		follow_mouse_object.get_child(0).mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+		var cloned_item = menu.items[slot_index].clone()
+		cloned_item.quantity = 1
+		follow_mouse_object.set_item(cloned_item)
+
+		menu.items[slot_index].quantity -= 1
 
 func set_slot(item_index: int, item):
 	var slot = slots[item_index]
