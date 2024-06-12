@@ -34,7 +34,7 @@ func _input(event: InputEvent):
 	if dragging_items and event is InputEventMouseMotion:
 		for slot in slots:
 			if slot.get_child(0).get_global_rect().has_point(event.position) and !dragged_slots.has(slot.slotIndex):
-				if !menu.items[slot.slotIndex] is Item or menu.items[slot.slotIndex].key == follow_mouse_object.item.key:
+				if !menu.items[slot.slotIndex] is Item or menu.items[slot.slotIndex].id == follow_mouse_object.item.id:
 					dragged_slots.append(slot.slotIndex)
 
 func _process(_delta):
@@ -114,7 +114,7 @@ func distribute_items_across_slots(event: InputEvent):
 				remainder -= 1
 
 			if quantity_to_place > 0:
-				if menu.items[slot_index] is Item and follow_mouse_object.item.key == menu.items[slot_index].key:
+				if menu.items[slot_index] is Item and follow_mouse_object.item.id == menu.items[slot_index].id:
 					menu.items[slot_index].quantity += quantity_to_place
 					slots[slot_index].set_slot_quantity()
 				else:
@@ -140,12 +140,12 @@ func handle_item_place(slot_index: int, event: InputEvent):
 	if event.button_index == MOUSE_BUTTON_LEFT:
 		if !menu.items[slot_index] is Item:
 			place_item_in_empty_slot(slot_index)
-		elif follow_mouse_object.item.key == menu.items[slot_index].key:
+		elif follow_mouse_object.item.id == menu.items[slot_index].id:
 			merge_items(slot_index)
 		else:
 			swap_items(slot_index)
 	elif event.button_index == MOUSE_BUTTON_RIGHT:
-		if menu.items[slot_index] is Item and follow_mouse_object.item.key == menu.items[slot_index].key:
+		if menu.items[slot_index] is Item and follow_mouse_object.item.id == menu.items[slot_index].id:
 			increment_single_item(slot_index)
 		elif !menu.items[slot_index] is Item:
 			place_single_item_in_empty_slot(slot_index)
@@ -216,14 +216,14 @@ func pickup_stack(slot_index: int):
 # places 1 item into the slot
 func handle_scroll_down(slot_index: int):
 	if follow_mouse_object:
-		if menu.items[slot_index] is Item and follow_mouse_object.item.key == menu.items[slot_index].key:
+		if menu.items[slot_index] is Item and follow_mouse_object.item.id == menu.items[slot_index].id:
 			increment_single_item(slot_index)
 		else:
 			place_single_item_in_empty_slot(slot_index)
 
 # removes 1 item from the slot
 func handle_scroll_up(slot_index: int):
-	if follow_mouse_object and menu.items[slot_index] is Item and follow_mouse_object.item.key == menu.items[slot_index].key:
+	if follow_mouse_object and menu.items[slot_index] is Item and follow_mouse_object.item.id == menu.items[slot_index].id:
 		follow_mouse_object.item.quantity += 1
 		follow_mouse_object.set_slot_quantity()
 		menu.items[slot_index].quantity -= 1

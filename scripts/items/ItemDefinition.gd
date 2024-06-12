@@ -13,7 +13,7 @@ func _ready():
 			quantity = item_data[key]["quantity"]
 
 		var new_item = Item.new(
-			key,
+			item_data[key].id,
 			item_data[key].label,
 			item_data[key].icon,
 			item_data[key].stackable,
