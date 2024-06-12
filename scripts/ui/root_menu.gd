@@ -16,6 +16,7 @@ var follow_mouse_object: Panel
 var dragging_items: bool = false
 var start_slot_index: int = -1
 var dragged_slots: Array[int] = []
+var last_pickup_slot_index: int = -1
 
 var is_dragging = false
 var drag_offset = Vector2.ZERO
@@ -40,6 +41,9 @@ func _input(event: InputEvent):
 	if event.is_action_pressed("sort_inventory"):
 		sort_inventory()
 
+	if event.is_action_pressed("close"):
+		_on_close_button_pressed()
+
 func _process(_delta):
 	if follow_mouse_object != null:
 		follow_mouse_object.global_position = get_global_mouse_position()
@@ -53,6 +57,7 @@ func set_menu(menu: Menu):
 		set_slot(i, item)
 
 func _on_close_button_pressed():
+	handle_escape()
 	emit_signal("menu_closed", UISingleton.get_menu_key(menu_name, index))
 
 func _on_move_button_pressed(event):
@@ -172,6 +177,16 @@ func sort_inventory():
 		menu.items[i] = sorted_inventory[i]
 		set_slot(i, menu.items[i])
 
+func handle_escape():
+	if follow_mouse_object and last_pickup_slot_index != -1:
+		menu.items[last_pickup_slot_index] = follow_mouse_object.item
+		slots[last_pickup_slot_index].set_item(menu.items[last_pickup_slot_index])
+
+		follow_mouse_object.queue_free()
+		follow_mouse_object = null
+
+	last_pickup_slot_index = -1
+
 func init_follow_mouse_slot():
 	follow_mouse_object = slot_scene.instantiate()
 	add_child(follow_mouse_object)
@@ -179,6 +194,7 @@ func init_follow_mouse_slot():
 	follow_mouse_object.get_child(0).mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 func handle_item_pickup(slot_index: int, event: InputEvent):
+	last_pickup_slot_index = slot_index
 	if event.button_index == MOUSE_BUTTON_RIGHT and menu.items[slot_index].quantity > 1:
 		pickup_half_stack(slot_index)
 	elif event.button_index == MOUSE_BUTTON_LEFT:

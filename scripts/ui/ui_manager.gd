@@ -11,9 +11,6 @@ var menu_types = {
 func _input(event):
 	if event.is_action_pressed("toggle_breeding"):
 		toggle_menu(UISingleton.MenuType.Breeding, 0)
-	elif UISingleton.get_active_menu() && event.is_action_pressed("close"):
-		var active_menu = UISingleton.get_active_menu()
-		close_menu(active_menu.key)
 
 func toggle_menu(menu_name: UISingleton.MenuType, index: int):
 	var key = UISingleton.get_menu_key(menu_name, index)
