@@ -1,6 +1,7 @@
 extends Panel
 
 signal slot_pressed(slot_index: int, event: InputEvent)
+signal slot_drag_end(slot_index: int, event: InputEvent)
 
 @onready var itemTexture = %"Item Texture"
 @onready var tensCounter = %"Count Texture (Tens)"
@@ -13,8 +14,11 @@ func _ready():
 	connect("gui_input", Callable(self, "_on_gui_input"))
 
 func _on_gui_input(event):
-	if event is InputEventMouseButton and event.pressed:
-		emit_signal("slot_pressed", slotIndex, event)
+	if event is InputEventMouseButton:
+		if event.pressed:
+			emit_signal("slot_pressed", slotIndex, event)
+		else:
+			emit_signal("slot_drag_end", slotIndex, event)
 
 func clear_slot():
 	tensCounter.frame = 0

@@ -13,6 +13,9 @@ var slots: Array[Node] = []
 var index: int
 var menu: Menu
 var follow_mouse_object: Panel
+var dragging_items: bool = false
+var start_slot_index: int = -1
+var dragged_slots: Array[int] = []
 
 var is_dragging = false
 var drag_offset = Vector2.ZERO
@@ -24,7 +27,14 @@ func _ready():
 	for i in range(slot_size):
 		var slot = %Menu.get_child(0).get_child(i)
 		slot.connect("slot_pressed", Callable(self, "_on_slot_pressed"))
+		slot.connect("slot_drag_end", Callable(self, "_on_slot_drag_end"))
 		slots.append(slot)
+
+func _input(event: InputEvent):
+	if dragging_items and event is InputEventMouseMotion:
+		for slot in slots:
+			if !menu.items[slot.slotIndex] is Item and slot.get_child(0).get_global_rect().has_point(event.position) and !dragged_slots.has(slot.slotIndex):
+				dragged_slots.append(slot.slotIndex)
 
 func _process(_delta):
 	if follow_mouse_object != null:
@@ -60,11 +70,45 @@ func _on_slot_pressed(slot_index: int, event: InputEvent):
 		handle_scroll_up(slot_index)
 
 	elif follow_mouse_object:
-		handle_item_place(slot_index, event)
+		dragging_items = true
+		start_slot_index = slot_index
+		dragged_slots.append(slot_index)
 	else:
 		handle_item_pickup(slot_index, event)
 
 	set_slot(slot_index, menu.items[slot_index])
+
+func _on_slot_drag_end(slot_index: int, event: InputEvent):
+	if dragging_items:
+		if dragged_slots.size() > 1:
+			distribute_items_across_slots(event)
+		else:
+			handle_item_place(slot_index, event)
+	set_slot(slot_index, menu.items[slot_index])
+	reset_dragging()
+
+func reset_dragging():
+	dragging_items = false
+	start_slot_index = -1
+	dragged_slots.clear()
+
+func distribute_items_across_slots(event: InputEvent):
+	if follow_mouse_object and dragged_slots.size() >= 1:
+		var total_quantity = follow_mouse_object.item.quantity
+		var slots_count = dragged_slots.size()
+		var items_per_slot = int(total_quantity / slots_count)
+		var remainder = total_quantity % slots_count
+
+		for slot_index in dragged_slots:
+			if items_per_slot > 0:
+				# TODO: handle merging items
+				place_item_in_empty_slot_quantity(slot_index, items_per_slot)
+
+		if remainder > 0:
+			menu.items[dragged_slots[0]].quantity += remainder
+
+		follow_mouse_object.queue_free()
+		follow_mouse_object = null
 
 func init_follow_mouse_slot():
 	follow_mouse_object = slot_scene.instantiate()
@@ -101,6 +145,11 @@ func place_item_in_empty_slot(slot_index: int):
 	menu.items[slot_index] = follow_mouse_object.item
 	follow_mouse_object.queue_free()
 	follow_mouse_object = null
+
+func place_item_in_empty_slot_quantity(slot_index: int, quantity: int):
+	menu.items[slot_index] = follow_mouse_object.item.clone()
+	menu.items[slot_index].quantity = quantity
+	set_slot(slot_index, menu.items[slot_index])
 
 func place_single_item_in_empty_slot(slot_index: int):
 	follow_mouse_object.item.quantity -= 1
