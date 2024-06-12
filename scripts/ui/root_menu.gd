@@ -33,8 +33,9 @@ func _ready():
 func _input(event: InputEvent):
 	if dragging_items and event is InputEventMouseMotion:
 		for slot in slots:
-			if !menu.items[slot.slotIndex] is Item and slot.get_child(0).get_global_rect().has_point(event.position) and !dragged_slots.has(slot.slotIndex):
-				dragged_slots.append(slot.slotIndex)
+			if slot.get_child(0).get_global_rect().has_point(event.position) and !dragged_slots.has(slot.slotIndex):
+				if !menu.items[slot.slotIndex] is Item or menu.items[slot.slotIndex].key == follow_mouse_object.item.key:
+					dragged_slots.append(slot.slotIndex)
 
 func _process(_delta):
 	if follow_mouse_object != null:
@@ -99,13 +100,26 @@ func distribute_items_across_slots(event: InputEvent):
 		var items_per_slot = int(total_quantity / slots_count)
 		var remainder = total_quantity % slots_count
 
-		for slot_index in dragged_slots:
-			if items_per_slot > 0:
-				# TODO: handle merging items
-				place_item_in_empty_slot_quantity(slot_index, items_per_slot)
+		var distributed_items = 0
 
-		if remainder > 0:
-			menu.items[dragged_slots[0]].quantity += remainder
+		for i in range(slots_count):
+			if distributed_items >= total_quantity:
+				break
+
+			var slot_index = dragged_slots[i]
+			var quantity_to_place = items_per_slot
+
+			if remainder > 0:
+				quantity_to_place += 1
+				remainder -= 1
+
+			if quantity_to_place > 0:
+				if menu.items[slot_index] is Item and follow_mouse_object.item.key == menu.items[slot_index].key:
+					menu.items[slot_index].quantity += quantity_to_place
+					slots[slot_index].set_slot_quantity()
+				else:
+					place_item_in_empty_slot_quantity(slot_index, quantity_to_place)
+				distributed_items += quantity_to_place
 
 		follow_mouse_object.queue_free()
 		follow_mouse_object = null
