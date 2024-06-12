@@ -134,7 +134,6 @@ func sort_inventory():
 	for slot in slots:
 		if slot.item is Item:
 			var item = slot.item
-			print(item.max_quantity)
 			if item.id in combined_items:
 				var remaining_quantity = item.quantity
 				for combined_item in combined_items[item.id]:
@@ -225,19 +224,26 @@ func place_single_item_in_empty_slot(slot_index: int):
 		follow_mouse_object = null
 
 func increment_single_item(slot_index: int):
-	follow_mouse_object.item.quantity -= 1
-	follow_mouse_object.set_slot_quantity()
+	if menu.items[slot_index].quantity < menu.items[slot_index].max_quantity:
+		follow_mouse_object.item.quantity -= 1
+		follow_mouse_object.set_slot_quantity()
 
-	menu.items[slot_index].quantity += 1
+		menu.items[slot_index].quantity += 1
 
-	if follow_mouse_object.item.quantity == 0:
-		follow_mouse_object.queue_free()
-		follow_mouse_object = null
+		if follow_mouse_object.item.quantity == 0:
+			follow_mouse_object.queue_free()
+			follow_mouse_object = null
 
 func merge_items(slot_index: int):
-	menu.items[slot_index].quantity += follow_mouse_object.item.quantity
-	follow_mouse_object.queue_free()
-	follow_mouse_object = null
+	var total_quantity = menu.items[slot_index].quantity + follow_mouse_object.item.quantity
+
+	if total_quantity > menu.items[slot_index].max_quantity:
+		menu.items[slot_index].quantity = menu.items[slot_index].max_quantity
+		follow_mouse_object.item.quantity = total_quantity - menu.items[slot_index].max_quantity
+	else:
+		menu.items[slot_index].quantity = total_quantity
+		follow_mouse_object.queue_free()
+		follow_mouse_object = null
 
 func swap_items(slot_index: int):
 	var temp = menu.items[slot_index]
