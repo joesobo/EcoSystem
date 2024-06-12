@@ -37,6 +37,9 @@ func _input(event: InputEvent):
 				if !menu.items[slot.slotIndex] is Item or menu.items[slot.slotIndex].id == follow_mouse_object.item.id:
 					dragged_slots.append(slot.slotIndex)
 
+	if event.is_action_pressed("sort_inventory"):
+		sort_inventory()
+
 func _process(_delta):
 	if follow_mouse_object != null:
 		follow_mouse_object.global_position = get_global_mouse_position()
@@ -82,7 +85,7 @@ func _on_slot_pressed(slot_index: int, event: InputEvent):
 func _on_slot_drag_end(slot_index: int, event: InputEvent):
 	if dragging_items:
 		if dragged_slots.size() > 1:
-			distribute_items_across_slots(event)
+			distribute_items_across_slots()
 		else:
 			handle_item_place(slot_index, event)
 	set_slot(slot_index, menu.items[slot_index])
@@ -93,7 +96,7 @@ func reset_dragging():
 	start_slot_index = -1
 	dragged_slots.clear()
 
-func distribute_items_across_slots(event: InputEvent):
+func distribute_items_across_slots():
 	if follow_mouse_object and dragged_slots.size() >= 1:
 		var total_quantity = follow_mouse_object.item.quantity
 		var slots_count = dragged_slots.size()
@@ -123,6 +126,52 @@ func distribute_items_across_slots(event: InputEvent):
 
 		follow_mouse_object.queue_free()
 		follow_mouse_object = null
+
+func sort_inventory():
+	var combined_items = {}
+
+	# combine items by id
+	for slot in slots:
+		if slot.item is Item:
+			var item = slot.item
+			print(item.max_quantity)
+			if item.id in combined_items:
+				var remaining_quantity = item.quantity
+				for combined_item in combined_items[item.id]:
+					var available_space = combined_item.max_quantity - combined_item.quantity
+					if remaining_quantity <= available_space:
+						combined_item.quantity += remaining_quantity
+						remaining_quantity = 0
+						break
+					else:
+						remaining_quantity -= available_space
+						combined_item.quantity = combined_item.max_quantity
+
+				while remaining_quantity > 0:
+					var new_quantity = min(remaining_quantity, item.max_quantity)
+					var new_item = item.clone()
+					new_item.quantity = new_quantity
+					combined_items[item.id].append(new_item)
+					remaining_quantity -= new_quantity
+			else:
+				combined_items[item.id] = [item.clone()]
+
+	# sort combined items
+	var sorted_inventory = []
+	var sorted_keys = combined_items.keys()
+	sorted_keys.sort()
+
+	for key in sorted_keys:
+		sorted_inventory += combined_items[key]
+
+	# clear old inventory
+	for slot in slots:
+		slot.clear_slot()
+
+	# place sorted inventory
+	for i in range(sorted_inventory.size()):
+		menu.items[i] = sorted_inventory[i]
+		set_slot(i, menu.items[i])
 
 func init_follow_mouse_slot():
 	follow_mouse_object = slot_scene.instantiate()

@@ -16,8 +16,8 @@ func _ready():
 			item_data[key].id,
 			item_data[key].label,
 			item_data[key].icon,
-			item_data[key].stackable,
-			quantity
+			quantity,
+			item_data[key].max_quantity,
 		)
 
 		items.append(new_item)
