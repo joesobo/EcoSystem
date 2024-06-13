@@ -1,25 +1,34 @@
 shader_type canvas_item;
 
-uniform vec4 outline_color : source_color = vec4(1.0, 1.0, 1.0, 1.0);
-uniform float outline_thickness : hint_range(0.0, 5.0) = 0.0;
+uniform vec4 color : source_color = vec4(1.0);
+uniform float width : hint_range(0, 10) = 1.0;
 
-void fragment() {
-	vec2 texel_size = outline_thickness * vec2(1.0) / vec2(textureSize(TEXTURE, 0));
-	vec2 uv = FRAGCOORD.xy / SCREEN_PIXEL_SIZE;
-	vec4 color = texture(TEXTURE, UV);
-	vec4 outline = vec4(outline_color.rgb, 0.0);
+bool hasContraryNeighbour(vec2 uv, vec2 texture_pixel_size, sampler2D texture) {
+	for (float i = -ceil(width); i <= ceil(width); i++) {
+		float x = abs(i) > width ? width * sign(i) : i;
+		float offset = width - abs(x);
 
-	for (int x = -1; x <= 1; x++) {
-		for (int y = -1; y <= 1; y++) {
-			if (x != 0 || y != 0) {
-				vec4 neighbor = texture(TEXTURE, UV + vec2(float(x), float(y)) * texel_size);
+		for (float j = -ceil(offset); j <= ceil(offset); j++) {
+			float y = abs(j) > offset ? offset * sign(j) : j;
+			vec2 xy = uv + texture_pixel_size * vec2(x, y);
 
-				if (neighbor.a == 0.0) {
-					outline.a = outline_color.a;
-				}
+			if ((xy != clamp(xy, vec2(0.0), vec2(1.0)) || texture(texture, xy).a <= 0.0) == false) {
+				return true;
 			}
 		}
 	}
 
-	COLOR = mix(color, outline, outline.a);
+	return false;
+}
+
+void fragment() {
+	vec2 uv = UV;
+
+
+	COLOR = texture(TEXTURE, uv);
+
+	if ((COLOR.a <= 0.0) && hasContraryNeighbour(uv, TEXTURE_PIXEL_SIZE, TEXTURE)) {
+		COLOR.rgb = color.rgb;
+		COLOR.a += (1.0 - COLOR.a) * color.a;
+	}
 }

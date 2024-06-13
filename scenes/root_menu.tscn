@@ -9,8 +9,8 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_tdvra"]
 shader = ExtResource("2_18ohe")
-shader_parameter/outline_color = Color(1, 1, 1, 0)
-shader_parameter/outline_thickness = 0.0
+shader_parameter/color = Color(1, 1, 1, 1)
+shader_parameter/width = 1.0
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_53glm"]
 
@@ -18,8 +18,8 @@ shader_parameter/outline_thickness = 0.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_jqqvl"]
 shader = ExtResource("2_18ohe")
-shader_parameter/outline_color = Color(1, 1, 1, 0)
-shader_parameter/outline_thickness = 0.0
+shader_parameter/color = Color(1, 1, 1, 1)
+shader_parameter/width = 1.0
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_gwel2"]
 
@@ -29,10 +29,10 @@ shader_parameter/outline_thickness = 0.0
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ge7gn"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_wjspf"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_c2yk6"]
 shader = ExtResource("2_18ohe")
-shader_parameter/outline_color = Color(1, 1, 1, 0)
-shader_parameter/outline_thickness = 0.0
+shader_parameter/color = Color(1, 1, 1, 1)
+shader_parameter/width = 1.0
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ali7a"]
 
@@ -67,7 +67,7 @@ script = ExtResource("4_psyiv")
 
 [node name="Focus" type="Button" parent="."]
 unique_name_in_owner = true
-material = SubResource("ShaderMaterial_wjspf")
+material = SubResource("ShaderMaterial_c2yk6")
 offset_left = -13.0
 offset_top = 28.0
 offset_bottom = 41.0
