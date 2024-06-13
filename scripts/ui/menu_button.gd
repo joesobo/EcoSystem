@@ -3,7 +3,9 @@ extends Button
 var current_material
 
 func _ready():
-	current_material = material as ShaderMaterial
+	var unique_material = material.duplicate() as ShaderMaterial
+	current_material = unique_material
+	material = unique_material
 	current_material.set_shader_parameter("color", Color(1,1,1,0))
 
 	connect("mouse_entered", Callable(self, "_on_mouse_entered"))
