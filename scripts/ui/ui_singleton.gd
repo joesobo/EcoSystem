@@ -3,6 +3,9 @@ extends Node
 signal set_focus_menu(menu_key)
 signal clear_focus_menu(menu_key)
 
+signal set_hovered_menu(menu_key)
+signal clear_hovered_menu(menu_key)
+
 enum MenuType {
 	Storage,
 	Breeding
@@ -38,6 +41,7 @@ func create_menu(key: String, instance: Node) -> Menu:
 		],
 		true,
 		false,
+		false,
 		instance
 	)
 
@@ -45,14 +49,26 @@ func create_menu(key: String, instance: Node) -> Menu:
 
 	return new_menu
 
-func set_focused_menu(key):
+func toggle_focused_menu(key):
 	for menu in menus:
 		if menu.key == key:
-			emit_signal("set_focus_menu", key)
-			menu.focused = true
+			if menu.focused:
+				emit_signal("clear_focus_menu", key)
+				menu.focused = false
+			else:
+				emit_signal("set_focus_menu", key)
+				menu.focused = true
 		else:
 			emit_signal("clear_focus_menu", menu.key)
 			menu.focused = false
+
+func update_menu(key):
+	var menu = get_menu_by_key(key)
+
+	if menu.hovered:
+		emit_signal("set_hovered_menu", key)
+	else:
+		emit_signal("clear_hovered_menu", key)
 
 func clear_active_menu():
 	for menu in menus:

@@ -36,8 +36,6 @@ func create_menu(menu_name: UISingleton.MenuType, index: int):
 	var new_menu = UISingleton.create_menu(key, menu_instance)
 	menu_instance.set_menu(new_menu)
 
-	UISingleton.set_focused_menu(new_menu.key)
-
 func open_menu(key: String):
 	var menu = UISingleton.get_menu_by_key(key)
 

@@ -5,6 +5,7 @@ signal menu_closed(menu_name, index)
 @onready var close_button = %Close
 @onready var move_button = %Move
 @onready var focus_button = %Focus
+@onready var menu_texture = %MenuTexture
 
 @onready var slot_scene = preload("res://scenes/slot.tscn")
 
@@ -24,6 +25,8 @@ var is_dragging = false
 var drag_offset = Vector2.ZERO
 
 func _ready():
+	menu_texture.connect("mouse_entered", Callable(self, "_on_mouse_entered"))
+	menu_texture.connect("mouse_exited", Callable(self, "_on_mouse_exited"))
 	close_button.connect("pressed", Callable(self, "_on_close_button_pressed"))
 	move_button.connect("gui_input", Callable(self, "_on_move_button_pressed"))
 	focus_button.connect("pressed", Callable(self, "_on_focus_button_pressed"))
@@ -44,8 +47,13 @@ func _input(event: InputEvent):
 	if event.is_action_pressed("sort_inventory"):
 		sort_inventory()
 
+	# TODO: add in some way to check the current focused menu
 	if event.is_action_pressed("close"):
 		_on_close_button_pressed()
+
+	# TODO: add in some way to check the current hovered menu
+	if event.is_action_pressed("focus_menu"):
+		_on_focus_button_pressed()
 
 func _process(_delta):
 	if follow_mouse_object != null:
@@ -67,18 +75,26 @@ func _on_move_button_pressed(event):
 	if event is InputEventMouseButton and event.pressed:
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			if event.pressed:
+				move_button.set_active()
 				is_dragging = true
 				drag_offset = event.position
 			else:
 				is_dragging = false
+				move_button.set_default()
 	elif event is InputEventMouseMotion && is_dragging:
 		var new_position = global_position + (event.position - drag_offset)
 		ensure_within_viewport(new_position)
 	else:
 		is_dragging = false
+		move_button.set_default()
 
 func _on_focus_button_pressed():
-	UISingleton.set_focused_menu(menu.key)
+	UISingleton.toggle_focused_menu(menu.key)
+
+	if menu.focused:
+		focus_button.set_active()
+	else:
+		focus_button.set_default()
 
 func _on_slot_pressed(slot_index: int, event: InputEvent):
 	if event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
@@ -103,6 +119,14 @@ func _on_slot_drag_end(slot_index: int, event: InputEvent):
 			handle_item_place(slot_index, event)
 	set_slot(slot_index, menu.items[slot_index])
 	reset_dragging()
+
+func _on_mouse_entered():
+	menu.hovered = true
+	UISingleton.update_menu(menu.key)
+
+func _on_mouse_exited():
+	menu.hovered = false
+	UISingleton.update_menu(menu.key)
 
 func reset_dragging():
 	dragging_items = false

@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://b314d4arovyk"]
+[gd_scene load_steps=20 format=3 uid="uid://b314d4arovyk"]
 
 [ext_resource type="Script" path="res://scripts/ui/root_menu.gd" id="1_6jow1"]
 [ext_resource type="Shader" path="res://shaders/outline_shader.gdshader" id="2_18ohe"]
@@ -7,6 +7,8 @@
 [ext_resource type="Texture2D" uid="uid://ceo6yco28od5b" path="res://sprites/ui/Focus.png" id="4_7jlgs"]
 [ext_resource type="Script" path="res://scripts/ui/button_outline.gd" id="4_kme0u"]
 [ext_resource type="Script" path="res://scripts/ui/menu_outline.gd" id="4_r13x0"]
+[ext_resource type="Texture2D" uid="uid://jo6ch7scydh4" path="res://sprites/ui/Move_Active.png" id="6_g11wf"]
+[ext_resource type="Texture2D" uid="uid://m4h3ma0y1s8n" path="res://sprites/ui/Focus_Active.png" id="8_eiovm"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_tdvra"]
 shader = ExtResource("2_18ohe")
@@ -42,7 +44,11 @@ shader_parameter/width = 1.0
 
 [node name="Root" type="Control"]
 layout_mode = 3
-anchors_preset = 0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_6jow1")
 
 [node name="ButtonCol" type="VBoxContainer" parent="."]
@@ -72,6 +78,8 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_ge7gn")
 action_mode = 0
 icon = ExtResource("3_xccdw")
 script = ExtResource("4_kme0u")
+default_texture = ExtResource("3_xccdw")
+active_texture = ExtResource("6_g11wf")
 
 [node name="Focus" type="Button" parent="ButtonCol"]
 unique_name_in_owner = true
@@ -84,11 +92,14 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_ge7gn")
 action_mode = 0
 icon = ExtResource("4_7jlgs")
 script = ExtResource("4_kme0u")
+default_texture = ExtResource("4_7jlgs")
+active_texture = ExtResource("8_eiovm")
 
 [node name="MenuTexture" type="TextureRect" parent="."]
+unique_name_in_owner = true
 material = SubResource("ShaderMaterial_ejc3d")
 layout_mode = 0
-offset_left = 13.0
-offset_right = 13.0
+offset_left = 14.0
+offset_right = 14.0
 mouse_filter = 0
 script = ExtResource("4_r13x0")

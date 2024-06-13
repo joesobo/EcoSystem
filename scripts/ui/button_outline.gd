@@ -1,5 +1,8 @@
 extends Button
 
+@export var default_texture: Texture
+@export var active_texture: Texture
+
 var current_material
 
 func _ready():
@@ -16,3 +19,9 @@ func _on_mouse_entered():
 
 func _on_mouse_exited():
 	current_material.set_shader_parameter("color", Color(1,1,1,0))
+
+func set_active():
+	self.icon = active_texture
+
+func set_default():
+	self.icon = default_texture
