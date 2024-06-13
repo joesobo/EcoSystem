@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b26jkqsk5htkg"
-path="res://.godot/imported/StorageUI.png-6a36adb0fa0cd10642092ee0050f5f8e.ctex"
+uid="uid://jo6ch7scydh4"
+path="res://.godot/imported/Move_Active.png-5710b354be322d9c7f747984f151ed65.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprites/ui/StorageUI.png"
-dest_files=["res://.godot/imported/StorageUI.png-6a36adb0fa0cd10642092ee0050f5f8e.ctex"]
+source_file="res://sprites/ui/Move_Active.png"
+dest_files=["res://.godot/imported/Move_Active.png-5710b354be322d9c7f747984f151ed65.ctex"]
 
 [params]
 

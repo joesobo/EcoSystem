@@ -4,6 +4,8 @@ signal menu_closed(menu_name, index)
 
 @onready var close_button = %Close
 @onready var move_button = %Move
+@onready var focus_button = %Focus
+
 @onready var slot_scene = preload("res://scenes/slot.tscn")
 
 @export var slot_size: int = 0
@@ -71,6 +73,8 @@ func _on_move_button_pressed(event):
 	elif event is InputEventMouseMotion && is_dragging:
 		var new_position = global_position + (event.position - drag_offset)
 		ensure_within_viewport(new_position)
+	else:
+		is_dragging = false
 
 func _on_slot_pressed(slot_index: int, event: InputEvent):
 	if event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
@@ -279,10 +283,11 @@ func pickup_half_stack(slot_index: int):
 	menu.items[slot_index].quantity = half_quantity
 
 func pickup_stack(slot_index: int):
-	init_follow_mouse_slot()
+	if menu.items[slot_index] is Item:
+		init_follow_mouse_slot()
 
-	follow_mouse_object.set_item(menu.items[slot_index])
-	menu.items[slot_index] = {}
+		follow_mouse_object.set_item(menu.items[slot_index])
+		menu.items[slot_index] = {}
 
 # places 1 item into the slot
 func handle_scroll_down(slot_index: int):

@@ -27,10 +27,10 @@ func create_menu(menu_name: UISingleton.MenuType, index: int):
 	var key = UISingleton.get_menu_key(menu_name, index)
 
 	var menu_instance = menu_types[menu_name].instantiate()
+	add_child(menu_instance)
 
 	menu_instance.index = index
 	menu_instance.global_position = get_viewport().get_mouse_position()
-	add_child(menu_instance)
 	menu_instance.connect("menu_closed", Callable(self, "close_menu"))
 
 	var new_menu = UISingleton.create_menu(key, menu_instance)

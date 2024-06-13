@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b26jkqsk5htkg"
-path="res://.godot/imported/StorageUI.png-6a36adb0fa0cd10642092ee0050f5f8e.ctex"
+uid="uid://ceo6yco28od5b"
+path="res://.godot/imported/Focus.png-a91f05f94e08cf3d288f4caf21e6cc31.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprites/ui/StorageUI.png"
-dest_files=["res://.godot/imported/StorageUI.png-6a36adb0fa0cd10642092ee0050f5f8e.ctex"]
+source_file="res://sprites/ui/Focus.png"
+dest_files=["res://.godot/imported/Focus.png-a91f05f94e08cf3d288f4caf21e6cc31.ctex"]
 
 [params]
 

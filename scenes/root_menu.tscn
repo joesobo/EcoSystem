@@ -1,14 +1,25 @@
-[gd_scene load_steps=12 format=3 uid="uid://b314d4arovyk"]
+[gd_scene load_steps=17 format=3 uid="uid://b314d4arovyk"]
 
 [ext_resource type="Script" path="res://scripts/ui/root_menu.gd" id="1_6jow1"]
+[ext_resource type="Shader" path="res://shaders/outline_shader.gdshader" id="2_18ohe"]
 [ext_resource type="Texture2D" uid="uid://b6i36wv7622d7" path="res://sprites/ui/Close.png" id="2_vbngy"]
 [ext_resource type="Texture2D" uid="uid://dchoncvs1hdlv" path="res://sprites/ui/Move.png" id="3_xccdw"]
+[ext_resource type="Texture2D" uid="uid://ceo6yco28od5b" path="res://sprites/ui/Focus.png" id="4_7jlgs"]
+[ext_resource type="Script" path="res://scripts/ui/menu_button.gd" id="4_psyiv"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5hkve"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tdvra"]
+shader = ExtResource("2_18ohe")
+shader_parameter/outline_color = Color(1, 1, 1, 0)
+shader_parameter/outline_thickness = 0.0
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_53glm"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hmi31"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jqqvl"]
+shader = ExtResource("2_18ohe")
+shader_parameter/outline_color = Color(1, 1, 1, 0)
+shader_parameter/outline_thickness = 0.0
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_gwel2"]
 
@@ -18,17 +29,19 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ge7gn"]
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wjspf"]
+shader = ExtResource("2_18ohe")
+shader_parameter/outline_color = Color(1, 1, 1, 0)
+shader_parameter/outline_thickness = 0.0
+
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ali7a"]
 
-[node name="Root" type="Panel"]
-offset_right = 40.0
-offset_bottom = 40.0
-theme_override_styles/panel = SubResource("StyleBoxEmpty_5hkve")
+[node name="Root" type="Node2D"]
 script = ExtResource("1_6jow1")
 
 [node name="Close" type="Button" parent="."]
 unique_name_in_owner = true
-layout_mode = 0
+material = SubResource("ShaderMaterial_tdvra")
 offset_left = -13.0
 offset_top = 2.0
 offset_bottom = 15.0
@@ -36,10 +49,11 @@ theme_override_styles/normal = SubResource("StyleBoxEmpty_53glm")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_hmi31")
 action_mode = 0
 icon = ExtResource("2_vbngy")
+script = ExtResource("4_psyiv")
 
 [node name="Move" type="Button" parent="."]
 unique_name_in_owner = true
-layout_mode = 0
+material = SubResource("ShaderMaterial_jqqvl")
 offset_left = -13.0
 offset_top = 15.0
 offset_bottom = 28.0
@@ -49,12 +63,30 @@ theme_override_styles/pressed = SubResource("StyleBoxEmpty_0wfl5")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_ge7gn")
 action_mode = 0
 icon = ExtResource("3_xccdw")
+script = ExtResource("4_psyiv")
+
+[node name="Focus" type="Button" parent="."]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_wjspf")
+offset_left = -13.0
+offset_top = 28.0
+offset_bottom = 41.0
+theme_override_styles/normal = SubResource("StyleBoxEmpty_gwel2")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_02f48")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_0wfl5")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ge7gn")
+action_mode = 0
+icon = ExtResource("4_7jlgs")
+script = ExtResource("4_psyiv")
 
 [node name="Menu" type="Panel" parent="."]
 unique_name_in_owner = true
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_ali7a")
 
-[node name="Sprite2D" type="Sprite2D" parent="Menu"]
+[node name="TextureRect" type="TextureRect" parent="Menu"]
+layout_mode = 0
