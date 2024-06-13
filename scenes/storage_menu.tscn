@@ -8,6 +8,7 @@
 slot_size = 15
 
 [node name="TextureRect" parent="Menu" index="0"]
+mouse_filter = 0
 texture = ExtResource("2_gjsh3")
 
 [node name="Slot" parent="Menu/TextureRect" index="0" instance=ExtResource("3_jbst8")]
@@ -16,6 +17,7 @@ offset_left = 13.0
 offset_top = 14.0
 offset_right = 13.0
 offset_bottom = 14.0
+mouse_filter = 1
 
 [node name="Slot2" parent="Menu/TextureRect" index="1" instance=ExtResource("3_jbst8")]
 layout_mode = 0
@@ -23,6 +25,7 @@ offset_left = 32.0
 offset_top = 14.0
 offset_right = 32.0
 offset_bottom = 14.0
+mouse_filter = 1
 
 [node name="Slot3" parent="Menu/TextureRect" index="2" instance=ExtResource("3_jbst8")]
 layout_mode = 0
@@ -30,6 +33,7 @@ offset_left = 51.0
 offset_top = 14.0
 offset_right = 51.0
 offset_bottom = 14.0
+mouse_filter = 1
 
 [node name="Slot4" parent="Menu/TextureRect" index="3" instance=ExtResource("3_jbst8")]
 layout_mode = 0
@@ -37,6 +41,7 @@ offset_left = 70.0
 offset_top = 14.0
 offset_right = 70.0
 offset_bottom = 14.0
+mouse_filter = 1
 
 [node name="Slot5" parent="Menu/TextureRect" index="4" instance=ExtResource("3_jbst8")]
 layout_mode = 0
@@ -44,6 +49,7 @@ offset_left = 89.0
 offset_top = 14.0
 offset_right = 89.0
 offset_bottom = 14.0
+mouse_filter = 1
 
 [node name="Slot6" parent="Menu/TextureRect" index="5" instance=ExtResource("3_jbst8")]
 layout_mode = 0
@@ -51,6 +57,7 @@ offset_left = 13.0
 offset_top = 33.0
 offset_right = 13.0
 offset_bottom = 33.0
+mouse_filter = 1
 
 [node name="Slot7" parent="Menu/TextureRect" index="6" instance=ExtResource("3_jbst8")]
 layout_mode = 0
@@ -58,6 +65,7 @@ offset_left = 32.0
 offset_top = 33.0
 offset_right = 32.0
 offset_bottom = 33.0
+mouse_filter = 1
 
 [node name="Slot8" parent="Menu/TextureRect" index="7" instance=ExtResource("3_jbst8")]
 layout_mode = 0
@@ -65,6 +73,7 @@ offset_left = 51.0
 offset_top = 33.0
 offset_right = 51.0
 offset_bottom = 33.0
+mouse_filter = 1
 
 [node name="Slot9" parent="Menu/TextureRect" index="8" instance=ExtResource("3_jbst8")]
 layout_mode = 0
@@ -72,6 +81,7 @@ offset_left = 70.0
 offset_top = 33.0
 offset_right = 70.0
 offset_bottom = 33.0
+mouse_filter = 1
 
 [node name="Slot10" parent="Menu/TextureRect" index="9" instance=ExtResource("3_jbst8")]
 layout_mode = 0
@@ -79,6 +89,7 @@ offset_left = 89.0
 offset_top = 33.0
 offset_right = 89.0
 offset_bottom = 33.0
+mouse_filter = 1
 
 [node name="Slot11" parent="Menu/TextureRect" index="10" instance=ExtResource("3_jbst8")]
 layout_mode = 0
@@ -86,6 +97,7 @@ offset_left = 13.0
 offset_top = 52.0
 offset_right = 13.0
 offset_bottom = 52.0
+mouse_filter = 1
 
 [node name="Slot12" parent="Menu/TextureRect" index="11" instance=ExtResource("3_jbst8")]
 layout_mode = 0
@@ -93,6 +105,7 @@ offset_left = 32.0
 offset_top = 52.0
 offset_right = 32.0
 offset_bottom = 52.0
+mouse_filter = 1
 
 [node name="Slot13" parent="Menu/TextureRect" index="12" instance=ExtResource("3_jbst8")]
 layout_mode = 0
@@ -100,6 +113,7 @@ offset_left = 51.0
 offset_top = 52.0
 offset_right = 51.0
 offset_bottom = 52.0
+mouse_filter = 1
 
 [node name="Slot14" parent="Menu/TextureRect" index="13" instance=ExtResource("3_jbst8")]
 layout_mode = 0
@@ -107,6 +121,7 @@ offset_left = 70.0
 offset_top = 52.0
 offset_right = 70.0
 offset_bottom = 52.0
+mouse_filter = 1
 
 [node name="Slot15" parent="Menu/TextureRect" index="14" instance=ExtResource("3_jbst8")]
 layout_mode = 0
@@ -114,3 +129,4 @@ offset_left = 89.0
 offset_top = 52.0
 offset_right = 89.0
 offset_bottom = 52.0
+mouse_filter = 1

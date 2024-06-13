@@ -1,4 +1,4 @@
-extends Button
+extends Control
 
 var current_material
 
