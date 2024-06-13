@@ -1,5 +1,8 @@
 extends Node
 
+signal set_focus_menu(menu_key)
+signal clear_focus_menu(menu_key)
+
 enum MenuType {
 	Storage,
 	Breeding
@@ -34,16 +37,22 @@ func create_menu(key: String, instance: Node) -> Menu:
 			ItemDefinition.items[0].clone()
 		],
 		true,
-		true,
+		false,
 		instance
 	)
 
-	for menu in menus:
-		if menu.focused:
-			menu.focused = false
-
 	menus.append(new_menu)
+
 	return new_menu
+
+func set_focused_menu(key):
+	for menu in menus:
+		if menu.key == key:
+			emit_signal("set_focus_menu", key)
+			menu.focused = true
+		else:
+			emit_signal("clear_focus_menu", menu.key)
+			menu.focused = false
 
 func clear_active_menu():
 	for menu in menus:

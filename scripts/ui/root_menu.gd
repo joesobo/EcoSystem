@@ -1,4 +1,4 @@
-extends Node2D
+extends Control
 
 signal menu_closed(menu_name, index)
 
@@ -26,9 +26,10 @@ var drag_offset = Vector2.ZERO
 func _ready():
 	close_button.connect("pressed", Callable(self, "_on_close_button_pressed"))
 	move_button.connect("gui_input", Callable(self, "_on_move_button_pressed"))
+	focus_button.connect("pressed", Callable(self, "_on_focus_button_pressed"))
 
 	for i in range(slot_size):
-		var slot = %Menu.get_child(0).get_child(i)
+		var slot = %MenuTexture.get_child(i)
 		slot.connect("slot_pressed", Callable(self, "_on_slot_pressed"))
 		slot.connect("slot_drag_end", Callable(self, "_on_slot_drag_end"))
 		slots.append(slot)
@@ -75,6 +76,9 @@ func _on_move_button_pressed(event):
 		ensure_within_viewport(new_position)
 	else:
 		is_dragging = false
+
+func _on_focus_button_pressed():
+	UISingleton.set_focused_menu(menu.key)
 
 func _on_slot_pressed(slot_index: int, event: InputEvent):
 	if event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
