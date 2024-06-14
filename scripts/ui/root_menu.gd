@@ -4,6 +4,7 @@ signal menu_closed(menu_name, index)
 
 @onready var close_button = %Close
 @onready var move_button = %Move
+@onready var top_bar = %TopBar
 @onready var focus_button = %Focus
 @onready var pin_button = %Pin
 
@@ -29,6 +30,7 @@ func _ready():
 	connect("mouse_exited", Callable(self, "_on_mouse_exited"))
 	close_button.connect("pressed", Callable(self, "_on_close_button_pressed"))
 	move_button.connect("gui_input", Callable(self, "_on_move_button_pressed"))
+	top_bar.connect("gui_input", Callable(self, "_on_move_button_pressed"))
 	focus_button.connect("pressed", Callable(self, "_on_focus_button_pressed"))
 	pin_button.connect("pressed", Callable(self, "_on_pin_button_pressed"))
 

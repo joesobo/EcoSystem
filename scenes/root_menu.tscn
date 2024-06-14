@@ -122,3 +122,11 @@ layout_mode = 0
 offset_left = 14.0
 offset_right = 14.0
 script = ExtResource("4_r13x0")
+
+[node name="TopBar" type="Control" parent="."]
+unique_name_in_owner = true
+anchors_preset = 0
+offset_left = 15.0
+offset_right = 102.0
+offset_bottom = 11.0
+mouse_filter = 1

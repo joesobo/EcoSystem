@@ -9,7 +9,7 @@ anchors_preset = 0
 anchor_right = 0.0
 anchor_bottom = 0.0
 offset_right = 117.0
-offset_bottom = 65.0
+offset_bottom = 75.0
 grow_horizontal = 1
 grow_vertical = 1
 size_flags_horizontal = 0
@@ -138,3 +138,8 @@ offset_top = 61.0
 offset_right = 89.0
 offset_bottom = 61.0
 mouse_filter = 1
+
+[node name="TopBar" parent="." index="2"]
+offset_left = 16.0
+offset_top = 2.0
+offset_right = 114.0
