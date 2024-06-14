@@ -3,10 +3,17 @@ extends Node
 @export var storage_menu_scene = preload("res://scenes/storage_menu.tscn")
 @export var breeding_menu_scene = preload("res://scenes/breeding_menu.tscn")
 
+@export var cursor_image = "res://sprites/ui/Cursor.png"
+var viewport_size = Vector2(640, 360)
+
 var menu_types = {
 	UISingleton.MenuType.Breeding: breeding_menu_scene,
 	UISingleton.MenuType.Storage: storage_menu_scene,
 }
+
+func _ready():
+	update_cursor()
+	get_viewport().connect("size_changed", Callable(self, "update_cursor"))
 
 func _input(event):
 	if event.is_action_pressed("toggle_breeding"):
@@ -56,3 +63,15 @@ func close_menu(key: String):
 
 	UISingleton.next_active_menu(key)
 
+func update_cursor():
+	var scale_factor = get_viewport().size.x / viewport_size.x
+
+	var image = Image.new()
+	image.load(cursor_image)
+
+	var scaled_image = image.duplicate()
+	scaled_image.resize(image.get_width() * scale_factor, image.get_height() * scale_factor, Image.INTERPOLATE_NEAREST)
+
+	var image_texture = ImageTexture.create_from_image(scaled_image)
+
+	Input.set_custom_mouse_cursor(image_texture, Input.CursorShape.CURSOR_ARROW)

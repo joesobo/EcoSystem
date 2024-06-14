@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://db2oggt7gbkhq"
-path="res://.godot/imported/StorageUI.png-6a36adb0fa0cd10642092ee0050f5f8e.ctex"
+uid="uid://bd00xepxxx0m"
+path="res://.godot/imported/Alphabet.png-06429f1c5cf720865da845c0b98f88d1.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprites/ui/StorageUI.png"
-dest_files=["res://.godot/imported/StorageUI.png-6a36adb0fa0cd10642092ee0050f5f8e.ctex"]
+source_file="res://sprites/ui/Alphabet.png"
+dest_files=["res://.godot/imported/Alphabet.png-06429f1c5cf720865da845c0b98f88d1.ctex"]
 
 [params]
 
