@@ -68,8 +68,20 @@ func set_menu(menu: Menu):
 		set_slot(i, item)
 
 func _on_close_button_pressed():
-	handle_escape()
-	emit_signal("menu_closed", UISingleton.get_menu_key(menu_name, index))
+	var hovered_menu
+
+	for menu in UISingleton.menus:
+		if menu.hovered:
+			hovered_menu = menu
+			break
+
+	if hovered_menu:
+		if hovered_menu.key == menu.key:
+			handle_escape()
+			emit_signal("menu_closed", UISingleton.get_menu_key(menu_name, index))
+	else:
+		handle_escape()
+		emit_signal("menu_closed", UISingleton.get_menu_key(menu_name, index))
 
 func _on_move_button_pressed(event):
 	if event is InputEventMouseButton and event.pressed:
