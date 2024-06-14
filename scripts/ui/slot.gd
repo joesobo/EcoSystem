@@ -6,12 +6,17 @@ signal slot_drag_end(slot_index: int, event: InputEvent)
 @onready var itemTexture = %"Item Texture"
 @onready var tensCounter = %"Count Texture (Tens)"
 @onready var onesCounter = %"Count Texture (Ones)"
+@onready var backgroundTexture = %"Background Highlight"
+
+@export var highlighted_slot_texture: Texture
 
 var slotIndex: int
 var item: Item
 
 func _ready():
 	connect("gui_input", Callable(self, "_on_gui_input"))
+	connect("mouse_entered", Callable(self, "_on_mouse_entered"))
+	connect("mouse_exited", Callable(self, "_on_mouse_exited"))
 
 func _on_gui_input(event):
 	if event is InputEventMouseButton:
@@ -19,6 +24,12 @@ func _on_gui_input(event):
 			emit_signal("slot_pressed", slotIndex, event)
 		else:
 			emit_signal("slot_drag_end", slotIndex, event)
+
+func _on_mouse_entered():
+	backgroundTexture.texture = highlighted_slot_texture
+
+func _on_mouse_exited():
+	backgroundTexture.texture = null
 
 func clear_slot():
 	tensCounter.frame = 0

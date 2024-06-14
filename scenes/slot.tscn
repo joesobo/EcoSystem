@@ -1,7 +1,8 @@
-[gd_scene load_steps=14 format=3 uid="uid://ixyduxobwoxs"]
+[gd_scene load_steps=15 format=3 uid="uid://ixyduxobwoxs"]
 
 [ext_resource type="Script" path="res://scripts/ui/slot.gd" id="1_rj73i"]
 [ext_resource type="Texture2D" uid="uid://e4bxuh6mvjke" path="res://sprites/ui/numbers-Sheet.png" id="2_q732m"]
+[ext_resource type="Texture2D" path="res://sprites/ui/Slot_Highlight.png" id="2_ypl5k"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_gkqay"]
 atlas = ExtResource("2_q732m")
@@ -83,9 +84,20 @@ animations = [{
 
 [node name="Slot" type="Panel"]
 script = ExtResource("1_rj73i")
+highlighted_slot_texture = ExtResource("2_ypl5k")
+
+[node name="Background Highlight" type="TextureRect" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = -6.0
+offset_top = -6.0
+offset_right = 6.0
+offset_bottom = 6.0
+mouse_filter = 2
 
 [node name="Item Texture" type="TextureRect" parent="."]
 unique_name_in_owner = true
+z_index = 1
 layout_mode = 0
 offset_left = -6.0
 offset_top = -6.0
