@@ -53,11 +53,9 @@ func _input(event: InputEvent):
 	if event.is_action_pressed("sort_inventory"):
 		sort_inventory()
 
-	# TODO: add in some way to check the current focused menu
 	if event.is_action_pressed("close"):
 		_on_close_button_pressed()
 
-	# TODO: add in some way to check the current hovered menu
 	if event.is_action_pressed("focus_menu"):
 		_on_focus_button_pressed()
 
@@ -76,9 +74,9 @@ func set_menu(menu: Menu):
 func _on_close_button_pressed():
 	var hovered_menu
 
-	for menu in UISingleton.menus:
-		if menu.hovered:
-			hovered_menu = menu
+	for check_menu in UISingleton.menus:
+		if check_menu.hovered:
+			hovered_menu = check_menu
 			break
 
 	if hovered_menu:
@@ -107,10 +105,20 @@ func _on_move_button_pressed(event):
 		move_button.set_default()
 
 func _on_focus_button_pressed():
-	UISingleton.toggle_focused_menu(menu.key)
+	var hovered_menu
 
-	if menu.focused:
-		focus_button.set_active()
+	for check_menu in UISingleton.menus:
+		if check_menu.hovered:
+			hovered_menu = check_menu
+			break
+
+	if hovered_menu and hovered_menu.key == menu.key:
+		if menu.focused:
+			menu.focused = false
+			focus_button.set_default()
+		else:
+			menu.focused = true
+			focus_button.set_active()
 	else:
 		focus_button.set_default()
 
