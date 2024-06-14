@@ -6,7 +6,6 @@ signal menu_closed(menu_name, index)
 @onready var move_button = %Move
 @onready var focus_button = %Focus
 @onready var pin_button = %Pin
-@onready var menu_texture = %MenuTexture
 
 @onready var slot_scene = preload("res://scenes/slot.tscn")
 
@@ -26,8 +25,8 @@ var is_dragging = false
 var drag_offset = Vector2.ZERO
 
 func _ready():
-	menu_texture.connect("mouse_entered", Callable(self, "_on_mouse_entered"))
-	menu_texture.connect("mouse_exited", Callable(self, "_on_mouse_exited"))
+	connect("mouse_entered", Callable(self, "_on_mouse_entered"))
+	connect("mouse_exited", Callable(self, "_on_mouse_exited"))
 	close_button.connect("pressed", Callable(self, "_on_close_button_pressed"))
 	move_button.connect("gui_input", Callable(self, "_on_move_button_pressed"))
 	focus_button.connect("pressed", Callable(self, "_on_focus_button_pressed"))
