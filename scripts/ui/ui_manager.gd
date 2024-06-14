@@ -42,6 +42,7 @@ func open_menu(key: String):
 	menu.opened = true
 	UISingleton.clear_active_menu()
 	menu.focused = true
+	menu.instance.global_position = get_viewport().get_mouse_position()
 	menu.instance.show()
 
 func close_menu(key: String):
