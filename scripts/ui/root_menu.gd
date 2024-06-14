@@ -33,6 +33,9 @@ func _ready():
 	focus_button.connect("pressed", Callable(self, "_on_focus_button_pressed"))
 	pin_button.connect("pressed", Callable(self, "_on_pin_button_pressed"))
 
+	UISingleton.connect("clear_focus_menu", Callable(self, "_on_clear_focus_menu"))
+	UISingleton.connect("set_focus_menu", Callable(self, "_on_set_focus_menu"))
+
 	for i in range(slot_size):
 		var slot = %MenuTexture.get_child(i)
 		slot.connect("slot_pressed", Callable(self, "_on_slot_pressed"))
@@ -109,6 +112,14 @@ func _on_focus_button_pressed():
 		focus_button.set_active()
 	else:
 		focus_button.set_default()
+
+func _on_clear_focus_menu(key):
+	if key == menu.key:
+		focus_button.set_default()
+
+func _on_set_focus_menu(key):
+	if key == menu.key:
+		focus_button.set_active()
 
 func _on_pin_button_pressed():
 	menu.pinned = !menu.pinned
