@@ -42,6 +42,7 @@ func create_menu(key: String, instance: Node) -> Menu:
 		true,
 		false,
 		false,
+		false,
 		instance
 	)
 

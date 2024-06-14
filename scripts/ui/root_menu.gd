@@ -5,6 +5,7 @@ signal menu_closed(menu_name, index)
 @onready var close_button = %Close
 @onready var move_button = %Move
 @onready var focus_button = %Focus
+@onready var pin_button = %Pin
 @onready var menu_texture = %MenuTexture
 
 @onready var slot_scene = preload("res://scenes/slot.tscn")
@@ -30,6 +31,7 @@ func _ready():
 	close_button.connect("pressed", Callable(self, "_on_close_button_pressed"))
 	move_button.connect("gui_input", Callable(self, "_on_move_button_pressed"))
 	focus_button.connect("pressed", Callable(self, "_on_focus_button_pressed"))
+	pin_button.connect("pressed", Callable(self, "_on_pin_button_pressed"))
 
 	for i in range(slot_size):
 		var slot = %MenuTexture.get_child(i)
@@ -107,6 +109,14 @@ func _on_focus_button_pressed():
 		focus_button.set_active()
 	else:
 		focus_button.set_default()
+
+func _on_pin_button_pressed():
+	menu.pinned = !menu.pinned
+
+	if menu.pinned:
+		pin_button.set_active()
+	else:
+		pin_button.set_default()
 
 func _on_slot_pressed(slot_index: int, event: InputEvent):
 	if event.button_index == MOUSE_BUTTON_WHEEL_DOWN:

@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://b314d4arovyk"]
+[gd_scene load_steps=22 format=3 uid="uid://b314d4arovyk"]
 
 [ext_resource type="Script" path="res://scripts/ui/root_menu.gd" id="1_6jow1"]
 [ext_resource type="Shader" path="res://shaders/outline_shader.gdshader" id="2_18ohe"]
@@ -9,6 +9,8 @@
 [ext_resource type="Script" path="res://scripts/ui/menu_outline.gd" id="4_r13x0"]
 [ext_resource type="Texture2D" uid="uid://jo6ch7scydh4" path="res://sprites/ui/Move_Active.png" id="6_g11wf"]
 [ext_resource type="Texture2D" uid="uid://m4h3ma0y1s8n" path="res://sprites/ui/Focus_Active.png" id="8_eiovm"]
+[ext_resource type="Texture2D" uid="uid://bk3l3h5nw30hb" path="res://sprites/ui/Pin.png" id="9_5y8b6"]
+[ext_resource type="Texture2D" uid="uid://djqknr6sgdarc" path="res://sprites/ui/Pin_Active.png" id="10_ol0n4"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_tdvra"]
 shader = ExtResource("2_18ohe")
@@ -94,6 +96,20 @@ icon = ExtResource("4_7jlgs")
 script = ExtResource("4_kme0u")
 default_texture = ExtResource("4_7jlgs")
 active_texture = ExtResource("8_eiovm")
+
+[node name="Pin" type="Button" parent="ButtonCol"]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_c2yk6")
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_gwel2")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_02f48")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_0wfl5")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ge7gn")
+action_mode = 0
+icon = ExtResource("9_5y8b6")
+script = ExtResource("4_kme0u")
+default_texture = ExtResource("9_5y8b6")
+active_texture = ExtResource("10_ol0n4")
 
 [node name="MenuTexture" type="TextureRect" parent="."]
 unique_name_in_owner = true
