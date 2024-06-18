@@ -1,0 +1,47 @@
+[gd_scene load_steps=5 format=3 uid="uid://bf5681n5nave6"]
+
+[ext_resource type="Texture2D" uid="uid://b6x3wonxfaamt" path="res://sprites/ui/Player.png" id="1_4qe2p"]
+[ext_resource type="Script" path="res://scripts/player/player_controller.gd" id="1_wqv8e"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_7sr5p"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_sfoqn"]
+radius = 6.5
+height = 18.0
+
+[node name="Player" type="RigidBody2D"]
+mass = 10.0
+physics_material_override = SubResource("PhysicsMaterial_7sr5p")
+gravity_scale = 0.75
+lock_rotation = true
+continuous_cd = 1
+script = ExtResource("1_wqv8e")
+move_speed = 200.0
+jump_force = 400.0
+
+[node name="Sprite" type="Sprite2D" parent="."]
+texture = ExtResource("1_4qe2p")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(2.08165e-12, -1)
+shape = SubResource("CapsuleShape2D_sfoqn")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="GroundCheckLeft" type="RayCast2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(-2, 0)
+target_position = Vector2(0, 10)
+
+[node name="GroundCheckRight" type="RayCast2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(2, 0)
+target_position = Vector2(0, 10)
+
+[node name="WallCheckLeft" type="RayCast2D" parent="."]
+unique_name_in_owner = true
+target_position = Vector2(-8, 0)
+
+[node name="WallCheckRight" type="RayCast2D" parent="."]
+unique_name_in_owner = true
+target_position = Vector2(8, 0)

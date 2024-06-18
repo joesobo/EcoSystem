@@ -56,20 +56,19 @@ func _draw():
 		for i in range(outline.size() - 1):
 			draw_line(vertices[outline[i]], vertices[outline[i + 1]], Color.BLACK, 1)
 
-	#for outline in outlines:
-		#for i in range(outline.size() - 1):
-			#var p1 = vertices[outline[i]]
-			#var p2 = vertices[outline[i + 1]]
-#
-			## Draw lines between the points for debugging
-			#draw_line(p1, p2, Color(1, 0, 0), 10) # Red color for visibility
-#
-			## Optional: Draw normals for debugging
-			#var mid_point = (p1 + p2) / 2
-			#var normal = (p2 - p1).rotated(PI / 2).normalized() * 10
-			##if p1.x == 0 || p2.x == 0:
-				##normal = -normal
-			#draw_line(mid_point, mid_point + normal, Color(0, 1, 0), 10) # Green color for normals
+	for outline in outlines:
+		for i in range(outline.size() - 1):
+			var p1 = vertices[outline[i]]
+			var p2 = vertices[outline[i + 1]]
+
+			# Draw lines between the points for debugging
+			# draw_line(p1, p2, Color(1, 0, 0), 10) # Red color for visibility
+
+			# Optional: Draw normals for debugging
+			var mid_point = (p1 + p2) / 2
+			var normal = Vector2(p2.y - p1.y, p1.x - p2.x).normalized() * 10
+
+			draw_line(mid_point, mid_point + normal, Color(0, 1, 0), 2) # Green color for normals
 
 func create_chunk():
 	var chunk = Node2D.new()

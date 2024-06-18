@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/ui/slot.gd" id="1_rj73i"]
 [ext_resource type="Texture2D" uid="uid://e4bxuh6mvjke" path="res://sprites/ui/numbers-Sheet.png" id="2_q732m"]
-[ext_resource type="Texture2D" path="res://sprites/ui/Slot_Highlight.png" id="2_ypl5k"]
+[ext_resource type="Texture2D" uid="uid://d2iccoc3inoc4" path="res://sprites/ui/Slot_Highlight.png" id="2_ypl5k"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_gkqay"]
 atlas = ExtResource("2_q732m")
