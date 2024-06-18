@@ -4,10 +4,12 @@ extends Node2D
 @export var voxel_resolution_x = 8
 @export var voxel_resolution_y = 8
 @export var voxel_scene: PackedScene
+@export var static_body: StaticBody2D
+
 @onready var ui_manager = %"UI Manager"
 @onready var player = %"Player"
+@onready var camera = player.get_child(2)
 
-@export var static_body: StaticBody2D
 var collision_shape: CollisionShape2D
 
 var voxels: Array[Voxel] = []
@@ -26,6 +28,7 @@ var indices = PackedInt32Array()
 var triangle_dictionary = {}
 var outlines: Array = [[]]
 var checked_vertices =  []
+
 
 @export var storage_scene = preload("res://scenes/storage_block.tscn")
 var storage_map: Dictionary = {}
@@ -57,19 +60,19 @@ func _draw():
 		for i in range(outline.size() - 1):
 			draw_line(vertices[outline[i]], vertices[outline[i + 1]], Color.BLACK, 1)
 
-	for outline in outlines:
-		for i in range(outline.size() - 1):
-			var p1 = vertices[outline[i]]
-			var p2 = vertices[outline[i + 1]]
+	# for outline in outlines:
+	# 	for i in range(outline.size() - 1):
+	# 		var p1 = vertices[outline[i]]
+	# 		var p2 = vertices[outline[i + 1]]
 
-			# Draw lines between the points for debugging
-			# draw_line(p1, p2, Color(1, 0, 0), 10) # Red color for visibility
+	# 		# Draw lines between the points for debugging
+	# 		# draw_line(p1, p2, Color(1, 0, 0), 10) # Red color for visibility
 
-			# Optional: Draw normals for debugging
-			var mid_point = (p1 + p2) / 2
-			var normal = Vector2(p2.y - p1.y, p1.x - p2.x).normalized() * 10
+	# 		# Optional: Draw normals for debugging
+	# 		var mid_point = (p1 + p2) / 2
+	# 		var normal = Vector2(p2.y - p1.y, p1.x - p2.x).normalized() * 10
 
-			draw_line(mid_point, mid_point + normal, Color(0, 1, 0), 2) # Green color for normals
+	# 		draw_line(mid_point, mid_point + normal, Color(0, 1, 0), 2) # Green color for normals
 
 func create_chunk():
 	var chunk = Node2D.new()
@@ -102,7 +105,6 @@ func create_voxel(parent, x, y):
 
 func _on_Area2D_input_event(_viewport, event, _shape_idx):
 	if event is InputEventMouseButton and event.pressed:
-		var camera = player.get_child(2)
 		var world_position = camera.get_global_mouse_position()
 
 		var voxel_x = floor(world_position.x / voxel_size)
