@@ -8,14 +8,18 @@
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_6n80m"]
 
-[node name="Node2D" type="Node2D"]
+[node name="Main" type="Node2D"]
 
-[node name="MarchingSquares" parent="." instance=ExtResource("1_atrqb")]
+[node name="UI Manager" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("7_8k03j")
 
 [node name="FishManager" type="Node2D" parent="."]
 script = ExtResource("5_1qjtw")
 fishCount = 50
 fishScene = ExtResource("6_up3j5")
+
+[node name="MarchingSquares" parent="." instance=ExtResource("1_atrqb")]
 
 [node name="Background" type="Sprite2D" parent="."]
 modulate = Color(0.380392, 0.717647, 0.811765, 1)
@@ -24,10 +28,9 @@ position = Vector2(319.5, 182.5)
 scale = Vector2(635, 361)
 texture = SubResource("CanvasTexture_6n80m")
 
-[node name="UI Manager" type="Node" parent="."]
-unique_name_in_owner = true
-script = ExtResource("7_8k03j")
-
 [node name="Player" parent="." instance=ExtResource("8_b3iae")]
 unique_name_in_owner = true
 position = Vector2(319, 181)
+gravity_scale = 0.25
+move_speed = 75.0
+jump_force = 150.0
