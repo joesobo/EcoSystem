@@ -5,6 +5,7 @@ extends Node2D
 @export var voxel_resolution_y = 8
 @export var voxel_scene: PackedScene
 @onready var ui_manager = %"UI Manager"
+@onready var player = %"Player"
 
 @export var static_body: StaticBody2D
 var collision_shape: CollisionShape2D
@@ -85,23 +86,27 @@ func create_voxel(parent, x, y):
 	var voxel = voxel_scene.instantiate()
 	parent.add_child(voxel)
 	voxel.position = Vector2(x * voxel_size, y * voxel_size)
-	voxel.scale = Vector2(voxel_size, voxel_size) * 0.1
+	voxel.scale = Vector2(voxel_size, voxel_size)
 	voxel.name = "Voxel (%d, %d)" % [x, y]
 
 	var state = 0.0
+	# Outline
 	if (x == 0 || y == 0 || x == voxel_resolution_x-1 || y == voxel_resolution_y-1):
 		state = 1.0
 		var index = x + y * voxel_resolution_x
 		voxel.modulate = Color.BLACK
 		#image.set_pixel(x, y, Color(2.0 / 255.0, 0, 0, 1))
-#
+
 	voxels.append(Voxel.new(x, y, voxel_size, state))
 	voxel_pos_indicators.append(voxel)
 
 func _on_Area2D_input_event(_viewport, event, _shape_idx):
 	if event is InputEventMouseButton and event.pressed:
-		var voxel_x = floor(event.position.x / voxel_size)
-		var voxel_y = floor(event.position.y / voxel_size)
+		var camera = player.get_child(2)
+		var world_position = camera.get_global_mouse_position()
+
+		var voxel_x = floor(world_position.x / voxel_size)
+		var voxel_y = floor(world_position.y / voxel_size)
 		var index = voxel_x + voxel_y * voxel_resolution_x
 		if Input.is_action_pressed("place_storage") && voxels[index].state == 0.0:
 			var storage = storage_scene.instantiate()
@@ -119,12 +124,12 @@ func _on_Area2D_input_event(_viewport, event, _shape_idx):
 			# open UI
 			ui_manager.toggle_menu(UISingleton.MenuType.Storage, index)
 		elif !storage_map.has(index):
-			edit_voxel(event.position)
+			edit_voxel(world_position)
 		queue_redraw()
 
 func edit_voxel(point: Vector2):
-	var voxel_x = floor(point.x / voxel_size)
-	var voxel_y = floor(point.y / voxel_size)
+	var voxel_x = round(point.x / voxel_size)
+	var voxel_y = round(point.y / voxel_size)
 
 	set_voxel(Vector2(voxel_x, voxel_y))
 

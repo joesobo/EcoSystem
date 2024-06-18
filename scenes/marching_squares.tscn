@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://bwfe30h2s655f"]
+[gd_scene load_steps=13 format=3 uid="uid://bwfe30h2s655f"]
 
 [ext_resource type="Script" path="res://scripts/marchingSquares/VoxelGrid.gd" id="1_7sy1n"]
 [ext_resource type="PackedScene" uid="uid://bltijxvovh1q" path="res://scenes/voxel.tscn" id="2_4y4kx"]
@@ -23,8 +23,6 @@ shader_parameter/state_texture = ExtResource("4_fjbr0")
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_6n80m"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_s8gt2"]
-
 [node name="Node2D" type="Node2D"]
 
 [node name="MarchingSquares" type="Node2D" parent="." node_paths=PackedStringArray("static_body")]
@@ -34,21 +32,21 @@ voxel_size = 16
 voxel_resolution_x = 41
 voxel_resolution_y = 24
 voxel_scene = ExtResource("2_4y4kx")
-static_body = NodePath("StaticBody2D")
+static_body = NodePath("BuildArea")
 
-[node name="StaticBody2D" type="StaticBody2D" parent="MarchingSquares"]
+[node name="BuildArea" type="StaticBody2D" parent="MarchingSquares"]
 position = Vector2(580, 314)
 scale = Vector2(59.76, -33.406)
 collision_layer = 2
 collision_mask = 2
 input_pickable = true
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="MarchingSquares/StaticBody2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MarchingSquares/BuildArea"]
 position = Vector2(-4.18842, 4.23666)
 shape = SubResource("RectangleShape2D_6mmkp")
 debug_color = Color(0, 0.6, 0.701961, 0.419608)
 
-[node name="MeshInstance2D" type="MeshInstance2D" parent="MarchingSquares"]
+[node name="TerrainFill" type="MeshInstance2D" parent="MarchingSquares"]
 material = SubResource("ShaderMaterial_mi3id")
 texture = SubResource("CanvasTexture_1l0eq")
 
@@ -57,11 +55,11 @@ script = ExtResource("3_qhq6a")
 fishCount = 50
 fishScene = ExtResource("4_q7dbu")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Background" type="Sprite2D" parent="."]
 modulate = Color(0.380392, 0.717647, 0.811765, 1)
 z_index = -1
-position = Vector2(377, 202)
-scale = Vector2(750, 400)
+position = Vector2(319.5, 182.5)
+scale = Vector2(635, 361)
 texture = SubResource("CanvasTexture_6n80m")
 
 [node name="UI Manager" type="Node" parent="."]
@@ -69,15 +67,5 @@ unique_name_in_owner = true
 script = ExtResource("7_1w7gj")
 
 [node name="Player" parent="." instance=ExtResource("8_tkxut")]
-position = Vector2(241, 265)
-
-[node name="StaticBody2D" type="StaticBody2D" parent="."]
-position = Vector2(229, 288)
-scale = Vector2(13.4, 1)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
-shape = SubResource("RectangleShape2D_s8gt2")
-
-[node name="Sprite2D" type="Sprite2D" parent="StaticBody2D"]
-scale = Vector2(20, 20)
-texture = ExtResource("4_fjbr0")
+unique_name_in_owner = true
+position = Vector2(319, 181)
