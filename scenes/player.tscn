@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://bf5681n5nave6"]
+[gd_scene load_steps=6 format=3 uid="uid://bf5681n5nave6"]
 
 [ext_resource type="Texture2D" uid="uid://b6x3wonxfaamt" path="res://sprites/ui/Player.png" id="1_4qe2p"]
 [ext_resource type="Script" path="res://scripts/player/player_controller.gd" id="1_wqv8e"]
+[ext_resource type="PackedScene" uid="uid://dyxud4rafa4rd" path="res://scenes/inventory.tscn" id="3_yvjka"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_7sr5p"]
 
@@ -47,3 +48,10 @@ target_position = Vector2(-8, 0)
 [node name="WallCheckRight" type="RayCast2D" parent="."]
 unique_name_in_owner = true
 target_position = Vector2(8, 0)
+
+[node name="Inventory" parent="." instance=ExtResource("3_yvjka")]
+offset_top = 79.0
+offset_bottom = 79.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+metadata/_edit_use_anchors_ = true
