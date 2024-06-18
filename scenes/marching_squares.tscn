@@ -1,13 +1,9 @@
-[gd_scene load_steps=13 format=3 uid="uid://bwfe30h2s655f"]
+[gd_scene load_steps=8 format=3 uid="uid://bhj5e7mcbhl3s"]
 
 [ext_resource type="Script" path="res://scripts/marchingSquares/VoxelGrid.gd" id="1_7sy1n"]
 [ext_resource type="PackedScene" uid="uid://bltijxvovh1q" path="res://scenes/voxel.tscn" id="2_4y4kx"]
-[ext_resource type="Script" path="res://scripts/FishManager.gd" id="3_qhq6a"]
 [ext_resource type="Shader" path="res://shaders/marching_squares.gdshader" id="3_srn0q"]
 [ext_resource type="Texture2D" uid="uid://cgbueytyqf3ak" path="res://sprites/ui/white.png" id="4_fjbr0"]
-[ext_resource type="PackedScene" uid="uid://yc35bijsp2iy" path="res://scenes/orangeFish.tscn" id="4_q7dbu"]
-[ext_resource type="Script" path="res://scripts/ui/ui_manager.gd" id="7_1w7gj"]
-[ext_resource type="PackedScene" uid="uid://bf5681n5nave6" path="res://scenes/player.tscn" id="8_tkxut"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6mmkp"]
 size = Vector2(11.6232, 11.5267)
@@ -21,11 +17,7 @@ shader_parameter/state_texture = ExtResource("4_fjbr0")
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_1l0eq"]
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_6n80m"]
-
-[node name="Node2D" type="Node2D"]
-
-[node name="MarchingSquares" type="Node2D" parent="." node_paths=PackedStringArray("static_body")]
+[node name="MarchingSquares" type="Node2D" node_paths=PackedStringArray("static_body")]
 position = Vector2(1, 1)
 script = ExtResource("1_7sy1n")
 voxel_size = 16
@@ -34,38 +26,18 @@ voxel_resolution_y = 24
 voxel_scene = ExtResource("2_4y4kx")
 static_body = NodePath("BuildArea")
 
-[node name="BuildArea" type="StaticBody2D" parent="MarchingSquares"]
+[node name="BuildArea" type="StaticBody2D" parent="."]
 position = Vector2(580, 314)
 scale = Vector2(59.76, -33.406)
 collision_layer = 2
 collision_mask = 2
 input_pickable = true
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="MarchingSquares/BuildArea"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BuildArea"]
 position = Vector2(-4.18842, 4.23666)
 shape = SubResource("RectangleShape2D_6mmkp")
 debug_color = Color(0, 0.6, 0.701961, 0.419608)
 
-[node name="TerrainFill" type="MeshInstance2D" parent="MarchingSquares"]
+[node name="TerrainFill" type="MeshInstance2D" parent="."]
 material = SubResource("ShaderMaterial_mi3id")
 texture = SubResource("CanvasTexture_1l0eq")
-
-[node name="FishManager" type="Node2D" parent="."]
-script = ExtResource("3_qhq6a")
-fishCount = 50
-fishScene = ExtResource("4_q7dbu")
-
-[node name="Background" type="Sprite2D" parent="."]
-modulate = Color(0.380392, 0.717647, 0.811765, 1)
-z_index = -1
-position = Vector2(319.5, 182.5)
-scale = Vector2(635, 361)
-texture = SubResource("CanvasTexture_6n80m")
-
-[node name="UI Manager" type="Node" parent="."]
-unique_name_in_owner = true
-script = ExtResource("7_1w7gj")
-
-[node name="Player" parent="." instance=ExtResource("8_tkxut")]
-unique_name_in_owner = true
-position = Vector2(319, 181)
