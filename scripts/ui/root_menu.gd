@@ -2,12 +2,7 @@ extends Control
 
 signal menu_closed(menu_name, index)
 
-@onready var close_button = %Close
-@onready var move_button = %Move
-@onready var top_bar = %TopBar
-@onready var focus_button = %Focus
-@onready var pin_button = %Pin
-
+@onready var button_menu = $ButtonCol
 @onready var slot_scene = preload("res://scenes/slot.tscn")
 
 @export var slot_size: int = 0
@@ -28,14 +23,9 @@ var drag_offset = Vector2.ZERO
 func _ready():
 	connect("mouse_entered", Callable(self, "_on_mouse_entered"))
 	connect("mouse_exited", Callable(self, "_on_mouse_exited"))
-	close_button.connect("pressed", Callable(self, "_on_close_button_pressed"))
-	move_button.connect("gui_input", Callable(self, "_on_move_button_pressed"))
-	top_bar.connect("gui_input", Callable(self, "_on_move_button_pressed"))
-	focus_button.connect("pressed", Callable(self, "_on_focus_button_pressed"))
-	pin_button.connect("pressed", Callable(self, "_on_pin_button_pressed"))
 
-	UISingleton.connect("clear_focus_menu", Callable(self, "_on_clear_focus_menu"))
-	UISingleton.connect("set_focus_menu", Callable(self, "_on_set_focus_menu"))
+	button_menu.connect('close_button_pressed', Callable(self, "_on_close_button_pressed"))
+	button_menu.connect('move_button_pressed', Callable(self, "_on_move_button_pressed"))
 
 	for i in range(slot_size):
 		var slot = %MenuTexture.get_child(i)
@@ -46,7 +36,8 @@ func _ready():
 func _input(event: InputEvent):
 	if dragging_items and event is InputEventMouseMotion:
 		for slot in slots:
-			if slot.get_child(0).get_global_rect().has_point(event.position) and !dragged_slots.has(slot.slotIndex):
+			# TODO: figure out why the offset is needed
+			if slot.get_child(0).get_global_rect().has_point(Vector2(event.position.x, event.position.y + 80)) and !dragged_slots.has(slot.slotIndex):
 				if !menu.items[slot.slotIndex] is Item or menu.items[slot.slotIndex].id == follow_mouse_object.item.id:
 					dragged_slots.append(slot.slotIndex)
 
@@ -55,9 +46,6 @@ func _input(event: InputEvent):
 
 	if event.is_action_pressed("close"):
 		_on_close_button_pressed()
-
-	if event.is_action_pressed("focus_menu"):
-		_on_focus_button_pressed()
 
 func _process(_delta):
 	if follow_mouse_object != null:
@@ -88,55 +76,15 @@ func _on_close_button_pressed():
 		emit_signal("menu_closed", UISingleton.get_menu_key(menu_name, index))
 
 func _on_move_button_pressed(event):
-	if event is InputEventMouseButton and event.pressed:
-		if event.button_index == MOUSE_BUTTON_LEFT:
-			if event.pressed:
-				move_button.set_active()
-				is_dragging = true
-				drag_offset = event.position
-			else:
-				is_dragging = false
-				move_button.set_default()
-	elif event is InputEventMouseMotion && is_dragging:
-		var new_position = global_position + (event.position - drag_offset)
-		ensure_within_viewport(new_position)
-	else:
-		is_dragging = false
-		move_button.set_default()
-
-func _on_focus_button_pressed():
-	var hovered_menu
-
-	for check_menu in UISingleton.menus:
-		if check_menu.hovered:
-			hovered_menu = check_menu
-			break
-
-	if hovered_menu and hovered_menu.key == menu.key:
-		if menu.focused:
-			menu.focused = false
-			focus_button.set_default()
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		if event.pressed:
+			is_dragging = true
+			drag_offset = event.position
 		else:
-			menu.focused = true
-			focus_button.set_active()
-	else:
-		focus_button.set_default()
-
-func _on_clear_focus_menu(key):
-	if key == menu.key:
-		focus_button.set_default()
-
-func _on_set_focus_menu(key):
-	if key == menu.key:
-		focus_button.set_active()
-
-func _on_pin_button_pressed():
-	menu.pinned = !menu.pinned
-
-	if menu.pinned:
-		pin_button.set_active()
-	else:
-		pin_button.set_default()
+			is_dragging = false
+	elif event is InputEventMouseMotion and is_dragging:
+		var new_position = get_position() + event.position - drag_offset
+		global_position = new_position
 
 func _on_slot_pressed(slot_index: int, event: InputEvent):
 	if event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
@@ -394,23 +342,3 @@ func set_slot(item_index: int, item):
 		slot.set_item(item)
 	else:
 		slot.clear_slot()
-
-func ensure_within_viewport(new_position: Vector2):
-	var viewport_rect = get_viewport_rect()
-
-	var move_button_global_pos = new_position + move_button.position
-
-	# Check horizontal boundaries
-	if move_button_global_pos.x < viewport_rect.position.x:
-		new_position.x = viewport_rect.position.x - move_button.position.x
-	elif move_button_global_pos.x + move_button.size.x > viewport_rect.position.x + viewport_rect.size.x:
-		new_position.x = viewport_rect.position.x + viewport_rect.size.x - move_button.size.x - move_button.position.x
-
-	# Check vertical boundaries
-	if move_button_global_pos.y < viewport_rect.position.y:
-		new_position.y = viewport_rect.position.y - move_button.position.y
-	elif move_button_global_pos.y + move_button.size.y > viewport_rect.position.y + viewport_rect.size.y:
-		new_position.y = viewport_rect.position.y + viewport_rect.size.y - move_button.size.y - move_button.position.y
-
-	# Update the global position with the corrected position
-	global_position = new_position

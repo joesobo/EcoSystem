@@ -47,11 +47,7 @@ func open_menu(key: String):
 	var menu = UISingleton.get_menu_by_key(key)
 
 	menu.opened = true
-	UISingleton.clear_active_menu()
-
-	if !menu.pinned:
-		menu.instance.global_position = get_viewport().get_mouse_position()
-
+	menu.instance.global_position = get_viewport().get_mouse_position()
 	menu.instance.show()
 
 func close_menu(key: String):
@@ -60,8 +56,6 @@ func close_menu(key: String):
 	menu.opened = false
 	menu.hovered = false
 	menu.instance.hide()
-
-	UISingleton.next_active_menu(key)
 
 func update_cursor():
 	var scale_factor = get_viewport().size.x / viewport_size.x

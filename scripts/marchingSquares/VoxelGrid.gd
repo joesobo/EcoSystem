@@ -107,8 +107,8 @@ func _on_Area2D_input_event(_viewport, event, _shape_idx):
 	if event is InputEventMouseButton and event.pressed:
 		var world_position = camera.get_global_mouse_position()
 
-		var voxel_x = floor(world_position.x / voxel_size)
-		var voxel_y = floor(world_position.y / voxel_size)
+		var voxel_x = round(world_position.x / voxel_size)
+		var voxel_y = round(world_position.y / voxel_size)
 		var index = voxel_x + voxel_y * voxel_resolution_x
 		if Input.is_action_pressed("place_storage") && voxels[index].state == 0.0:
 			var storage = storage_scene.instantiate()

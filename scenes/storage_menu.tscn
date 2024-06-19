@@ -15,6 +15,7 @@ grow_vertical = 1
 size_flags_horizontal = 0
 size_flags_vertical = 0
 slot_size = 15
+menu_name = 0
 
 [node name="MenuTexture" parent="." index="1"]
 texture = ExtResource("2_gjsh3")
