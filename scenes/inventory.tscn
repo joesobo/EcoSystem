@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://dyxud4rafa4rd"]
+[gd_scene load_steps=4 format=3 uid="uid://dyxud4rafa4rd"]
 
 [ext_resource type="Texture2D" uid="uid://lavtsofiv26c" path="res://sprites/ui/Inventory.png" id="1_n7usw"]
+[ext_resource type="Script" path="res://scripts/ui/inventory.gd" id="1_ywmqf"]
 [ext_resource type="Texture2D" uid="uid://48bhvy3wj6xk" path="res://sprites/ui/InventoryExtended.png" id="2_jrkqa"]
 
 [node name="Inventory" type="Control"]
@@ -12,8 +13,10 @@ anchor_right = 0.5
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 0
+script = ExtResource("1_ywmqf")
 
 [node name="Hotbar" type="TextureRect" parent="."]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -29,6 +32,7 @@ expand_mode = 1
 stretch_mode = 3
 
 [node name="Extended" type="TextureRect" parent="."]
+unique_name_in_owner = true
 visible = false
 layout_mode = 1
 anchors_preset = 7
