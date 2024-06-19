@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://dyxud4rafa4rd"]
+[gd_scene load_steps=5 format=3 uid="uid://dyxud4rafa4rd"]
 
 [ext_resource type="Texture2D" uid="uid://lavtsofiv26c" path="res://sprites/ui/Inventory.png" id="1_n7usw"]
 [ext_resource type="Script" path="res://scripts/ui/inventory.gd" id="1_ywmqf"]
 [ext_resource type="Texture2D" uid="uid://48bhvy3wj6xk" path="res://sprites/ui/InventoryExtended.png" id="2_jrkqa"]
+[ext_resource type="Texture2D" uid="uid://dbn3outdqqtpl" path="res://sprites/ui/Slot_Outline.png" id="4_5lhas"]
 
 [node name="Inventory" type="Control"]
 layout_mode = 3
@@ -28,7 +29,6 @@ offset_bottom = -2.0
 grow_horizontal = 2
 grow_vertical = 0
 texture = ExtResource("1_n7usw")
-expand_mode = 1
 stretch_mode = 3
 
 [node name="Extended" type="TextureRect" parent="."]
@@ -40,9 +40,21 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_top = -66.0
+offset_left = -99.0
+offset_top = -68.0
+offset_right = 98.0
+offset_bottom = -2.0
 grow_horizontal = 2
 grow_vertical = 0
 texture = ExtResource("2_jrkqa")
-expand_mode = 1
 stretch_mode = 3
+
+[node name="Slot Outline" type="TextureRect" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = -95.0
+offset_top = -24.0
+offset_right = -77.0
+offset_bottom = -6.0
+texture = ExtResource("4_5lhas")
+stretch_mode = 2
