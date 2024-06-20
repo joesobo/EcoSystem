@@ -1,6 +1,7 @@
 extends Control
 
 signal menu_closed(menu_name, index)
+signal update_slot(slot_index, item)
 
 var button_menu
 @onready var slot_scene = preload("res://scenes/slot.tscn")
@@ -60,6 +61,7 @@ func set_menu(menu: Menu):
 	for i in range(menu.items.size()):
 		var item = menu.items[i]
 		set_slot(i, item)
+		emit_signal("update_slot", i, item)
 
 func _on_close_button_pressed():
 	var hovered_menu
@@ -102,6 +104,7 @@ func _on_slot_pressed(slot_index: int, event: InputEvent):
 		handle_item_pickup(slot_index, event)
 
 	set_slot(slot_index, menu.items[slot_index])
+	emit_signal("update_slot", slot_index, menu.items[slot_index])
 
 func _on_slot_drag_end(slot_index: int, event: InputEvent):
 	if dragging_items:
@@ -110,6 +113,7 @@ func _on_slot_drag_end(slot_index: int, event: InputEvent):
 		else:
 			handle_item_place(slot_index, event)
 	set_slot(slot_index, menu.items[slot_index])
+	emit_signal("update_slot", slot_index, menu.items[slot_index])
 	reset_dragging()
 
 func _on_mouse_entered():
@@ -149,6 +153,7 @@ func distribute_items_across_slots():
 				if menu.items[slot_index] is Item and follow_mouse_object.item.id == menu.items[slot_index].id:
 					menu.items[slot_index].quantity += quantity_to_place
 					slots[slot_index].set_slot_quantity()
+					emit_signal("update_slot", slot_index, menu.items[slot_index])
 				else:
 					place_item_in_empty_slot_quantity(slot_index, quantity_to_place)
 				distributed_items += quantity_to_place
@@ -200,6 +205,7 @@ func sort_inventory():
 	for i in range(sorted_inventory.size()):
 		menu.items[i] = sorted_inventory[i]
 		set_slot(i, menu.items[i])
+		emit_signal("update_slot", i, menu.items[i])
 
 func handle_escape():
 	if follow_mouse_object and last_pickup_slot_index != -1:
@@ -253,6 +259,7 @@ func place_item_in_empty_slot_quantity(slot_index: int, quantity: int):
 	menu.items[slot_index] = follow_mouse_object.item.clone()
 	menu.items[slot_index].quantity = quantity
 	set_slot(slot_index, menu.items[slot_index])
+	emit_signal("update_slot", slot_index, menu.items[slot_index])
 
 func place_single_item_in_empty_slot(slot_index: int):
 	follow_mouse_object.item.quantity -= 1
@@ -270,6 +277,7 @@ func increment_single_item(slot_index: int):
 		follow_mouse_object.set_slot_quantity()
 
 		menu.items[slot_index].quantity += 1
+		emit_signal("update_slot", slot_index, menu.items[slot_index])
 
 		if follow_mouse_object.item.quantity == 0:
 			follow_mouse_object.queue_free()
@@ -324,6 +332,7 @@ func handle_scroll_up(slot_index: int):
 		follow_mouse_object.item.quantity += 1
 		follow_mouse_object.set_slot_quantity()
 		menu.items[slot_index].quantity -= 1
+		emit_signal("update_slot", slot_index, menu.items[slot_index])
 
 		if (menu.items[slot_index].quantity == 0):
 			menu.items[slot_index] = {}
@@ -336,9 +345,10 @@ func handle_scroll_up(slot_index: int):
 
 		menu.items[slot_index].quantity -= 1
 
-func set_slot(item_index: int, item):
-	var slot = slots[item_index]
-	slot.slotIndex = item_index
+func set_slot(slot_index: int, item):
+	var slot = slots[slot_index]
+	slot.slotIndex = slot_index
+	menu.items[slot_index] = item
 
 	if item is Item:
 		slot.set_item(item)

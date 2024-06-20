@@ -32,6 +32,9 @@ func _ready():
 	var inventory_menu = UISingleton.create_menu(inventory_key, extended_inventory)
 	extended_inventory.set_menu(inventory_menu)
 
+	hotbar.connect('update_slot', Callable(self, 'duplicate_slot_to_extended_inventory'))
+	extended_inventory.connect('update_slot', Callable(self, 'duplicate_slot_to_hotbar'))
+
 func _input(event):
 	if event.is_action_pressed("inventory"):
 		toggle_extend_inventory()
@@ -69,3 +72,11 @@ func move_outline_to_slot(slot: int):
 		new_position.y = start_position.y
 
 	slot_outline.position = new_position
+
+func duplicate_slot_to_extended_inventory(slot_index, item):
+	print('duplicating slot ', slot_index)
+	extended_inventory.set_slot(slot_index, item)
+
+func duplicate_slot_to_hotbar(slot_index, item):
+	if slot_index < 10:
+		hotbar.set_slot(slot_index, item)
