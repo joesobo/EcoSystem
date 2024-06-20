@@ -31,7 +31,6 @@ var checked_vertices =  []
 
 
 @export var storage_scene = preload("res://scenes/storage_block.tscn")
-var storage_map: Dictionary = {}
 
 func _ready():
 	viewport_rect = get_viewport_rect()
@@ -117,15 +116,15 @@ func _on_Area2D_input_event(_viewport, event, _shape_idx):
 			add_child(storage)
 
 			voxels[index].state = 2.0
-			storage_map[index] = storage
+			UISingleton.storage_map[index] = storage
 		elif Input.is_action_pressed("place_storage") && voxels[index].state == 2.0:
-			storage_map[index].queue_free()
+			UISingleton.storage_map[index].queue_free()
 			voxels[index].state = 0.0
-			storage_map.erase(index)
+			UISingleton.storage_map.erase(index)
 		elif voxels[index].state == 2.0:
 			# open UI
 			ui_manager.toggle_menu(UISingleton.MenuType.Storage, index)
-		elif !storage_map.has(index):
+		elif !UISingleton.storage_map.has(index):
 			edit_voxel(world_position)
 		queue_redraw()
 

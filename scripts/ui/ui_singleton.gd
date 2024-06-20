@@ -11,6 +11,8 @@ enum MenuType {
 }
 
 var menus: Array[Menu] = []
+var storage_map = {}
+var follow_mouse_object: Panel
 
 func get_menu_key(menu_name: MenuType, index: int) -> String:
 	return str(menu_name) + "_" + str(index)
