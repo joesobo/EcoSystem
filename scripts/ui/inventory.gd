@@ -43,6 +43,12 @@ func _input(event):
 		if event.keycode in key_to_slot:
 			set_focus_slot(key_to_slot[event.keycode])
 
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_WHEEL_UP and event.pressed:
+			set_focus_slot(focus_slot - 1)
+		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN and event.pressed:
+			set_focus_slot(focus_slot + 1)
+
 func toggle_extend_inventory():
 	extended = !extended
 
@@ -56,6 +62,11 @@ func toggle_extend_inventory():
 	move_outline_to_slot(focus_slot)
 
 func set_focus_slot(slot: int):
+	if slot < 0:
+		slot = 9
+	elif slot > 9:
+		slot = 0
+
 	focus_slot = slot
 	move_outline_to_slot(slot)
 
@@ -74,7 +85,6 @@ func move_outline_to_slot(slot: int):
 	slot_outline.position = new_position
 
 func duplicate_slot_to_extended_inventory(slot_index, item):
-	print('duplicating slot ', slot_index)
 	extended_inventory.set_slot(slot_index, item)
 
 func duplicate_slot_to_hotbar(slot_index, item):
