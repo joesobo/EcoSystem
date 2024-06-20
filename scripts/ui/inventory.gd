@@ -90,3 +90,15 @@ func duplicate_slot_to_extended_inventory(slot_index, item):
 func duplicate_slot_to_hotbar(slot_index, item):
 	if slot_index < 10:
 		hotbar.set_slot(slot_index, item)
+
+func is_room_in_inventory():
+	for item in extended_inventory.menu.items:
+		if !item is Item:
+			return true
+	return false
+
+func pickup_item(item):
+	for i in range(len(extended_inventory.menu.items)):
+		if !extended_inventory.menu.items[i] is Item:
+			extended_inventory.set_emitted_slot(i, item)
+			break

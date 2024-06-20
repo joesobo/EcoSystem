@@ -9,6 +9,7 @@ extends RigidBody2D
 @onready var ground_check_right: RayCast2D = %GroundCheckRight
 @onready var wall_check_left: RayCast2D = %WallCheckLeft
 @onready var wall_check_right: RayCast2D = %WallCheckRight
+@onready var inventory: Control = %Inventory
 
 var is_grounded = false
 var is_on_wall = false

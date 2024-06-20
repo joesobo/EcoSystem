@@ -98,6 +98,8 @@ jump={
 2d_physics/layer_3="OrangeFish"
 2d_physics/layer_4="Predator"
 2d_physics/layer_5="Food"
+2d_physics/layer_6="WorldItem"
+2d_physics/layer_7="Player"
 
 [rendering]
 

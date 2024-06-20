@@ -59,8 +59,7 @@ func set_menu(menu: Menu):
 
 	for i in range(menu.items.size()):
 		var item = menu.items[i]
-		set_slot(i, item)
-		emit_signal("update_slot", i, item)
+		set_emitted_slot(i, item)
 
 func _on_close_button_pressed():
 	var hovered_menu
@@ -102,8 +101,7 @@ func _on_slot_pressed(slot_index: int, event: InputEvent):
 	else:
 		handle_item_pickup(slot_index, event)
 
-	set_slot(slot_index, menu.items[slot_index])
-	emit_signal("update_slot", slot_index, menu.items[slot_index])
+	set_emitted_slot(slot_index, menu.items[slot_index])
 
 func _on_slot_drag_end(slot_index: int, event: InputEvent):
 	if dragging_items:
@@ -111,8 +109,7 @@ func _on_slot_drag_end(slot_index: int, event: InputEvent):
 			distribute_items_across_slots()
 		else:
 			handle_item_place(slot_index, event)
-	set_slot(slot_index, menu.items[slot_index])
-	emit_signal("update_slot", slot_index, menu.items[slot_index])
+	set_emitted_slot(slot_index, menu.items[slot_index])
 	reset_dragging()
 
 func _on_mouse_entered():
@@ -203,8 +200,7 @@ func sort_inventory():
 	# place sorted inventory
 	for i in range(sorted_inventory.size()):
 		menu.items[i] = sorted_inventory[i]
-		set_slot(i, menu.items[i])
-		emit_signal("update_slot", i, menu.items[i])
+		set_emitted_slot(i, menu.items[i])
 
 func handle_escape():
 	if UISingleton.follow_mouse_object and last_pickup_slot_index != -1:
@@ -257,8 +253,7 @@ func place_item_in_empty_slot(slot_index: int):
 func place_item_in_empty_slot_quantity(slot_index: int, quantity: int):
 	menu.items[slot_index] = UISingleton.follow_mouse_object.item.clone()
 	menu.items[slot_index].quantity = quantity
-	set_slot(slot_index, menu.items[slot_index])
-	emit_signal("update_slot", slot_index, menu.items[slot_index])
+	set_emitted_slot(slot_index, menu.items[slot_index])
 
 func place_single_item_in_empty_slot(slot_index: int):
 	UISingleton.follow_mouse_object.item.quantity -= 1
@@ -343,6 +338,10 @@ func handle_scroll_up(slot_index: int):
 		UISingleton.follow_mouse_object.set_item(cloned_item)
 
 		menu.items[slot_index].quantity -= 1
+
+func set_emitted_slot(slot_index: int, item):
+	set_slot(slot_index, item)
+	emit_signal("update_slot", slot_index, item)
 
 func set_slot(slot_index: int, item):
 	var slot = slots[slot_index]

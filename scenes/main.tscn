@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://bwfe30h2s655f"]
+[gd_scene load_steps=8 format=3 uid="uid://bwfe30h2s655f"]
 
 [ext_resource type="PackedScene" uid="uid://bhj5e7mcbhl3s" path="res://scenes/marching_squares.tscn" id="1_atrqb"]
 [ext_resource type="Script" path="res://scripts/FishManager.gd" id="5_1qjtw"]
+[ext_resource type="PackedScene" uid="uid://c46qx5ss0j2e" path="res://scenes/world_item.tscn" id="6_ofkvc"]
 [ext_resource type="PackedScene" uid="uid://yc35bijsp2iy" path="res://scenes/orangeFish.tscn" id="6_up3j5"]
 [ext_resource type="Script" path="res://scripts/ui/ui_manager.gd" id="7_8k03j"]
 [ext_resource type="PackedScene" uid="uid://bf5681n5nave6" path="res://scenes/player.tscn" id="8_b3iae"]
@@ -34,3 +35,6 @@ position = Vector2(319, 181)
 gravity_scale = 0.25
 move_speed = 75.0
 jump_force = 150.0
+
+[node name="WorldItem" parent="." instance=ExtResource("6_ofkvc")]
+position = Vector2(230, 113)
