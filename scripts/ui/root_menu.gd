@@ -336,7 +336,7 @@ func handle_scroll_up(slot_index: int):
 
 		if (menu.items[slot_index].quantity == 0):
 			menu.items[slot_index] = {}
-	elif !follow_mouse_object:
+	elif !follow_mouse_object and menu.items[slot_index] is Item:
 		init_follow_mouse_slot()
 
 		var cloned_item = menu.items[slot_index].clone()
