@@ -2,7 +2,7 @@ extends Control
 
 signal menu_closed(menu_name, index)
 
-@onready var button_menu = $ButtonCol
+var button_menu
 @onready var slot_scene = preload("res://scenes/slot.tscn")
 
 @export var slot_size: int = 0
@@ -24,8 +24,10 @@ func _ready():
 	connect("mouse_entered", Callable(self, "_on_mouse_entered"))
 	connect("mouse_exited", Callable(self, "_on_mouse_exited"))
 
-	button_menu.connect('close_button_pressed', Callable(self, "_on_close_button_pressed"))
-	button_menu.connect('move_button_pressed', Callable(self, "_on_move_button_pressed"))
+	if has_node("ButtonCol"):
+		button_menu = get_node("ButtonCol")
+		button_menu.connect('close_button_pressed', Callable(self, "_on_close_button_pressed"))
+		button_menu.connect('move_button_pressed', Callable(self, "_on_move_button_pressed"))
 
 	for i in range(slot_size):
 		var slot = %MenuTexture.get_child(i)

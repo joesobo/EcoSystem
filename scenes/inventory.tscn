@@ -1,8 +1,8 @@
 [gd_scene load_steps=5 format=3 uid="uid://dyxud4rafa4rd"]
 
-[ext_resource type="Texture2D" uid="uid://lavtsofiv26c" path="res://sprites/ui/Inventory.png" id="1_n7usw"]
 [ext_resource type="Script" path="res://scripts/ui/inventory.gd" id="1_ywmqf"]
-[ext_resource type="Texture2D" uid="uid://48bhvy3wj6xk" path="res://sprites/ui/InventoryExtended.png" id="2_jrkqa"]
+[ext_resource type="PackedScene" uid="uid://docvlw7pv62vv" path="res://scenes/hotbar.tscn" id="2_oiei1"]
+[ext_resource type="PackedScene" uid="uid://c7ph1g56wa1to" path="res://scenes/extended_inventory.tscn" id="3_vwkk6"]
 [ext_resource type="Texture2D" uid="uid://dbn3outdqqtpl" path="res://sprites/ui/Slot_Outline.png" id="4_5lhas"]
 
 [node name="Inventory" type="Control"]
@@ -16,38 +16,11 @@ grow_horizontal = 2
 grow_vertical = 0
 script = ExtResource("1_ywmqf")
 
-[node name="Hotbar" type="TextureRect" parent="."]
+[node name="Hotbar" parent="." instance=ExtResource("2_oiei1")]
 unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_top = -24.0
-offset_bottom = -2.0
-grow_horizontal = 2
-grow_vertical = 0
-texture = ExtResource("1_n7usw")
-stretch_mode = 3
 
-[node name="Extended" type="TextureRect" parent="."]
+[node name="Extended" parent="." instance=ExtResource("3_vwkk6")]
 unique_name_in_owner = true
-visible = false
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -99.0
-offset_top = -68.0
-offset_right = 98.0
-offset_bottom = -2.0
-grow_horizontal = 2
-grow_vertical = 0
-texture = ExtResource("2_jrkqa")
-stretch_mode = 3
 
 [node name="Slot Outline" type="TextureRect" parent="."]
 unique_name_in_owner = true

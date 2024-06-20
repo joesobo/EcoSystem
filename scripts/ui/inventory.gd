@@ -23,6 +23,15 @@ var key_to_slot = {
 	KEY_0: 0
 }
 
+func _ready():
+	var hotbar_key = UISingleton.get_menu_key(UISingleton.MenuType.Hotbar, 0)
+	var hotbar_menu = UISingleton.create_menu(hotbar_key, hotbar)
+	hotbar.set_menu(hotbar_menu)
+
+	var inventory_key = UISingleton.get_menu_key(UISingleton.MenuType.Inventory, 0)
+	var inventory_menu = UISingleton.create_menu(inventory_key, extended_inventory)
+	extended_inventory.set_menu(inventory_menu)
+
 func _input(event):
 	if event.is_action_pressed("inventory"):
 		toggle_extend_inventory()

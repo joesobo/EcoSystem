@@ -15,9 +15,8 @@ grow_vertical = 1
 size_flags_horizontal = 0
 size_flags_vertical = 0
 slot_size = 15
-menu_name = 0
 
-[node name="MenuTexture" parent="." index="1"]
+[node name="MenuTexture" parent="." index="0"]
 texture = ExtResource("2_gjsh3")
 
 [node name="Slot" parent="MenuTexture" index="0" instance=ExtResource("3_jbst8")]
@@ -139,8 +138,3 @@ offset_top = 61.0
 offset_right = 89.0
 offset_bottom = 61.0
 mouse_filter = 1
-
-[node name="TopBar" parent="." index="2"]
-offset_left = 16.0
-offset_top = 2.0
-offset_right = 114.0

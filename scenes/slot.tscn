@@ -83,6 +83,7 @@ animations = [{
 }]
 
 [node name="Slot" type="Panel"]
+z_index = 1
 script = ExtResource("1_rj73i")
 highlighted_slot_texture = ExtResource("2_ypl5k")
 

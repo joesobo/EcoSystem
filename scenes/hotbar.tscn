@@ -1,0 +1,110 @@
+[gd_scene load_steps=7 format=3 uid="uid://docvlw7pv62vv"]
+
+[ext_resource type="Texture2D" uid="uid://lavtsofiv26c" path="res://sprites/ui/Inventory.png" id="1_b0oq3"]
+[ext_resource type="Shader" path="res://shaders/outline_shader.gdshader" id="1_fccgf"]
+[ext_resource type="Script" path="res://scripts/ui/root_menu.gd" id="1_svtxw"]
+[ext_resource type="PackedScene" uid="uid://ixyduxobwoxs" path="res://scenes/slot.tscn" id="2_1220k"]
+[ext_resource type="Script" path="res://scripts/ui/menu_outline.gd" id="2_pkrdu"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_l7d1h"]
+shader = ExtResource("1_fccgf")
+shader_parameter/color = Color(1, 1, 1, 1)
+shader_parameter/width = 1.0
+
+[node name="Hotbar" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_svtxw")
+slot_size = 10
+menu_name = 2
+
+[node name="MenuTexture" type="TextureRect" parent="."]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_l7d1h")
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -118.5
+offset_top = -68.0
+offset_right = 78.5
+offset_bottom = -42.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("1_b0oq3")
+stretch_mode = 3
+script = ExtResource("2_pkrdu")
+
+[node name="Slot" parent="MenuTexture" instance=ExtResource("2_1220k")]
+layout_mode = 0
+offset_left = 12.5
+offset_top = 13.0
+offset_right = 12.5
+offset_bottom = 13.0
+
+[node name="Slot2" parent="MenuTexture" instance=ExtResource("2_1220k")]
+layout_mode = 0
+offset_left = 31.5
+offset_top = 13.0
+offset_right = 31.5
+offset_bottom = 13.0
+
+[node name="Slot3" parent="MenuTexture" instance=ExtResource("2_1220k")]
+layout_mode = 0
+offset_left = 50.5
+offset_top = 13.0
+offset_right = 50.5
+offset_bottom = 13.0
+
+[node name="Slot4" parent="MenuTexture" instance=ExtResource("2_1220k")]
+layout_mode = 0
+offset_left = 69.5
+offset_top = 13.0
+offset_right = 69.5
+offset_bottom = 13.0
+
+[node name="Slot5" parent="MenuTexture" instance=ExtResource("2_1220k")]
+layout_mode = 0
+offset_left = 88.5
+offset_top = 13.0
+offset_right = 88.5
+offset_bottom = 13.0
+
+[node name="Slot6" parent="MenuTexture" instance=ExtResource("2_1220k")]
+layout_mode = 0
+offset_left = 107.5
+offset_top = 13.0
+offset_right = 107.5
+offset_bottom = 13.0
+
+[node name="Slot7" parent="MenuTexture" instance=ExtResource("2_1220k")]
+layout_mode = 0
+offset_left = 126.5
+offset_top = 13.0
+offset_right = 126.5
+offset_bottom = 13.0
+
+[node name="Slot8" parent="MenuTexture" instance=ExtResource("2_1220k")]
+layout_mode = 0
+offset_left = 145.5
+offset_top = 13.0
+offset_right = 145.5
+offset_bottom = 13.0
+
+[node name="Slot9" parent="MenuTexture" instance=ExtResource("2_1220k")]
+layout_mode = 0
+offset_left = 164.5
+offset_top = 13.0
+offset_right = 164.5
+offset_bottom = 13.0
+
+[node name="Slot10" parent="MenuTexture" instance=ExtResource("2_1220k")]
+layout_mode = 0
+offset_left = 183.5
+offset_top = 13.0
+offset_right = 183.5
+offset_bottom = 13.0

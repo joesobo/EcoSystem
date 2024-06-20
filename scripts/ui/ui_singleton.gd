@@ -5,7 +5,9 @@ signal clear_hovered_menu(menu_key)
 
 enum MenuType {
 	Storage,
-	Breeding
+	Breeding,
+	Hotbar,
+	Inventory
 }
 
 var menus: Array[Menu] = []
