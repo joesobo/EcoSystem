@@ -1,8 +1,38 @@
-[gd_scene load_steps=4 format=3 uid="uid://cpahlwhq21806"]
+[gd_scene load_steps=19 format=3 uid="uid://cpahlwhq21806"]
 
 [ext_resource type="PackedScene" uid="uid://b314d4arovyk" path="res://scenes/root_menu.tscn" id="1_chig7"]
 [ext_resource type="Texture2D" uid="uid://db2oggt7gbkhq" path="res://sprites/ui/StorageUI.png" id="2_gjsh3"]
 [ext_resource type="PackedScene" uid="uid://ixyduxobwoxs" path="res://scenes/slot.tscn" id="3_jbst8"]
+[ext_resource type="Texture2D" uid="uid://dchoncvs1hdlv" path="res://sprites/ui/Move.png" id="4_dsscu"]
+[ext_resource type="Script" path="res://scripts/ui/button_menu.gd" id="4_kqj46"]
+[ext_resource type="Texture2D" uid="uid://b6i36wv7622d7" path="res://sprites/ui/Close.png" id="4_p0kdq"]
+[ext_resource type="Shader" path="res://shaders/outline_shader.gdshader" id="5_f0s73"]
+[ext_resource type="Script" path="res://scripts/ui/button_outline.gd" id="7_6uhci"]
+[ext_resource type="Texture2D" uid="uid://jo6ch7scydh4" path="res://sprites/ui/Move_Active.png" id="9_bm6q7"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_act3u"]
+shader = ExtResource("5_f0s73")
+shader_parameter/color = Color(1, 1, 1, 1)
+shader_parameter/width = 1.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_yuy23"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xmtt3"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_awn27"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_j5g2u"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4xien"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5l1mn"]
+shader = ExtResource("5_f0s73")
+shader_parameter/color = Color(1, 1, 1, 1)
+shader_parameter/width = 1.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fpibi"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fj2xn"]
 
 [node name="RootMenu" instance=ExtResource("1_chig7")]
 anchors_preset = 0
@@ -16,7 +46,56 @@ size_flags_horizontal = 0
 size_flags_vertical = 0
 slot_size = 15
 
-[node name="MenuTexture" parent="." index="0"]
+[node name="Button Menu" type="Control" parent="." index="0"]
+unique_name_in_owner = true
+anchors_preset = 0
+offset_right = 116.0
+offset_bottom = 76.0
+mouse_filter = 1
+script = ExtResource("4_kqj46")
+
+[node name="ButtonCol" type="VBoxContainer" parent="Button Menu" index="0"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 13.0
+offset_bottom = 26.0
+theme_override_constants/separation = 0
+
+[node name="Close" type="Button" parent="Button Menu/ButtonCol" index="0"]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_act3u")
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/normal = SubResource("StyleBoxEmpty_yuy23")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_xmtt3")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_awn27")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_j5g2u")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_4xien")
+icon = ExtResource("4_p0kdq")
+script = ExtResource("7_6uhci")
+default_texture = ExtResource("4_p0kdq")
+
+[node name="Move" type="Button" parent="Button Menu/ButtonCol" index="1"]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_5l1mn")
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/normal = SubResource("StyleBoxEmpty_yuy23")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_fpibi")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_fj2xn")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_j5g2u")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_4xien")
+icon = ExtResource("4_dsscu")
+script = ExtResource("7_6uhci")
+default_texture = ExtResource("4_dsscu")
+active_texture = ExtResource("9_bm6q7")
+
+[node name="MenuTexture" parent="." index="1"]
+offset_left = 13.0
+offset_right = 115.0
+offset_bottom = 75.0
 texture = ExtResource("2_gjsh3")
 
 [node name="Slot" parent="MenuTexture" index="0" instance=ExtResource("3_jbst8")]
@@ -137,4 +216,13 @@ offset_left = 89.0
 offset_top = 61.0
 offset_right = 89.0
 offset_bottom = 61.0
+mouse_filter = 1
+
+[node name="TopBar" type="Control" parent="." index="2"]
+unique_name_in_owner = true
+anchors_preset = 0
+offset_left = 15.0
+offset_top = 2.0
+offset_right = 113.0
+offset_bottom = 11.0
 mouse_filter = 1

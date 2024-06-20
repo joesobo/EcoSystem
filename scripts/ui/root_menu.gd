@@ -25,8 +25,8 @@ func _ready():
 	connect("mouse_entered", Callable(self, "_on_mouse_entered"))
 	connect("mouse_exited", Callable(self, "_on_mouse_exited"))
 
-	if has_node("ButtonCol"):
-		button_menu = get_node("ButtonCol")
+	if has_node("Button Menu"):
+		button_menu = get_node("Button Menu")
 		button_menu.connect('close_button_pressed', Callable(self, "_on_close_button_pressed"))
 		button_menu.connect('move_button_pressed', Callable(self, "_on_move_button_pressed"))
 
