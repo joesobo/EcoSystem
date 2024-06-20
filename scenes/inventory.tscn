@@ -16,14 +16,9 @@ grow_horizontal = 2
 grow_vertical = 0
 script = ExtResource("1_ywmqf")
 
-[node name="Hotbar" parent="." instance=ExtResource("2_oiei1")]
-unique_name_in_owner = true
-
-[node name="Extended" parent="." instance=ExtResource("3_vwkk6")]
-unique_name_in_owner = true
-
 [node name="Slot Outline" type="TextureRect" parent="."]
 unique_name_in_owner = true
+z_index = 1
 layout_mode = 0
 offset_left = -95.0
 offset_top = -24.0
@@ -32,3 +27,9 @@ offset_bottom = -6.0
 mouse_filter = 0
 texture = ExtResource("4_5lhas")
 stretch_mode = 2
+
+[node name="Hotbar" parent="." instance=ExtResource("2_oiei1")]
+unique_name_in_owner = true
+
+[node name="Extended" parent="." instance=ExtResource("3_vwkk6")]
+unique_name_in_owner = true
