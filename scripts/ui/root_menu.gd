@@ -70,6 +70,9 @@ func _input(event: InputEvent):
 	if event.is_action_pressed("throw_item") or (UISingleton.follow_mouse_object and event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT):
 		throw_item()
 
+	if event.is_action_pressed("throw_stack"):
+		throw_stack()
+
 func _process(_delta):
 	if UISingleton.follow_mouse_object != null:
 		UISingleton.follow_mouse_object.global_position = get_global_mouse_position()
@@ -226,34 +229,38 @@ func sort_inventory():
 		menu.items[i] = sorted_inventory[i]
 		set_emitted_slot(i, menu.items[i])
 
+func throw_stack():
+	if hovered_slot_index != -1 and menu.hovered and menu.items[hovered_slot_index] is Item:
+		throw_hovered_item(menu.items[hovered_slot_index].quantity)
+
 func throw_item():
 	if hovered_slot_index != -1 and menu.hovered and menu.items[hovered_slot_index] is Item:
 
-		throw_hovered_item()
+		throw_hovered_item(1)
 	elif UISingleton.follow_mouse_object:
-		throw_mouse_item()
+		throw_mouse_item(1)
 
-func throw_hovered_item():
+func throw_hovered_item(quantity):
 	var item = menu.items[hovered_slot_index].clone()
-	item.quantity = 1
+	item.quantity = quantity
 
 	create_world_item(item)
 
 	# update inventory
-	menu.items[hovered_slot_index].quantity -= 1
+	menu.items[hovered_slot_index].quantity -= quantity
 
 	if menu.items[hovered_slot_index].quantity == 0:
 		menu.items[hovered_slot_index] = {}
 
 	set_emitted_slot(hovered_slot_index, menu.items[hovered_slot_index])
 
-func throw_mouse_item():
+func throw_mouse_item(quantity):
 	var item = UISingleton.follow_mouse_object.item.clone()
-	item.quantity = 1
+	item.quantity = quantity
 
 	create_world_item(item)
 
-	UISingleton.follow_mouse_object.item.quantity -= 1
+	UISingleton.follow_mouse_object.item.quantity -= quantity
 	UISingleton.follow_mouse_object.set_slot_quantity()
 
 	if UISingleton.follow_mouse_object.item.quantity == 0:
