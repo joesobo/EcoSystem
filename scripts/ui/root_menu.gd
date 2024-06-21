@@ -237,7 +237,30 @@ func throw_hovered_item():
 	var item = menu.items[hovered_slot_index].clone()
 	item.quantity = 1
 
-	# create new world item
+	create_world_item(item)
+
+	# update inventory
+	menu.items[hovered_slot_index].quantity -= 1
+
+	if menu.items[hovered_slot_index].quantity == 0:
+		menu.items[hovered_slot_index] = {}
+
+	set_emitted_slot(hovered_slot_index, menu.items[hovered_slot_index])
+
+func throw_mouse_item():
+	var item = UISingleton.follow_mouse_object.item.clone()
+	item.quantity = 1
+
+	create_world_item(item)
+
+	UISingleton.follow_mouse_object.item.quantity -= 1
+	UISingleton.follow_mouse_object.set_slot_quantity()
+
+	if UISingleton.follow_mouse_object.item.quantity == 0:
+		UISingleton.follow_mouse_object.queue_free()
+		UISingleton.follow_mouse_object = null
+
+func create_world_item(item):
 	var worldItem = world_item.instantiate()
 	worldItem.item = item
 	get_tree().root.add_child(worldItem)
@@ -251,29 +274,6 @@ func throw_hovered_item():
 	# add force to move item initially
 	var throw_direction = (get_global_mouse_position() - player.global_position).normalized()
 	worldItem.apply_impulse(Vector2.ZERO, throw_direction * 500)
-
-	# update inventory
-	menu.items[hovered_slot_index].quantity -= 1
-
-	if menu.items[hovered_slot_index].quantity == 0:
-		menu.items[hovered_slot_index] = {}
-
-	set_emitted_slot(hovered_slot_index, menu.items[hovered_slot_index])
-
-func throw_mouse_item():
-	var item = UISingleton.follow_mouse_object.item
-	item.quantity = 1
-
-	var worldItem = world_item.instantiate()
-	worldItem.item = item
-	worldItem.global_position = player.position
-
-	UISingleton.follow_mouse_object.item.quantity -= 1
-	UISingleton.follow_mouse_object.set_slot_quantity()
-
-	if UISingleton.follow_mouse_object.item.quantity == 0:
-		UISingleton.follow_mouse_object.queue_free()
-		UISingleton.follow_mouse_object = null
 
 func handle_escape():
 	if UISingleton.follow_mouse_object and last_pickup_slot_index != -1:
