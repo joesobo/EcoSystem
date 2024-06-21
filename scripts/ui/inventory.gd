@@ -91,14 +91,40 @@ func duplicate_slot_to_hotbar(slot_index, item):
 	if slot_index < 10:
 		hotbar.set_slot(slot_index, item)
 
-func is_room_in_inventory():
-	for item in extended_inventory.menu.items:
-		if !item is Item:
+func is_room_in_inventory(item):
+	for slot_item in extended_inventory.menu.items:
+		if !slot_item is Item:
+			return true
+		elif slot_item.id == item.id and slot_item.quantity < slot_item.max_quantity:
 			return true
 	return false
 
 func pickup_item(item):
+	var remaining_quantity = item.quantity
+
+	for i in range(len(extended_inventory.menu.items)):
+		var slot_item = extended_inventory.menu.items[i]
+
+		if slot_item is Item and slot_item.id == item.id:
+			var available_space = slot_item.max_quantity - slot_item.quantity
+			if available_space > 0:
+				var quantity_to_add = min(available_space, remaining_quantity)
+				slot_item.quantity += quantity_to_add
+				remaining_quantity -= quantity_to_add
+				extended_inventory.set_emitted_slot(i, slot_item)
+				if remaining_quantity <= 0:
+					item.quantity = 0
+					return item
+
 	for i in range(len(extended_inventory.menu.items)):
 		if !extended_inventory.menu.items[i] is Item:
-			extended_inventory.set_emitted_slot(i, item)
-			break
+			var new_item = item.clone()
+			new_item.quantity = remaining_quantity
+			extended_inventory.set_emitted_slot(i, new_item)
+			item.quantity = 0
+			return item
+
+	if remaining_quantity > 0:
+		item.quantity = remaining_quantity
+
+	return item

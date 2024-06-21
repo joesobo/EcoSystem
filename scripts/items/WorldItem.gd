@@ -19,6 +19,8 @@ func _on_Area2D_body_entered(body):
 	if body.is_in_group('player'):
 		var inventory = body.inventory
 
-		if inventory.is_room_in_inventory():
-			inventory.pickup_item(item)
-			queue_free()
+		if inventory.is_room_in_inventory(item):
+			item = inventory.pickup_item(item)
+
+			if item.quantity == 0:
+				queue_free()
