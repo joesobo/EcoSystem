@@ -214,8 +214,9 @@ func handle_escape():
 
 func init_follow_mouse_slot():
 	UISingleton.follow_mouse_object = slot_scene.instantiate()
+	UISingleton.follow_mouse_object.z_index = 2
 	UISingleton.follow_mouse_object.remove_child(UISingleton.follow_mouse_object.get_child(0))
-	add_child(UISingleton.follow_mouse_object)
+	UISingleton.add_child(UISingleton.follow_mouse_object)
 	UISingleton.follow_mouse_object.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	UISingleton.follow_mouse_object.get_child(0).mouse_filter = Control.MOUSE_FILTER_IGNORE
 
