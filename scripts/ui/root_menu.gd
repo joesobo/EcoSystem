@@ -44,30 +44,21 @@ func _ready():
 		slots.append(slot)
 
 func _input(event: InputEvent):
-	if dragging_items and event is InputEventMouseMotion:
-		for slot in slots:
-			var player_offset = player.position - initial_player_position
-			var adjusted_mouse_position = Vector2(event.position.x + player_offset.x, event.position.y + player_offset.y + size.y)
-
-			if menu_name == UISingleton.MenuType.Inventory or menu_name == UISingleton.MenuType.Hotbar:
-				# adjust mouse position to account for player offset when inventory is tied to player
-				adjusted_mouse_position = Vector2(event.position.x + player_offset.x, event.position.y + player_offset.y - 99)
-
-			if slot.get_child(0).get_global_rect().has_point(Vector2(adjusted_mouse_position.x, adjusted_mouse_position.y)) and !dragged_slots.has(slot.slotIndex):
-				if !menu.items[slot.slotIndex] is Item or menu.items[slot.slotIndex].id == UISingleton.follow_mouse_object.item.id:
-					dragged_slots.append(slot.slotIndex)
-
 	if event is InputEventMouseMotion:
+		hovered_slot_index = -1
+		var player_offset = player.position - initial_player_position
+		var adjusted_mouse_position = Vector2(event.position.x + player_offset.x, event.position.y + player_offset.y + size.y)
+
+		if menu_name == UISingleton.MenuType.Inventory or menu_name == UISingleton.MenuType.Hotbar:
+			# Adjust mouse position to account for player offset when inventory is tied to player
+			adjusted_mouse_position = Vector2(event.position.x + player_offset.x, event.position.y + player_offset.y - 99)
+
 		for slot in slots:
-			var player_offset = player.position - initial_player_position
-			var adjusted_mouse_position = Vector2(event.position.x + player_offset.x, event.position.y + player_offset.y + size.y)
-
-			if menu_name == UISingleton.MenuType.Inventory or menu_name == UISingleton.MenuType.Hotbar:
-				# adjust mouse position to account for player offset when inventory is tied to player
-				adjusted_mouse_position = Vector2(event.position.x + player_offset.x, event.position.y + player_offset.y - 99)
-
 			if slot.get_child(0).get_global_rect().has_point(Vector2(adjusted_mouse_position.x, adjusted_mouse_position.y)):
 				hovered_slot_index = slot.slotIndex
+				if dragging_items and !dragged_slots.has(slot.slotIndex):
+					if !menu.items[slot.slotIndex] is Item or menu.items[slot.slotIndex].id == UISingleton.follow_mouse_object.item.id:
+						dragged_slots.append(slot.slotIndex)
 				break
 
 	if event.is_action_pressed("sort_inventory"):
