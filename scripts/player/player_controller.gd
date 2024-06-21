@@ -13,6 +13,7 @@ extends RigidBody2D
 
 var is_grounded = false
 var is_on_wall = false
+var facing_right = false
 
 func _physics_process(_delta):
 	is_grounded = ground_check_left.is_colliding() or ground_check_right.is_colliding()
@@ -42,9 +43,11 @@ func _physics_process(_delta):
 			if Input.is_action_pressed("move_right"):
 				velocity.x = move_speed
 				sprite.flip_h = true
+				facing_right = true
 			elif Input.is_action_pressed("move_left"):
 				velocity.x = -move_speed
 				sprite.flip_h = false
+				facing_right = false
 			else:
 				velocity.x = 0
 		else:
@@ -53,9 +56,11 @@ func _physics_process(_delta):
 		if Input.is_action_pressed("move_right") and not is_on_wall:
 			velocity.x = move_speed
 			sprite.flip_h = true
+			facing_right = true
 		elif Input.is_action_pressed("move_left") and not is_on_wall:
 			velocity.x = -move_speed
 			sprite.flip_h = false
+			facing_right = false
 		else:
 			velocity.x = 0
 

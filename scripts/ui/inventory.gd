@@ -6,7 +6,7 @@ extends Control
 
 var extended: bool = false
 var focus_slot: int = 1
-var start_position = Vector2(-95, -24)
+var start_position = Vector2(-94, -25)
 var horizontal_increment = 19
 var vertical_increment = -40
 

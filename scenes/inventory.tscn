@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://dbn3outdqqtpl" path="res://sprites/ui/Slot_Outline.png" id="4_5lhas"]
 
 [node name="Inventory" type="Control"]
+z_index = 1
 layout_mode = 3
 anchors_preset = 7
 anchor_left = 0.5
@@ -18,18 +19,29 @@ script = ExtResource("1_ywmqf")
 
 [node name="Slot Outline" type="TextureRect" parent="."]
 unique_name_in_owner = true
-z_index = 1
+z_index = 2
 layout_mode = 0
-offset_left = -95.0
-offset_top = -24.0
-offset_right = -77.0
-offset_bottom = -6.0
+offset_left = -94.0
+offset_top = -25.0
+offset_right = -76.0
+offset_bottom = -7.0
 mouse_filter = 0
 texture = ExtResource("4_5lhas")
 stretch_mode = 2
 
 [node name="Hotbar" parent="." instance=ExtResource("2_oiei1")]
 unique_name_in_owner = true
+layout_mode = 1
+offset_left = 2.08165e-12
+offset_top = -29.0
+offset_right = 2.08165e-12
+offset_bottom = -29.0
 
 [node name="Extended" parent="." instance=ExtResource("3_vwkk6")]
 unique_name_in_owner = true
+visible = false
+layout_mode = 1
+offset_left = 2.08165e-12
+offset_top = -69.0
+offset_right = 2.08165e-12
+offset_bottom = -69.0
