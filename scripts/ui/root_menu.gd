@@ -158,6 +158,9 @@ func distribute_items_across_slots():
 		UISingleton.follow_mouse_object = null
 
 func sort_inventory():
+	if !menu.hovered:
+		return
+
 	var combined_items = {}
 
 	# combine items by id
