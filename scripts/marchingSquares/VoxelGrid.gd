@@ -103,7 +103,7 @@ func create_voxel(parent, x, y):
 	voxel_pos_indicators.append(voxel)
 
 func _on_Area2D_input_event(_viewport, event, _shape_idx):
-	if event is InputEventMouseButton and event.pressed:
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		var world_position = camera.get_global_mouse_position()
 
 		var voxel_x = round(world_position.x / voxel_size)
