@@ -24,7 +24,8 @@ func spawn_fish():
 	var max_radius = min(viewport_rect.size.x, viewport_rect.size.y) / 4 # Adjust this value as needed
 	var angle = randf() * 2 * PI # Random angle in radians
 	var radius = sqrt(randf()) * max_radius # Random radius, sqrt for even distribution
-	newFish.global_position = center + Vector2(cos(angle), sin(angle)) * radius
+	# newFish.global_position = center + Vector2(cos(angle), sin(angle)) * radius
+	newFish.global_position = center
 
 	add_child(newFish)
 	var fish_template = FishDefinition.find_template_by_index(randf() * FishDefinition.fishList.size())

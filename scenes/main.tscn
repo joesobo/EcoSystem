@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://bwfe30h2s655f"]
+[gd_scene load_steps=8 format=3 uid="uid://bwfe30h2s655f"]
 
 [ext_resource type="PackedScene" uid="uid://bhj5e7mcbhl3s" path="res://scenes/marching_squares.tscn" id="1_atrqb"]
 [ext_resource type="Script" path="res://scripts/FishManager.gd" id="5_1qjtw"]
@@ -7,6 +7,8 @@
 [ext_resource type="PackedScene" uid="uid://bf5681n5nave6" path="res://scenes/player.tscn" id="8_b3iae"]
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_6n80m"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_a4m6g"]
 
 [node name="Main" type="Node2D"]
 
@@ -24,8 +26,8 @@ fishScene = ExtResource("6_up3j5")
 [node name="Background" type="Sprite2D" parent="."]
 modulate = Color(0.380392, 0.717647, 0.811765, 1)
 z_index = -1
-position = Vector2(319.5, 182.5)
-scale = Vector2(635, 361)
+position = Vector2(329, 193)
+scale = Vector2(624, 352)
 texture = SubResource("CanvasTexture_6n80m")
 
 [node name="Player" parent="." instance=ExtResource("8_b3iae")]
@@ -34,3 +36,34 @@ position = Vector2(319, 181)
 gravity_scale = 0.25
 move_speed = 75.0
 jump_force = 150.0
+
+[node name="Wall" type="StaticBody2D" parent="."]
+position = Vector2(16, 205)
+rotation = 1.5708
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Wall"]
+scale = Vector2(2, 1)
+shape = SubResource("WorldBoundaryShape2D_a4m6g")
+
+[node name="Wall2" type="StaticBody2D" parent="."]
+position = Vector2(642, 205)
+rotation = -1.5708
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Wall2"]
+scale = Vector2(2, 1)
+shape = SubResource("WorldBoundaryShape2D_a4m6g")
+
+[node name="Wall3" type="StaticBody2D" parent="."]
+position = Vector2(320, 370)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Wall3"]
+scale = Vector2(4, 1)
+shape = SubResource("WorldBoundaryShape2D_a4m6g")
+
+[node name="Wall4" type="StaticBody2D" parent="."]
+position = Vector2(317, 16)
+rotation = 3.14159
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Wall4"]
+scale = Vector2(4, 1)
+shape = SubResource("WorldBoundaryShape2D_a4m6g")
