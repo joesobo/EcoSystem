@@ -175,8 +175,6 @@ func _physics_process(delta):
 
 	set_linear_velocity(velocity)
 
-	handle_borders()
-
 	queue_redraw()
 
 func separation():
@@ -219,23 +217,20 @@ func randomVelocity():
 	return Vector2(randf_range(-1, 1), randf_range(-1, 1)).normalized() * speed
 
 func inAvoidRange():
-	var margin = 10
-
-	var distance_to_left_border = global_position.x - (viewport_rect.position.x + margin)
-	var distance_to_right_border = (viewport_rect.position.x + viewport_rect.size.x - margin) - global_position.x
-	var distance_to_top_border = global_position.y - (viewport_rect.position.y + margin)
-	var distance_to_bottom_border = (viewport_rect.position.y + viewport_rect.size.y - margin) - global_position.y
+	var distance_to_left_border = global_position.x - (viewport_rect.position.x + 20)
+	var distance_to_right_border = (viewport_rect.position.x + viewport_rect.size.x - 5) - global_position.x
+	var distance_to_top_border = global_position.y - (viewport_rect.position.y + 20)
+	var distance_to_bottom_border = (viewport_rect.position.y + viewport_rect.size.y - 10) - global_position.y
 
 	return obstacles.size() > 0 || distance_to_left_border < wallRadius || distance_to_right_border < wallRadius || distance_to_top_border < wallRadius || distance_to_bottom_border < wallRadius
 
 func borderForce():
-	var borderVelocity = Vector2()
-	var margin = 10
+	var distance_to_left_border = global_position.x - (viewport_rect.position.x + 20)
+	var distance_to_right_border = (viewport_rect.position.x + viewport_rect.size.x - 5) - global_position.x
+	var distance_to_top_border = global_position.y - (viewport_rect.position.y + 20)
+	var distance_to_bottom_border = (viewport_rect.position.y + viewport_rect.size.y - 10) - global_position.y
 
-	var distance_to_left_border = global_position.x - (viewport_rect.position.x + margin)
-	var distance_to_right_border = (viewport_rect.position.x + viewport_rect.size.x - margin) - global_position.x
-	var distance_to_top_border = global_position.y - (viewport_rect.position.y + margin)
-	var distance_to_bottom_border = (viewport_rect.position.y + viewport_rect.size.y - margin) - global_position.y
+	var borderVelocity = Vector2()
 
 	if distance_to_left_border < wallRadius:
 		borderVelocity.x = ((wallRadius - distance_to_left_border) / wallRadius)
@@ -346,13 +341,13 @@ func calculate_normal(P1, P2, intersection_point, clockwise):
 	var unit_normal = normal / normal_length
 	return unit_normal
 
-func handle_borders():
-	if global_position.x < viewport_rect.position.x:
-		global_position.x = viewport_rect.position.x + viewport_rect.size.x
-	elif global_position.x > viewport_rect.position.x + viewport_rect.size.x:
-		global_position.x = viewport_rect.position.x
+# func handle_borders():
+# 	if global_position.x < viewport_rect.position.x:
+# 		global_position.x = viewport_rect.position.x + viewport_rect.size.x
+# 	elif global_position.x > viewport_rect.position.x + viewport_rect.size.x:
+# 		global_position.x = viewport_rect.position.x
 
-	if global_position.y < viewport_rect.position.y:
-		global_position.y = viewport_rect.position.y + viewport_rect.size.y
-	elif global_position.y > viewport_rect.position.y + viewport_rect.size.y:
-		global_position.y = viewport_rect.position.y
+# 	if global_position.y < viewport_rect.position.y:
+# 		global_position.y = viewport_rect.position.y + viewport_rect.size.y
+# 	elif global_position.y > viewport_rect.position.y + viewport_rect.size.y:
+# 		global_position.y = viewport_rect.position.y

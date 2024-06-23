@@ -26,8 +26,8 @@ fishScene = ExtResource("6_up3j5")
 [node name="Background" type="Sprite2D" parent="."]
 modulate = Color(0.380392, 0.717647, 0.811765, 1)
 z_index = -1
-position = Vector2(329, 193)
-scale = Vector2(624, 352)
+position = Vector2(329, 184.5)
+scale = Vector2(624, 335)
 texture = SubResource("CanvasTexture_6n80m")
 
 [node name="Player" parent="." instance=ExtResource("8_b3iae")]
@@ -54,7 +54,7 @@ scale = Vector2(2, 1)
 shape = SubResource("WorldBoundaryShape2D_a4m6g")
 
 [node name="Wall3" type="StaticBody2D" parent="."]
-position = Vector2(320, 370)
+position = Vector2(320, 353)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Wall3"]
 scale = Vector2(4, 1)
