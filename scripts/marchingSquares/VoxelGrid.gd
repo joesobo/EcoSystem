@@ -13,7 +13,7 @@ extends Node2D
 var collision_shape: CollisionShape2D
 
 var voxels: Array[Voxel] = []
-var voxel_pos_indicators = []
+# var voxel_pos_indicators = []
 
 var viewport_rect
 
@@ -38,7 +38,7 @@ var terrain_states = [
 	[0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1],
 	[0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1],
 	[0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1],
-	[0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1],
+	[0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1],
 	[0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1],
 	[0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1],
 	[0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1],
@@ -67,9 +67,23 @@ func _ready():
 	arrays.resize(ArrayMesh.ARRAY_MAX)
 
 	image = Image.create(voxel_resolution_x, voxel_resolution_y, false, Image.FORMAT_RGBA8)
-	image.set_pixel(0, 0, Color(0.0, 0, 0, 1))
-	image.set_pixel(0, 1, Color(1.0 / 255.0, 0, 0, 1))
-	image.set_pixel(0, 2, Color(2.0 / 255.0, 0, 0, 1))
+
+	for y in range(voxel_resolution_y):
+		for x in range(voxel_resolution_x):
+				# Example pattern: alternating black, white, and transparent
+				var state = (x + y) % 2
+				var color
+				if state == 0:
+					color = Color(1.0/255, 0, 0, 1)  # White
+				elif state == 1:
+					color = Color(2.0/255, 0, 0, 1)  # Black
+
+				image.set_pixel(x, y, color)
+
+	image.set_pixel(19, 6, Color(3.0/255, 0, 0, 1)) # Red
+
+	# image.save_png("res://saved_texture.png")  # Save the image as a PNG file in the project folder
+
 	image_texture = ImageTexture.create_from_image(image)
 
 	mesh_instance.material.set_shader_parameter("state_texture", image_texture)
@@ -122,7 +136,7 @@ func create_voxel(parent, x, y):
 	var state = terrain_states[y][x]
 
 	voxels.append(Voxel.new(x, y, voxel_size, state))
-	voxel_pos_indicators.append(voxel)
+	# voxel_pos_indicators.append(voxel)
 
 func _on_Area2D_input_event(_viewport, event, _shape_idx):
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
@@ -137,13 +151,13 @@ func _on_Area2D_input_event(_viewport, event, _shape_idx):
 
 			add_child(storage)
 
-			voxels[index].state = 2.0
+			voxels[index].state = -1.0
 			UISingleton.storage_map[index] = storage
-		elif Input.is_action_pressed("place_storage") && voxels[index].state == 2.0:
+		elif Input.is_action_pressed("place_storage") && voxels[index].state == -1.0:
 			UISingleton.storage_map[index].queue_free()
 			voxels[index].state = 0.0
 			UISingleton.storage_map.erase(index)
-		elif voxels[index].state == 2.0:
+		elif voxels[index].state == -1.0:
 			# open UI
 			ui_manager.toggle_menu(UISingleton.MenuType.Storage, index)
 		elif !UISingleton.storage_map.has(index):
@@ -167,14 +181,14 @@ func toggle_voxel_color(local_pos: Vector2):
 	var index = local_pos.x + local_pos.y * voxel_resolution_x
 
 	if voxels.size() > index && voxels[index].state != 2.0:
-		var color = Color.BLACK
+		# var color = Color.BLACK
 		if voxels[index].state == 0.0:
 			voxels[index].state = 1.0
 		elif voxels[index].state == 1.0:
 			voxels[index].state = 0.0
-			color = Color.WHITE
+			# color = Color.WHITE
 
-		voxel_pos_indicators[index].modulate = color
+		# voxel_pos_indicators[index].modulate = color
 
 	image.set_pixel(local_pos.x, local_pos.y, Color(voxels[index].state / 255.0, 0, 0, 1))
 	image_texture = ImageTexture.create_from_image(image)
@@ -205,23 +219,6 @@ func triangulate():
 
 	calculate_mesh_outlines()
 
-	# for outline_index in range(outlines.size()):
-	# 	var outline = outlines[outline_index]
-	# 	for i in range(outline.size()):
-	# 		if vertices[outline[i]].y == (voxel_resolution_y - 1) * voxel_size:
-	# 			for j in outlines[outline_index]:
-	# 				if vertices[j].y <= (voxel_resolution_y - 2) * voxel_size:
-	# 					break
-	# 				outlines[outline_index].reverse()
-
-
-	# 		if vertices[outline[i]].x == 0:
-	# 			for j in outlines[outline_index]:
-	# 				if vertices[j].y == 0:
-	# 					break
-	# 				outlines[outline_index].reverse()
-	# 				break
-
 	for outline in outlines:
 		var collider_points = []
 		for i in range(outline.size() - 1):
@@ -251,13 +248,13 @@ func triangulate_chunk():
 
 func triangulate_cell(a: Voxel, b: Voxel, c: Voxel, d: Voxel):
 	var cell_type = 0
-	if a.state == 1:
+	if a.state >= 1:
 		cell_type |= 1;
-	if b.state == 1:
+	if b.state >= 1:
 		cell_type |= 2;
-	if c.state == 1:
+	if c.state >= 1:
 		cell_type |= 4;
-	if d.state == 1:
+	if d.state >= 1:
 		cell_type |= 8;
 
 	if cell_type == 1:

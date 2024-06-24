@@ -3,17 +3,16 @@
 [ext_resource type="Script" path="res://scripts/marchingSquares/VoxelGrid.gd" id="1_7sy1n"]
 [ext_resource type="PackedScene" uid="uid://bltijxvovh1q" path="res://scenes/voxel.tscn" id="2_4y4kx"]
 [ext_resource type="Shader" path="res://shaders/marching_squares.gdshader" id="3_srn0q"]
-[ext_resource type="Texture2D" uid="uid://cgbueytyqf3ak" path="res://sprites/ui/white.png" id="4_fjbr0"]
+[ext_resource type="Texture2D" uid="uid://e5kuryy7bvgh" path="res://saved_texture.png" id="4_l2wxg"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6mmkp"]
 size = Vector2(11.6232, 11.5267)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_mi3id"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hdxfh"]
 shader = ExtResource("3_srn0q")
-shader_parameter/x_size = 36
-shader_parameter/y_size = 36
-shader_parameter/offset = Vector2(27, 28)
-shader_parameter/state_texture = ExtResource("4_fjbr0")
+shader_parameter/offset = Vector2(7, 7)
+shader_parameter/voxel_size = 16.0
+shader_parameter/state_texture = ExtResource("4_l2wxg")
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_1l0eq"]
 
@@ -39,5 +38,5 @@ shape = SubResource("RectangleShape2D_6mmkp")
 debug_color = Color(0, 0.6, 0.701961, 0.419608)
 
 [node name="TerrainFill" type="MeshInstance2D" parent="."]
-material = SubResource("ShaderMaterial_mi3id")
+material = SubResource("ShaderMaterial_hdxfh")
 texture = SubResource("CanvasTexture_1l0eq")

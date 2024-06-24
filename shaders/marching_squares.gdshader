@@ -1,29 +1,28 @@
 shader_type canvas_item;
 
 uniform sampler2D state_texture;
-uniform int x_size;
-uniform int y_size;
 uniform vec2 offset;
+// uniform vec2 world_size = vec2(41, 24);
+uniform float voxel_size = 16.0;
 
-float rand(vec2 co){
-    return fract(sin(dot(co.xy, vec2(12.9898,78.233))) * 43758.5453);
+varying vec2 world_position;
+
+void vertex() {
+	world_position = (MODEL_MATRIX * vec4(VERTEX, 0.0, 1.0)).xy + offset;
 }
 
 void fragment() {
-    // TODO: convert frag coordinate into texture coordinate to look up color
-	vec2 state_pos = floor(FRAGCOORD.xy / vec2(32.0, 32.0));
-	vec2 normalized_state_pos = floor(state_pos / vec2(float(x_size), float(y_size)));
-	
-	float state = texture(state_texture, normalized_state_pos).r;
-	
-    vec4 color;
-	if (state == 2.0 / 255.0) {
-		color = vec4(0.0, 0.0, 0.0, 1.0); // Black for state 2
-	} else if (state == 1.0 / 255.0) {
-		color = vec4(1.0, 1.0, 1.0, 1.0); // White for state 1
+	ivec2 tex_coord = ivec2(floor(world_position / voxel_size));
+
+	float voxel_state = texture(state_texture, (vec2(tex_coord) + 0.5) / vec2(41, 24)).r * 255.0;
+
+	if (voxel_state == 2.0) {
+		COLOR = vec4(0.0, 0.0, 0.0, 1.0); // Black for state 2
+	} else if (voxel_state == 1.0) {
+		COLOR = vec4(1.0, 1.0, 1.0, 1.0); // White for state 1
+	} else if (voxel_state == 3.0) {
+		COLOR = vec4(1.0, 0.0, 0.0, 1.0); // Red for state 3
 	} else {
-		color = vec4(0.0, 0.0, 0.0, 1.0); // Transparent for state 0
+		COLOR = vec4(0.0, 0.0, 0.0, 0.0); // Transparent for state 0
 	}
-    
-    COLOR = color;
 }
