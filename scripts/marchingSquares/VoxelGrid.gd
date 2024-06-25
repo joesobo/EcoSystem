@@ -5,6 +5,7 @@ extends Node2D
 @export var voxel_resolution_y = 8
 @export var voxel_scene: PackedScene
 @export var static_body: StaticBody2D
+@export var block_textures: Array[Texture2D]
 
 @onready var ui_manager = %"UI Manager"
 @onready var player = %"Player"
@@ -85,8 +86,16 @@ func _ready():
 	# image.save_png("res://saved_texture.png")  # Save the image as a PNG file in the project folder
 
 	image_texture = ImageTexture.create_from_image(image)
-
 	mesh_instance.material.set_shader_parameter("state_texture", image_texture)
+
+	var images = []
+	for texture in block_textures:
+		images.append(texture.get_image())
+
+	var texture_2d_array = Texture2DArray.new()
+	texture_2d_array.create_from_images(images)
+	mesh_instance.material.set_shader_parameter("texture_array", texture_2d_array)
+
 	mesh_instance.mesh = array_mesh
 
 	collision_shape = static_body.get_child(0)
