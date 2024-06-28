@@ -26,6 +26,7 @@ var arrays = []
 
 var vertices = PackedVector2Array()
 var indices = PackedInt32Array()
+var colors = PackedColorArray()
 var triangle_dictionary = {}
 var outlines: Array = [[]]
 var checked_vertices =  []
@@ -38,11 +39,11 @@ var terrain_states = [
 	[0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1],
 	[0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1],
 	[0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1],
-	[0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1],
-	[0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1],
-	[0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1],
-	[0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1],
-	[0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1],
+	[0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1],
+	[0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1],
+	[0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1],
+	[0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1],
+	[0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1],
 	[0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1],
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1],
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1],
@@ -67,26 +68,12 @@ func _ready():
 	mesh_instance = get_child(1)
 	arrays.resize(ArrayMesh.ARRAY_MAX)
 
-	image = Image.create(voxel_resolution_x, voxel_resolution_y, false, Image.FORMAT_RGBA8)
-
-	for y in range(voxel_resolution_y):
-		for x in range(voxel_resolution_x):
-				# Example pattern: alternating black, white, and transparent
-				var state = (x + y) % 2
-				var color
-				if state == 0:
-					color = Color(1.0/255, 0, 0, 1)  # White
-				elif state == 1:
-					color = Color(2.0/255, 0, 0, 1)  # Black
-
-				image.set_pixel(x, y, color)
-
-	image.set_pixel(19, 6, Color(3.0/255, 0, 0, 1)) # Red
+	# image = Image.create(voxel_resolution_x, voxel_resolution_y, false, Image.FORMAT_RGBA8)
 
 	# image.save_png("res://saved_texture.png")  # Save the image as a PNG file in the project folder
 
-	image_texture = ImageTexture.create_from_image(image)
-	mesh_instance.material.set_shader_parameter("state_texture", image_texture)
+	# image_texture = ImageTexture.create_from_image(image)
+	# mesh_instance.material.set_shader_parameter("state_texture", image_texture)
 
 	var images = []
 	for texture in block_textures:
@@ -132,8 +119,8 @@ func create_chunk():
 	for voxel_y in range(voxel_resolution_y):
 		for voxel_x in range(voxel_resolution_x):
 			create_voxel(chunk, voxel_x, voxel_y)
-	#image_texture = ImageTexture.create_from_image(image)
-	#mesh_instance.material.set_shader_parameter("state_texture", image_texture)
+	# image_texture = ImageTexture.create_from_image(image)
+	# mesh_instance.material.set_shader_parameter("state_texture", image_texture)
 
 func create_voxel(parent, x, y):
 	var voxel = voxel_scene.instantiate()
@@ -144,8 +131,13 @@ func create_voxel(parent, x, y):
 
 	var state = terrain_states[y][x]
 
+	var color = Color(state / 255.0, 0, 0, 1)
+
 	voxels.append(Voxel.new(x, y, voxel_size, state))
-	# voxel_pos_indicators.append(voxel)
+	# image.set_pixel(x, y, color)
+	# image.set_pixel(x * 2 + 1, y * 2, color)
+	# image.set_pixel(x * 2, y * 2 + 1, color)
+	# image.set_pixel(x * 2 + 1, y * 2 + 1, color)
 
 func _on_Area2D_input_event(_viewport, event, _shape_idx):
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
@@ -171,6 +163,7 @@ func _on_Area2D_input_event(_viewport, event, _shape_idx):
 			ui_manager.toggle_menu(UISingleton.MenuType.Storage, index)
 		elif !UISingleton.storage_map.has(index):
 			edit_voxel(world_position)
+
 		queue_redraw()
 
 func edit_voxel(point: Vector2):
@@ -199,13 +192,14 @@ func toggle_voxel_color(local_pos: Vector2):
 
 		# voxel_pos_indicators[index].modulate = color
 
-	image.set_pixel(local_pos.x, local_pos.y, Color(voxels[index].state / 255.0, 0, 0, 1))
-	image_texture = ImageTexture.create_from_image(image)
-	mesh_instance.material.set_shader_parameter("state_texture", image_texture)
+	# image.set_pixel(local_pos.x, local_pos.y, Color(voxels[index].state / 255.0, 0, 0, 1))
+	# image_texture = ImageTexture.create_from_image(image)
+	# mesh_instance.material.set_shader_parameter("state_texture", image_texture)
 
 func triangulate():
 	vertices.clear()
 	indices.clear()
+	colors.clear()
 	triangle_dictionary.clear()
 	outlines.clear()
 	checked_vertices.clear()
@@ -221,6 +215,7 @@ func triangulate():
 
 	arrays[ArrayMesh.ARRAY_VERTEX] = vertices
 	arrays[ArrayMesh.ARRAY_INDEX] = indices
+	arrays[ArrayMesh.ARRAY_COLOR] = colors
 
 	array_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
 
@@ -255,53 +250,257 @@ func triangulate_chunk():
 				voxels[index + voxel_resolution_x + 1]
 			)
 
-func triangulate_cell(a: Voxel, b: Voxel, c: Voxel, d: Voxel):
-	var cell_type = 0
-	if a.state >= 1:
-		cell_type |= 1;
-	if b.state >= 1:
-		cell_type |= 2;
-	if c.state >= 1:
-		cell_type |= 4;
-	if d.state >= 1:
-		cell_type |= 8;
+func is_multi_material(aState: float, bState: float, cState: float, dState: float):
+	if aState == 0 and bState == 0 and cState == 0 and dState == 0:
+		return false
 
-	if cell_type == 1:
-		add_triangle(a.x_edge_pos, a.position, a.y_edge_pos)
-	elif cell_type == 2:
-		add_triangle(b.y_edge_pos, b.position, a.x_edge_pos)
-	elif cell_type == 4:
-		add_triangle(a.y_edge_pos, c.position, c.x_edge_pos)
-	elif cell_type == 8:
-		add_triangle(c.x_edge_pos, d.position, b.y_edge_pos)
-	elif cell_type == 3:
-		add_quad(b.y_edge_pos, b.position, a.position, a.y_edge_pos)
-	elif cell_type == 5:
-		add_quad(a.x_edge_pos, a.position, c.position, c.x_edge_pos)
-	elif cell_type == 10:
-		add_quad(c.x_edge_pos, d.position, b.position, a.x_edge_pos)
-	elif cell_type == 12:
-		add_quad(a.y_edge_pos, c.position, d.position, b.y_edge_pos)
-	elif cell_type == 15:
-		checked_vertices.append(a.position)
-		checked_vertices.append(c.position)
-		checked_vertices.append(d.position)
-		checked_vertices.append(b.position)
-		add_quad(a.position, c.position, d.position, b.position)
-	elif cell_type == 7:
-		add_pentagon(b.y_edge_pos, b.position, a.position, c.position, c.x_edge_pos)
-	elif cell_type == 11:
-		add_pentagon(c.x_edge_pos, d.position, b.position, a.position, a.y_edge_pos)
-	elif cell_type == 13:
-		add_pentagon(a.x_edge_pos, a.position, c.position, d.position, b.y_edge_pos)
-	elif cell_type == 14:
-		add_pentagon(a.y_edge_pos, c.position, d.position, b.position, a.x_edge_pos)
-	elif cell_type == 6:
-		add_triangle(b.y_edge_pos, b.position, a.x_edge_pos);
-		add_triangle(a.y_edge_pos, c.position, c.x_edge_pos);
-	elif cell_type == 9:
-		add_triangle(a.x_edge_pos, a.position, a.y_edge_pos);
-		add_triangle(c.x_edge_pos, d.position, b.y_edge_pos);
+	var value = dState
+	if aState > 0:
+		value = aState
+	elif bState > 0:
+		value = bState
+	elif cState > 0:
+		value = cState
+
+	if (aState == value or aState == 0) and (bState == value or bState == 0) and (cState == value or cState == 0) and (dState == value or dState == 0):
+		return false
+
+	return true
+
+func triangulate_cell(a: Voxel, b: Voxel, c: Voxel, d: Voxel):
+	var aState = a.state
+	var bState = b.state
+	var cState = c.state
+	var dState = d.state
+
+	var multi_material = is_multi_material(aState, bState, cState, dState)
+
+	var half_length = a.x_edge_pos.x - a.position.x
+	var quarter_length = half_length / 2
+
+	var center = Vector2(a.x_edge_pos.x, a.y_edge_pos.y)
+	var a_inner = center + Vector2(-quarter_length, -quarter_length)
+	var b_inner = center + Vector2(quarter_length, -quarter_length)
+	var c_inner = center + Vector2(-quarter_length, quarter_length)
+	var d_inner = center + Vector2(quarter_length, quarter_length)
+
+	var cell_type = 0
+
+	if aState > 0:
+		cell_type |= 1
+	if bState > 0:
+		cell_type |= 2
+	if cState > 0:
+		cell_type |= 4
+	if dState > 0:
+		cell_type |= 8
+
+	# multi material full-cell types
+	if cell_type >= 15 and multi_material:
+		if cState != aState and aState == bState and aState == dState:
+			cell_type = 16
+		elif aState == bState and aState == cState and aState != dState:
+			cell_type = 17
+		elif aState != bState and bState == cState and bState == dState:
+			cell_type = 18
+		elif aState == cState and aState == dState and aState != bState:
+			cell_type = 19
+		elif aState != bState and aState != cState and bState == dState and cState != dState:
+			cell_type = 20
+		elif aState == cState and aState != bState and aState != dState and bState != dState:
+			cell_type = 21
+		elif aState != bState and aState != cState and bState != cState and cState == dState:
+			cell_type = 22
+		elif aState == bState and aState != cState and aState != dState and cState != dState:
+			cell_type = 23
+		elif aState != bState and aState == cState and bState == dState:
+			cell_type = 24
+		elif aState == bState and cState == dState and aState != cState:
+			cell_type = 25
+
+	if !multi_material:
+		if cell_type == 1:
+			add_triangle(a.x_edge_pos, a.position, a.y_edge_pos)
+		elif cell_type == 2:
+			add_triangle(b.y_edge_pos, b.position, a.x_edge_pos)
+		elif cell_type == 4:
+			add_triangle(a.y_edge_pos, c.position, c.x_edge_pos)
+		elif cell_type == 8:
+			add_triangle(c.x_edge_pos, d.position, b.y_edge_pos)
+		elif cell_type == 3:
+			add_quad(b.y_edge_pos, b.position, a.position, a.y_edge_pos)
+		elif cell_type == 5:
+			add_quad(a.x_edge_pos, a.position, c.position, c.x_edge_pos)
+		elif cell_type == 10:
+			add_quad(c.x_edge_pos, d.position, b.position, a.x_edge_pos)
+		elif cell_type == 12:
+			add_quad(a.y_edge_pos, c.position, d.position, b.y_edge_pos)
+		elif cell_type == 15:
+			checked_vertices.append(a.position)
+			checked_vertices.append(c.position)
+			checked_vertices.append(d.position)
+			checked_vertices.append(b.position)
+			add_quad(a.position, c.position, d.position, b.position)
+		elif cell_type == 7:
+			add_pentagon(b.y_edge_pos, b.position, a.position, c.position, c.x_edge_pos)
+		elif cell_type == 11:
+			add_pentagon(c.x_edge_pos, d.position, b.position, a.position, a.y_edge_pos)
+		elif cell_type == 13:
+			add_pentagon(a.x_edge_pos, a.position, c.position, d.position, b.y_edge_pos)
+		elif cell_type == 14:
+			add_pentagon(a.y_edge_pos, c.position, d.position, b.position, a.x_edge_pos)
+		elif cell_type == 6:
+			add_triangle(b.y_edge_pos, b.position, a.x_edge_pos);
+			add_triangle(a.y_edge_pos, c.position, c.x_edge_pos);
+		elif cell_type == 9:
+			add_triangle(a.x_edge_pos, a.position, a.y_edge_pos);
+			add_triangle(c.x_edge_pos, d.position, b.y_edge_pos);
+	# multi material triangles
+	else:
+		if cell_type == 3:
+			add_triangle(center, a.y_edge_pos, a.position)
+			add_triangle(a.y_edge_pos, a.position, a.x_edge_pos)
+
+			add_triangle(b.y_edge_pos, center, b.position)
+			add_triangle(center, a.x_edge_pos, b.position)
+		elif cell_type == 5:
+			add_triangle(c.x_edge_pos, c.position, center)
+			add_triangle(c.position, a.y_edge_pos, center)
+
+			add_triangle(center, a.y_edge_pos, a.x_edge_pos)
+			add_triangle(a.y_edge_pos, a.position, a.x_edge_pos)
+		elif cell_type == 10:
+			add_triangle(d.position, c.x_edge_pos, b.y_edge_pos)
+			add_triangle(c.x_edge_pos, center, b.y_edge_pos)
+
+			add_triangle(b.y_edge_pos, center, b.position)
+			add_triangle(center, a.x_edge_pos, b.position)
+		elif cell_type == 12:
+			add_triangle(c.x_edge_pos, c.position, center)
+			add_triangle(c.position, a.y_edge_pos, center)
+
+			add_triangle(d.position, c.x_edge_pos, b.y_edge_pos)
+			add_triangle(c.x_edge_pos, center, b.y_edge_pos)
+		elif cell_type == 7:
+			add_triangle(c.x_edge_pos, c.position, center)
+			add_triangle(c.position, a.y_edge_pos, center)
+			add_triangle(c.x_edge_pos, center, d_inner)
+
+			add_triangle(center, a.y_edge_pos, a.x_edge_pos)
+			add_triangle(a.y_edge_pos, a.position, a.x_edge_pos)
+
+			add_triangle(b.y_edge_pos, d_inner, center)
+			add_triangle(b.y_edge_pos, center, b.position)
+			add_triangle(center, a.x_edge_pos, b.position)
+		elif cell_type == 11:
+			add_triangle(d.position, c.x_edge_pos, b.y_edge_pos)
+			add_triangle(c.x_edge_pos, center, b.y_edge_pos)
+			add_triangle(c.x_edge_pos, c_inner, center)
+
+			add_triangle(c_inner, a.y_edge_pos, center)
+			add_triangle(center, a.y_edge_pos, a.x_edge_pos)
+			add_triangle(a.y_edge_pos, a.position, a.x_edge_pos)
+
+			add_triangle(b.y_edge_pos, center, b.position)
+			add_triangle(center, a.x_edge_pos, b.position)
+		elif cell_type == 13:
+			add_triangle(c.x_edge_pos, c.position, center)
+			add_triangle(c.position, a.y_edge_pos, center)
+
+			add_triangle(d.position, c.x_edge_pos, b.y_edge_pos)
+			add_triangle(c.x_edge_pos, center, b.y_edge_pos)
+			add_triangle(b.y_edge_pos, center, b_inner)
+
+			add_triangle(center, a.y_edge_pos, a.x_edge_pos)
+			add_triangle(a.y_edge_pos, a.position, a.x_edge_pos)
+			add_triangle(center, a.x_edge_pos, b_inner)
+		elif cell_type == 14:
+			add_triangle(c.x_edge_pos, c.position, center)
+			add_triangle(center, c.position, a.y_edge_pos)
+			add_triangle(center, a.y_edge_pos, a_inner)
+
+			add_triangle(d.position, c.x_edge_pos, b.y_edge_pos)
+			add_triangle(b.y_edge_pos, c.x_edge_pos, center)
+
+			add_triangle(b.y_edge_pos, center, b.position)
+			add_triangle(center, a.x_edge_pos, b.position)
+			add_triangle(center, a_inner, a.x_edge_pos)
+		elif cell_type == 16:
+			add_triangle(c.x_edge_pos, c.position, a.y_edge_pos)
+
+			add_triangle(d.position, c.x_edge_pos, center)
+			add_triangle(c.x_edge_pos, a.y_edge_pos, center)
+			add_triangle(center, a.y_edge_pos, a.position)
+			add_triangle(d.position, a.position, b.position)
+		elif cell_type == 17:
+			add_triangle(d.position, c.x_edge_pos, b.y_edge_pos)
+
+			add_triangle(c.x_edge_pos, c.position, center)
+			add_triangle(c.x_edge_pos, center, b.y_edge_pos)
+			add_triangle(b.y_edge_pos, center, b.position)
+			add_triangle(b.position, c.position, a.position)
+		elif cell_type == 18:
+			add_triangle(d.position, c.position, b.position)
+			add_triangle(c.position, a.y_edge_pos, center)
+			add_triangle(center, a.y_edge_pos, a.x_edge_pos)
+			add_triangle(center, a.x_edge_pos, b.position)
+
+			add_triangle(a.y_edge_pos, a.position, a.x_edge_pos)
+		elif cell_type == 19:
+			add_triangle(d.position, c.position, a.position)
+			add_triangle(d.position, center, b.y_edge_pos)
+			add_triangle(b.y_edge_pos, center, a.x_edge_pos)
+			add_triangle(center, a.position, a.x_edge_pos)
+
+			add_triangle(b.y_edge_pos, a.x_edge_pos, b.position)
+		elif cell_type == 20:
+			add_triangle(c.x_edge_pos, c.position, center)
+			add_triangle(c.position, a.y_edge_pos, center)
+
+			add_triangle(center, a.y_edge_pos, a.x_edge_pos)
+			add_triangle(a.y_edge_pos, a.position, a.x_edge_pos)
+
+			add_triangle(d.position, c.x_edge_pos, b.position)
+			add_triangle(b.position, c.x_edge_pos, a.x_edge_pos)
+		elif cell_type == 21:
+			add_triangle(c.x_edge_pos, c.position, a.x_edge_pos)
+			add_triangle(c.position, a.position, a.x_edge_pos)
+
+			add_triangle(d.position, c.x_edge_pos, b.y_edge_pos)
+			add_triangle(c.x_edge_pos, center, b.y_edge_pos)
+
+			add_triangle(b.y_edge_pos, center, b.position)
+			add_triangle(center, a.x_edge_pos, b.position)
+		elif cell_type == 22:
+			add_triangle(d.position, c.position, b.y_edge_pos)
+			add_triangle(c.position, a.y_edge_pos, b.y_edge_pos)
+
+			add_triangle(center, a.y_edge_pos, a.x_edge_pos)
+			add_triangle(a.y_edge_pos, a.position, a.x_edge_pos)
+
+			add_triangle(b.y_edge_pos, center, b.position)
+			add_triangle(center, a.x_edge_pos, b.position)
+		elif cell_type == 23:
+			add_triangle(c.x_edge_pos, c.position, center)
+			add_triangle(center, c.position, a.y_edge_pos)
+
+			add_triangle(d.position, c.x_edge_pos, b.y_edge_pos)
+			add_triangle(c.x_edge_pos, center, b.y_edge_pos)
+
+			add_triangle(b.y_edge_pos, a.y_edge_pos, b.position)
+			add_triangle(b.position, a.y_edge_pos, a.position)
+		elif cell_type == 24:
+			add_triangle(c.x_edge_pos, c.position, a.x_edge_pos)
+			add_triangle(c.position, a.position, a.x_edge_pos)
+
+			add_triangle(d.position, c.x_edge_pos, b.position)
+			add_triangle(c.x_edge_pos, a.x_edge_pos, b.position)
+		elif cell_type == 25:
+			add_triangle(d.position, c.position, b.y_edge_pos)
+			add_triangle(b.y_edge_pos, c.position, a.y_edge_pos)
+
+			add_triangle(b.y_edge_pos, a.y_edge_pos, b.position)
+			add_triangle(b.position, a.y_edge_pos, a.position)
 
 func triangle_indices(a_index: int, b_index: int, c_index: int):
 	indices.append(a_index)
