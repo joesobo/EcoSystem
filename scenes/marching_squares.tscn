@@ -15,7 +15,7 @@ load_path = "res://.godot/imported/saved_texture.png-3b5d40491b886740c8998f83f0d
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_hdxfh"]
 shader = ExtResource("3_srn0q")
-shader_parameter/offset = Vector2(2.08165e-12, 2.08165e-12)
+shader_parameter/offset = Vector2(-1, 2.08165e-12)
 shader_parameter/world_size = Vector2(41, 24)
 shader_parameter/voxel_size = 16.0
 shader_parameter/texture_size = 16.0
