@@ -14,7 +14,6 @@ extends Node2D
 var collision_shape: CollisionShape2D
 
 var voxels: Array[Voxel] = []
-# var voxel_pos_indicators = []
 
 var viewport_rect
 
@@ -40,8 +39,8 @@ var terrain_states = [
 	[0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1],
 	[0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1],
 	[0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1],
-	[0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1],
-	[0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1],
+	[0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1],
+	[0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1],
 	[0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1],
 	[0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1],
 	[0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1],
@@ -74,7 +73,7 @@ func _ready():
 
 	var texture_2d_array = Texture2DArray.new()
 	texture_2d_array.create_from_images(images)
-	mesh_instance.material.set_shader_parameter("texture_array", texture_2d_array)
+	# mesh_instance.material.set_shader_parameter("texture_array", texture_2d_array)
 
 	mesh_instance.mesh = array_mesh
 
@@ -85,10 +84,10 @@ func _ready():
 
 	triangulate()
 
-func _draw():
-	for outline in outlines:
-		for i in range(outline.size() - 1):
-			draw_line(vertices[outline[i]], vertices[outline[i + 1]], Color.BLACK, 1)
+# func _draw():
+	# for outline in outlines:
+	# 	for i in range(outline.size() - 1):
+	# 		draw_line(vertices[outline[i]], vertices[outline[i + 1]], Color.BLACK, 1)
 
 	# for outline in outlines:
 	# 	for i in range(outline.size() - 1):
@@ -192,7 +191,7 @@ func triangulate():
 
 	arrays[ArrayMesh.ARRAY_VERTEX] = vertices
 	arrays[ArrayMesh.ARRAY_INDEX] = indices
-	# arrays[ArrayMesh.ARRAY_COLOR] = colors
+	arrays[ArrayMesh.ARRAY_COLOR] = colors
 
 	array_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
 
@@ -250,6 +249,11 @@ func triangulate_cell(a: Voxel, b: Voxel, c: Voxel, d: Voxel):
 	var cState = c.state
 	var dState = d.state
 
+	var aColor = Color(aState / 255, 0, 0)
+	var bColor = Color(bState / 255, 0, 0)
+	var cColor = Color(cState / 255, 0, 0)
+	var dColor = Color(dState / 255, 0, 0)
+
 	var multi_material = is_multi_material(aState, bState, cState, dState)
 
 	var half_length = a.x_edge_pos.x - a.position.x
@@ -299,117 +303,119 @@ func triangulate_cell(a: Voxel, b: Voxel, c: Voxel, d: Voxel):
 
 	if !multi_material:
 		if cell_type == 1:
-			add_triangle(a.x_edge_pos, a.position, a.y_edge_pos)
+			add_triangle(a.x_edge_pos, a.position, a.y_edge_pos, aColor)
 		elif cell_type == 2:
-			add_triangle(b.y_edge_pos, b.position, a.x_edge_pos)
+			add_triangle(b.y_edge_pos, b.position, a.x_edge_pos, bColor)
 		elif cell_type == 4:
-			add_triangle(a.y_edge_pos, c.position, c.x_edge_pos)
+			add_triangle(a.y_edge_pos, c.position, c.x_edge_pos, cColor)
 		elif cell_type == 8:
-			add_triangle(c.x_edge_pos, d.position, b.y_edge_pos)
+			add_triangle(c.x_edge_pos, d.position, b.y_edge_pos, dColor)
 		elif cell_type == 3:
-			add_quad(b.y_edge_pos, b.position, a.position, a.y_edge_pos)
+			add_quad(b.y_edge_pos, b.position, a.position, a.y_edge_pos, aColor)
 		elif cell_type == 5:
-			add_quad(a.x_edge_pos, a.position, c.position, c.x_edge_pos)
+			add_quad(a.x_edge_pos, a.position, c.position, c.x_edge_pos, aColor)
 		elif cell_type == 10:
-			add_quad(c.x_edge_pos, d.position, b.position, a.x_edge_pos)
+			add_quad(c.x_edge_pos, d.position, b.position, a.x_edge_pos, dColor)
 		elif cell_type == 12:
-			add_quad(a.y_edge_pos, c.position, d.position, b.y_edge_pos)
+			add_quad(a.y_edge_pos, c.position, d.position, b.y_edge_pos, cColor)
 		elif cell_type == 15:
 			checked_vertices.append(a.position)
 			checked_vertices.append(c.position)
 			checked_vertices.append(d.position)
 			checked_vertices.append(b.position)
-			add_quad(a.position, c.position, d.position, b.position)
+			add_quad(a.position, c.position, d.position, b.position, aColor)
 		elif cell_type == 7:
-			add_pentagon(b.y_edge_pos, b.position, a.position, c.position, c.x_edge_pos)
+			add_pentagon(b.y_edge_pos, b.position, a.position, c.position, c.x_edge_pos, bColor)
 		elif cell_type == 11:
-			add_pentagon(c.x_edge_pos, d.position, b.position, a.position, a.y_edge_pos)
+			add_pentagon(c.x_edge_pos, d.position, b.position, a.position, a.y_edge_pos, dColor)
 		elif cell_type == 13:
-			add_pentagon(a.x_edge_pos, a.position, c.position, d.position, b.y_edge_pos)
+			add_pentagon(a.x_edge_pos, a.position, c.position, d.position, b.y_edge_pos, aColor)
 		elif cell_type == 14:
-			add_pentagon(a.y_edge_pos, c.position, d.position, b.position, a.x_edge_pos)
+			add_pentagon(a.y_edge_pos, c.position, d.position, b.position, a.x_edge_pos, cColor)
 		elif cell_type == 6:
-			add_triangle(b.y_edge_pos, b.position, a.x_edge_pos);
-			add_triangle(a.y_edge_pos, c.position, c.x_edge_pos);
+			add_triangle(b.y_edge_pos, b.position, a.x_edge_pos, bColor)
+			add_triangle(a.y_edge_pos, c.position, c.x_edge_pos, cColor)
 		elif cell_type == 9:
-			add_triangle(a.x_edge_pos, a.position, a.y_edge_pos);
-			add_triangle(c.x_edge_pos, d.position, b.y_edge_pos);
+			add_triangle(a.x_edge_pos, a.position, a.y_edge_pos, aColor)
+			add_triangle(c.x_edge_pos, d.position, b.y_edge_pos, dColor)
 	# multi material triangles
 	else:
 		if cell_type == 3:
-			add_triangle(center, a.y_edge_pos, a.x_edge_pos)
-			add_triangle(a.y_edge_pos, a.position, a.x_edge_pos)
+			add_triangle(center, a.y_edge_pos, a.x_edge_pos, aColor)
+			add_triangle(a.y_edge_pos, a.position, a.x_edge_pos, aColor)
 
-			add_triangle(b.y_edge_pos, center, b.position)
-			add_triangle(center, a.x_edge_pos, b.position)
+			add_triangle(b.y_edge_pos, center, b.position, bColor)
+			add_triangle(center, a.x_edge_pos, b.position, bColor)
 		elif cell_type == 5:
-			add_triangle(c.x_edge_pos, c.position, center)
-			add_triangle(c.position, a.y_edge_pos, center)
+			add_triangle(c.x_edge_pos, c.position, center, cColor)
+			add_triangle(c.position, a.y_edge_pos, center, cColor)
 
-			add_triangle(center, a.y_edge_pos, a.x_edge_pos)
-			add_triangle(a.y_edge_pos, a.position, a.x_edge_pos)
+			add_triangle(center, a.y_edge_pos, a.x_edge_pos, aColor)
+			add_triangle(a.y_edge_pos, a.position, a.x_edge_pos, aColor)
 		elif cell_type == 10:
-			add_triangle(d.position, c.x_edge_pos, b.y_edge_pos)
-			add_triangle(c.x_edge_pos, center, b.y_edge_pos)
+			add_triangle(d.position, c.x_edge_pos, b.y_edge_pos, dColor)
+			add_triangle(c.x_edge_pos, center, b.y_edge_pos, dColor)
 
-			add_triangle(b.y_edge_pos, center, b.position)
-			add_triangle(center, a.x_edge_pos, b.position)
+			add_triangle(b.y_edge_pos, center, b.position, bColor)
+			add_triangle(center, a.x_edge_pos, b.position, bColor)
 		elif cell_type == 12:
-			add_triangle(c.x_edge_pos, c.position, center)
-			add_triangle(c.position, a.y_edge_pos, center)
+			add_triangle(c.x_edge_pos, c.position, center, cColor)
+			add_triangle(c.position, a.y_edge_pos, center, cColor)
 
-			add_triangle(d.position, c.x_edge_pos, b.y_edge_pos)
-			add_triangle(c.x_edge_pos, center, b.y_edge_pos)
+			add_triangle(d.position, c.x_edge_pos, b.y_edge_pos, dColor)
+			add_triangle(c.x_edge_pos, center, b.y_edge_pos, dColor)
 		elif cell_type == 6:
-			add_triangle(b.y_edge_pos, b.position, a.x_edge_pos)
-			add_triangle(a.y_edge_pos, c.position, c.x_edge_pos)
+			add_triangle(b.y_edge_pos, b.position, a.x_edge_pos, bColor)
+
+			add_triangle(a.y_edge_pos, c.position, c.x_edge_pos, cColor)
 		elif cell_type == 9:
-			add_triangle(a.x_edge_pos, a.position, a.y_edge_pos)
-			add_triangle(c.x_edge_pos, d.position, b.y_edge_pos)
+			add_triangle(a.x_edge_pos, a.position, a.y_edge_pos, aColor)
+
+			add_triangle(c.x_edge_pos, d.position, b.y_edge_pos, dColor)
 		elif cell_type == 7:
-			add_triangle(c.x_edge_pos, c.position, center)
-			add_triangle(c.position, a.y_edge_pos, center)
-			add_triangle(c.x_edge_pos, center, d_inner)
+			add_triangle(c.x_edge_pos, c.position, center, cColor)
+			add_triangle(c.position, a.y_edge_pos, center, cColor)
+			add_triangle(c.x_edge_pos, center, d_inner, cColor)
 
-			add_triangle(center, a.y_edge_pos, a.x_edge_pos)
-			add_triangle(a.y_edge_pos, a.position, a.x_edge_pos)
+			add_triangle(center, a.y_edge_pos, a.x_edge_pos, aColor)
+			add_triangle(a.y_edge_pos, a.position, a.x_edge_pos, aColor)
 
-			add_triangle(b.y_edge_pos, d_inner, center)
-			add_triangle(b.y_edge_pos, center, b.position)
-			add_triangle(center, a.x_edge_pos, b.position)
+			add_triangle(b.y_edge_pos, d_inner, center, bColor)
+			add_triangle(b.y_edge_pos, center, b.position, bColor)
+			add_triangle(center, a.x_edge_pos, b.position, bColor)
 		elif cell_type == 11:
-			add_triangle(d.position, c.x_edge_pos, b.y_edge_pos)
-			add_triangle(c.x_edge_pos, center, b.y_edge_pos)
-			add_triangle(c.x_edge_pos, c_inner, center)
+			add_triangle(d.position, c.x_edge_pos, b.y_edge_pos, dColor)
+			add_triangle(c.x_edge_pos, center, b.y_edge_pos, dColor)
+			add_triangle(c.x_edge_pos, c_inner, center, dColor)
 
-			add_triangle(c_inner, a.y_edge_pos, center)
-			add_triangle(center, a.y_edge_pos, a.x_edge_pos)
-			add_triangle(a.y_edge_pos, a.position, a.x_edge_pos)
+			add_triangle(c_inner, a.y_edge_pos, center, aColor)
+			add_triangle(center, a.y_edge_pos, a.x_edge_pos, aColor)
+			add_triangle(a.y_edge_pos, a.position, a.x_edge_pos, aColor)
 
-			add_triangle(b.y_edge_pos, center, b.position)
-			add_triangle(center, a.x_edge_pos, b.position)
+			add_triangle(b.y_edge_pos, center, b.position, bColor)
+			add_triangle(center, a.x_edge_pos, b.position, bColor)
 		elif cell_type == 13:
-			add_triangle(c.x_edge_pos, c.position, center)
-			add_triangle(c.position, a.y_edge_pos, center)
+			add_triangle(c.x_edge_pos, c.position, center, cColor)
+			add_triangle(c.position, a.y_edge_pos, center, cColor)
 
-			add_triangle(d.position, c.x_edge_pos, b.y_edge_pos)
-			add_triangle(c.x_edge_pos, center, b.y_edge_pos)
-			add_triangle(b.y_edge_pos, center, b_inner)
+			add_triangle(d.position, c.x_edge_pos, b.y_edge_pos, dColor)
+			add_triangle(c.x_edge_pos, center, b.y_edge_pos, dColor)
+			add_triangle(b.y_edge_pos, center, b_inner, dColor)
 
-			add_triangle(center, a.y_edge_pos, a.x_edge_pos)
-			add_triangle(a.y_edge_pos, a.position, a.x_edge_pos)
-			add_triangle(center, a.x_edge_pos, b_inner)
+			add_triangle(center, a.y_edge_pos, a.x_edge_pos, aColor)
+			add_triangle(a.y_edge_pos, a.position, a.x_edge_pos, aColor)
+			add_triangle(center, a.x_edge_pos, b_inner, aColor)
 		elif cell_type == 14:
-			add_triangle(c.x_edge_pos, c.position, center)
-			add_triangle(center, c.position, a.y_edge_pos)
-			add_triangle(center, a.y_edge_pos, a_inner)
+			add_triangle(c.x_edge_pos, c.position, center, cColor)
+			add_triangle(center, c.position, a.y_edge_pos, cColor)
+			add_triangle(center, a.y_edge_pos, a_inner, cColor)
 
-			add_triangle(d.position, c.x_edge_pos, b.y_edge_pos)
-			add_triangle(b.y_edge_pos, c.x_edge_pos, center)
+			add_triangle(d.position, c.x_edge_pos, b.y_edge_pos, dColor)
+			add_triangle(b.y_edge_pos, c.x_edge_pos, center, dColor)
 
-			add_triangle(b.y_edge_pos, center, b.position)
-			add_triangle(center, a.x_edge_pos, b.position)
-			add_triangle(center, a_inner, a.x_edge_pos)
+			add_triangle(b.y_edge_pos, center, b.position, bColor)
+			add_triangle(center, a.x_edge_pos, b.position, bColor)
+			add_triangle(center, a_inner, a.x_edge_pos, bColor)
 		elif cell_type == 16:
 			checked_vertices.append(c.x_edge_pos)
 			checked_vertices.append(a.y_edge_pos)
@@ -417,11 +423,11 @@ func triangulate_cell(a: Voxel, b: Voxel, c: Voxel, d: Voxel):
 			checked_vertices.append(d.position)
 			checked_vertices.append(b.position)
 			checked_vertices.append(a.position)
-			add_triangle(c.x_edge_pos, c.position, a.y_edge_pos)
+			add_triangle(c.x_edge_pos, c.position, a.y_edge_pos, cColor)
 
-			add_triangle(d.position, c.x_edge_pos, b.position)
-			add_triangle(c.x_edge_pos, a.y_edge_pos, b.position)
-			add_triangle(a.y_edge_pos, a.position, b.position)
+			add_triangle(d.position, c.x_edge_pos, b.position, dColor)
+			add_triangle(c.x_edge_pos, a.y_edge_pos, b.position, bColor)
+			add_triangle(a.y_edge_pos, a.position, b.position, aColor)
 		elif cell_type == 17:
 			checked_vertices.append(d.position)
 			checked_vertices.append(c.x_edge_pos)
@@ -429,11 +435,11 @@ func triangulate_cell(a: Voxel, b: Voxel, c: Voxel, d: Voxel):
 			checked_vertices.append(c.position)
 			checked_vertices.append(a.position)
 			checked_vertices.append(b.position)
-			add_triangle(d.position, c.x_edge_pos, b.y_edge_pos)
+			add_triangle(d.position, c.x_edge_pos, b.y_edge_pos, dColor)
 
-			add_triangle(c.x_edge_pos, c.position, a.position)
-			add_triangle(c.x_edge_pos, a.position, b.y_edge_pos)
-			add_triangle(b.y_edge_pos, a.position, b.position)
+			add_triangle(c.x_edge_pos, c.position, a.position, cColor)
+			add_triangle(c.x_edge_pos, a.position, b.y_edge_pos, aColor)
+			add_triangle(b.y_edge_pos, a.position, b.position, bColor)
 		elif cell_type == 18:
 			checked_vertices.append(a.y_edge_pos)
 			checked_vertices.append(a.x_edge_pos)
@@ -441,11 +447,11 @@ func triangulate_cell(a: Voxel, b: Voxel, c: Voxel, d: Voxel):
 			checked_vertices.append(d.position)
 			checked_vertices.append(b.position)
 			checked_vertices.append(a.position)
-			add_triangle(d.position, c.position, a.y_edge_pos)
-			add_triangle(d.position, a.y_edge_pos, a.x_edge_pos)
-			add_triangle(d.position, a.x_edge_pos, b.position)
+			add_triangle(d.position, c.position, a.y_edge_pos, cColor)
+			add_triangle(d.position, a.y_edge_pos, a.x_edge_pos, dColor)
+			add_triangle(d.position, a.x_edge_pos, b.position, bColor)
 
-			add_triangle(a.y_edge_pos, a.position, a.x_edge_pos)
+			add_triangle(a.y_edge_pos, a.position, a.x_edge_pos, aColor)
 		elif cell_type == 19:
 			checked_vertices.append(c.position)
 			checked_vertices.append(d.position)
@@ -453,11 +459,11 @@ func triangulate_cell(a: Voxel, b: Voxel, c: Voxel, d: Voxel):
 			checked_vertices.append(a.position)
 			checked_vertices.append(b.y_edge_pos)
 			checked_vertices.append(a.x_edge_pos)
-			add_triangle(d.position, c.position, b.y_edge_pos)
-			add_triangle(b.y_edge_pos, c.position, a.x_edge_pos)
-			add_triangle(a.x_edge_pos, c.position, a.position)
+			add_triangle(d.position, c.position, b.y_edge_pos, dColor)
+			add_triangle(b.y_edge_pos, c.position, a.x_edge_pos, cColor)
+			add_triangle(a.x_edge_pos, c.position, a.position, aColor)
 
-			add_triangle(b.y_edge_pos, a.x_edge_pos, b.position)
+			add_triangle(b.y_edge_pos, a.x_edge_pos, b.position, bColor)
 		elif cell_type == 20:
 			checked_vertices.append(c.x_edge_pos)
 			checked_vertices.append(c.position)
@@ -467,14 +473,14 @@ func triangulate_cell(a: Voxel, b: Voxel, c: Voxel, d: Voxel):
 			checked_vertices.append(d.position)
 			checked_vertices.append(b.position)
 			checked_vertices.append(a.position)
-			add_triangle(c.x_edge_pos, c.position, center)
-			add_triangle(c.position, a.y_edge_pos, center)
+			add_triangle(c.x_edge_pos, c.position, center, cColor)
+			add_triangle(c.position, a.y_edge_pos, center, cColor)
 
-			add_triangle(center, a.y_edge_pos, a.x_edge_pos)
-			add_triangle(a.y_edge_pos, a.position, a.x_edge_pos)
+			add_triangle(center, a.y_edge_pos, a.x_edge_pos, aColor)
+			add_triangle(a.y_edge_pos, a.position, a.x_edge_pos, aColor)
 
-			add_triangle(d.position, c.x_edge_pos, b.position)
-			add_triangle(b.position, c.x_edge_pos, a.x_edge_pos)
+			add_triangle(d.position, c.x_edge_pos, b.position, dColor)
+			add_triangle(b.position, c.x_edge_pos, a.x_edge_pos, bColor)
 		elif cell_type == 21:
 			checked_vertices.append(c.position)
 			checked_vertices.append(d.position)
@@ -484,14 +490,14 @@ func triangulate_cell(a: Voxel, b: Voxel, c: Voxel, d: Voxel):
 			checked_vertices.append(c.x_edge_pos)
 			checked_vertices.append(a.x_edge_pos)
 			checked_vertices.append(b.y_edge_pos)
-			add_triangle(c.x_edge_pos, c.position, a.x_edge_pos)
-			add_triangle(c.position, a.position, a.x_edge_pos)
+			add_triangle(c.x_edge_pos, c.position, a.x_edge_pos, cColor)
+			add_triangle(c.position, a.position, a.x_edge_pos, aColor)
 
-			add_triangle(d.position, c.x_edge_pos, b.y_edge_pos)
-			add_triangle(c.x_edge_pos, center, b.y_edge_pos)
+			add_triangle(d.position, c.x_edge_pos, b.y_edge_pos, dColor)
+			add_triangle(c.x_edge_pos, center, b.y_edge_pos, dColor)
 
-			add_triangle(b.y_edge_pos, center, b.position)
-			add_triangle(center, a.x_edge_pos, b.position)
+			add_triangle(b.y_edge_pos, center, b.position, bColor)
+			add_triangle(center, a.x_edge_pos, b.position, bColor)
 		elif cell_type == 22:
 			checked_vertices.append(c.position)
 			checked_vertices.append(d.position)
@@ -501,14 +507,14 @@ func triangulate_cell(a: Voxel, b: Voxel, c: Voxel, d: Voxel):
 			checked_vertices.append(b.y_edge_pos)
 			checked_vertices.append(a.y_edge_pos)
 			checked_vertices.append(a.x_edge_pos)
-			add_triangle(d.position, c.position, b.y_edge_pos)
-			add_triangle(c.position, a.y_edge_pos, b.y_edge_pos)
+			add_triangle(d.position, c.position, b.y_edge_pos, dColor)
+			add_triangle(c.position, a.y_edge_pos, b.y_edge_pos, cColor)
 
-			add_triangle(center, a.y_edge_pos, a.x_edge_pos)
-			add_triangle(a.y_edge_pos, a.position, a.x_edge_pos)
+			add_triangle(center, a.y_edge_pos, a.x_edge_pos, aColor)
+			add_triangle(a.y_edge_pos, a.position, a.x_edge_pos, aColor)
 
-			add_triangle(b.y_edge_pos, center, b.position)
-			add_triangle(center, a.x_edge_pos, b.position)
+			add_triangle(b.y_edge_pos, center, b.position, bColor)
+			add_triangle(center, a.x_edge_pos, b.position, bColor)
 		elif cell_type == 23:
 			checked_vertices.append(c.position)
 			checked_vertices.append(d.position)
@@ -518,14 +524,14 @@ func triangulate_cell(a: Voxel, b: Voxel, c: Voxel, d: Voxel):
 			checked_vertices.append(c.x_edge_pos)
 			checked_vertices.append(a.y_edge_pos)
 			checked_vertices.append(b.y_edge_pos)
-			add_triangle(c.x_edge_pos, c.position, center)
-			add_triangle(center, c.position, a.y_edge_pos)
+			add_triangle(c.x_edge_pos, c.position, center, cColor)
+			add_triangle(center, c.position, a.y_edge_pos, cColor)
 
-			add_triangle(d.position, c.x_edge_pos, b.y_edge_pos)
-			add_triangle(c.x_edge_pos, center, b.y_edge_pos)
+			add_triangle(d.position, c.x_edge_pos, b.y_edge_pos, dColor)
+			add_triangle(c.x_edge_pos, center, b.y_edge_pos, dColor)
 
-			add_triangle(b.y_edge_pos, a.y_edge_pos, b.position)
-			add_triangle(b.position, a.y_edge_pos, a.position)
+			add_triangle(b.y_edge_pos, a.y_edge_pos, b.position, bColor)
+			add_triangle(b.position, a.y_edge_pos, a.position, aColor)
 		elif cell_type == 24:
 			checked_vertices.append(c.position)
 			checked_vertices.append(d.position)
@@ -533,11 +539,11 @@ func triangulate_cell(a: Voxel, b: Voxel, c: Voxel, d: Voxel):
 			checked_vertices.append(a.position)
 			checked_vertices.append(c.x_edge_pos)
 			checked_vertices.append(a.x_edge_pos)
-			add_triangle(c.x_edge_pos, c.position, a.x_edge_pos)
-			add_triangle(c.position, a.position, a.x_edge_pos)
+			add_triangle(c.x_edge_pos, c.position, a.x_edge_pos, cColor)
+			add_triangle(c.position, a.position, a.x_edge_pos, aColor)
 
-			add_triangle(d.position, c.x_edge_pos, b.position)
-			add_triangle(c.x_edge_pos, a.x_edge_pos, b.position)
+			add_triangle(d.position, c.x_edge_pos, b.position, dColor)
+			add_triangle(c.x_edge_pos, a.x_edge_pos, b.position, bColor)
 		elif cell_type == 25:
 			checked_vertices.append(c.position)
 			checked_vertices.append(d.position)
@@ -545,11 +551,11 @@ func triangulate_cell(a: Voxel, b: Voxel, c: Voxel, d: Voxel):
 			checked_vertices.append(a.position)
 			checked_vertices.append(b.y_edge_pos)
 			checked_vertices.append(a.y_edge_pos)
-			add_triangle(d.position, c.position, b.y_edge_pos)
-			add_triangle(b.y_edge_pos, c.position, a.y_edge_pos)
+			add_triangle(d.position, c.position, b.y_edge_pos, dColor)
+			add_triangle(b.y_edge_pos, c.position, a.y_edge_pos, cColor)
 
-			add_triangle(b.y_edge_pos, a.y_edge_pos, b.position)
-			add_triangle(b.position, a.y_edge_pos, a.position)
+			add_triangle(b.y_edge_pos, a.y_edge_pos, b.position, bColor)
+			add_triangle(b.position, a.y_edge_pos, a.position, aColor)
 		elif cell_type == 26:
 			checked_vertices.append(c.position)
 			checked_vertices.append(d.position)
@@ -561,17 +567,17 @@ func triangulate_cell(a: Voxel, b: Voxel, c: Voxel, d: Voxel):
 			checked_vertices.append(a.y_edge_pos)
 			checked_vertices.append(a.x_edge_pos)
 
-			add_triangle(d.position, c.x_edge_pos, b.y_edge_pos)
-			add_triangle(b.y_edge_pos, c.x_edge_pos, center)
+			add_triangle(d.position, c.x_edge_pos, b.y_edge_pos, dColor)
+			add_triangle(b.y_edge_pos, c.x_edge_pos, center, dColor)
 
-			add_triangle(c.x_edge_pos, c.position, center)
-			add_triangle(center, c.position, a.y_edge_pos)
+			add_triangle(c.x_edge_pos, c.position, center, cColor)
+			add_triangle(center, c.position, a.y_edge_pos, cColor)
 
-			add_triangle(b.y_edge_pos, center, b.position)
-			add_triangle(b.position, center, a.x_edge_pos)
+			add_triangle(b.y_edge_pos, center, b.position, bColor)
+			add_triangle(b.position, center, a.x_edge_pos, bColor)
 
-			add_triangle(a.x_edge_pos, center, a.y_edge_pos)
-			add_triangle(a.x_edge_pos, a.y_edge_pos, a.position)
+			add_triangle(a.x_edge_pos, center, a.y_edge_pos, aColor)
+			add_triangle(a.x_edge_pos, a.y_edge_pos, a.position, aColor)
 
 func triangle_indices(a_index: int, b_index: int, c_index: int):
 	indices.append(a_index)
@@ -590,29 +596,41 @@ func add_triangle_to_dictionary(vertice_key, triangle):
 	else:
 		triangle_dictionary[vertice_key] = [triangle]
 
-func add_triangle(a: Vector2, b: Vector2, c: Vector2):
+func add_triangle(a: Vector2, b: Vector2, c: Vector2, color: Color):
 	var vertex_index = vertices.size()
 	vertices.append(a)
 	vertices.append(b)
 	vertices.append(c)
+	colors.append(color)
+	colors.append(color)
+	colors.append(color)
 	triangle_indices(vertex_index, vertex_index + 1, vertex_index + 2)
 
-func add_quad(a: Vector2, b: Vector2, c: Vector2, d: Vector2):
+func add_quad(a: Vector2, b: Vector2, c: Vector2, d: Vector2, color: Color):
 	var vertex_index = vertices.size()
 	vertices.append(a)
 	vertices.append(b)
 	vertices.append(c)
 	vertices.append(d)
+	colors.append(color)
+	colors.append(color)
+	colors.append(color)
+	colors.append(color)
 	triangle_indices(vertex_index, vertex_index + 1, vertex_index + 2)
 	triangle_indices(vertex_index, vertex_index + 2, vertex_index + 3)
 
-func add_pentagon(a: Vector2, b: Vector2, c: Vector2, d: Vector2, e: Vector2):
+func add_pentagon(a: Vector2, b: Vector2, c: Vector2, d: Vector2, e: Vector2, color: Color):
 	var vertex_index = vertices.size()
 	vertices.append(a)
 	vertices.append(b)
 	vertices.append(c)
 	vertices.append(d)
 	vertices.append(e)
+	colors.append(color)
+	colors.append(color)
+	colors.append(color)
+	colors.append(color)
+	colors.append(color)
 	triangle_indices(vertex_index, vertex_index + 1, vertex_index + 2)
 	triangle_indices(vertex_index, vertex_index + 2, vertex_index + 3)
 	triangle_indices(vertex_index, vertex_index + 3, vertex_index + 4)

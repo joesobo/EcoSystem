@@ -1,25 +1,13 @@
-[gd_scene load_steps=11 format=3 uid="uid://bhj5e7mcbhl3s"]
+[gd_scene load_steps=8 format=3 uid="uid://bhj5e7mcbhl3s"]
 
 [ext_resource type="Script" path="res://scripts/marchingSquares/VoxelGrid.gd" id="1_7sy1n"]
 [ext_resource type="PackedScene" uid="uid://bltijxvovh1q" path="res://scenes/voxel.tscn" id="2_4y4kx"]
-[ext_resource type="Shader" path="res://shaders/marching_squares.gdshader" id="3_srn0q"]
 [ext_resource type="Texture2D" uid="uid://jqnf5wrw4k4q" path="res://sprites/blocks/black.png" id="3_xei8i"]
 [ext_resource type="Texture2D" uid="uid://dnx35jswgveud" path="res://sprites/blocks/orange.png" id="7_1xr8x"]
 [ext_resource type="Texture2D" uid="uid://cc5fg4gdl7ogk" path="res://sprites/blocks/red.png" id="8_elwxu"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6mmkp"]
 size = Vector2(11.6232, 11.5267)
-
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_lat0l"]
-load_path = "res://.godot/imported/saved_texture.png-3b5d40491b886740c8998f83f0dc429d.ctex"
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_hdxfh"]
-shader = ExtResource("3_srn0q")
-shader_parameter/offset = Vector2(-1, 2.08165e-12)
-shader_parameter/world_size = Vector2(41, 24)
-shader_parameter/voxel_size = 16.0
-shader_parameter/texture_size = 16.0
-shader_parameter/state_texture = SubResource("CompressedTexture2D_lat0l")
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_1l0eq"]
 
@@ -46,6 +34,5 @@ shape = SubResource("RectangleShape2D_6mmkp")
 debug_color = Color(0, 0.6, 0.701961, 0.419608)
 
 [node name="TerrainFill" type="MeshInstance2D" parent="."]
-material = SubResource("ShaderMaterial_hdxfh")
 position = Vector2(1, 0)
 texture = SubResource("CanvasTexture_1l0eq")
