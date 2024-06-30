@@ -1,10 +1,7 @@
 shader_type canvas_item;
 
-uniform sampler2D state_texture;
-uniform sampler2DArray texture_array;
-uniform vec2 offset;
-uniform vec2 world_size = vec2(41, 24);
-uniform float voxel_size = 16.0;
+uniform sampler2DArray texture_array: filter_nearest;
+uniform vec2 offset = vec2(0.0, 0.0);
 uniform float texture_size = 16.0;
 
 varying vec2 world_position;
@@ -14,17 +11,9 @@ void vertex() {
 }
 
 void fragment() {
-	ivec2 tex_coord = ivec2(floor(world_position / voxel_size));
+	float state_index = COLOR.r * 255.0;
 
-	float voxel_state = texture(state_texture, (vec2(tex_coord) + 0.5) / (world_size)).r * 255.0;
+	vec2 texture_coord = fract(world_position / texture_size);
 
-	vec2 texture_coord = mod(world_position, texture_size) / texture_size;
-
-	vec4 tex_color = texture(texture_array, vec3(texture_coord, voxel_state));
-
-	if (voxel_state == 0.0) {
-		COLOR = vec4(0.0);
-	} else {
-		COLOR = tex_color;
-	}
+	COLOR = texture(texture_array, vec3(texture_coord, state_index));
 }

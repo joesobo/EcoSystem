@@ -73,7 +73,8 @@ func _ready():
 
 	var texture_2d_array = Texture2DArray.new()
 	texture_2d_array.create_from_images(images)
-	# mesh_instance.material.set_shader_parameter("texture_array", texture_2d_array)
+
+	mesh_instance.material.set_shader_parameter("texture_array", texture_2d_array)
 
 	mesh_instance.mesh = array_mesh
 

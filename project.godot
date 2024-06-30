@@ -113,5 +113,5 @@ throw_stack={
 
 [rendering]
 
-textures/canvas_textures/default_texture_filter=3
+textures/canvas_textures/default_texture_repeat=1
 viewport/transparent_background=true
