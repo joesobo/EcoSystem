@@ -191,8 +191,7 @@ func triangulate():
 	array_mesh = ArrayMesh.new()
 
 	# remove old child colliders
-	while mesh_instance.get_child_count() > 0:
-		var child = mesh_instance.get_child(0)
+	for child in mesh_instance.get_children():
 		mesh_instance.remove_child(child)
 		child.queue_free()
 

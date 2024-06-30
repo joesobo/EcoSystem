@@ -12,9 +12,11 @@ radius = 5.0
 collision_layer = 32
 collision_mask = 65
 gravity_scale = 0.5
+can_sleep = false
 lock_rotation = true
 continuous_cd = 2
 script = ExtResource("1_g60dc")
+max_speed = 200.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_tqk7d")
