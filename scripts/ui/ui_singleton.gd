@@ -27,13 +27,7 @@ func create_menu(key: String, instance: Node) -> Menu:
 	var new_menu = Menu.new(
 		key,
 		instance.position,
-		[
-			ItemDefinition.items[0].clone(),
-			ItemDefinition.items[0].clone(),
-			ItemDefinition.items[0].clone(),
-			ItemDefinition.items[1].clone(),
-			ItemDefinition.items[0].clone()
-		],
+		[],
 		true,
 		false,
 		instance

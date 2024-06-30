@@ -47,7 +47,7 @@ func set_item(item: Item):
 	set_slot_quantity()
 
 func set_slot_texture():
-	itemTexture.texture = load("res://sprites/item/%s" % item.icon)
+	itemTexture.texture = item.icon
 
 func set_slot_quantity():
 	var value = min(max(item.quantity, 1), 99)

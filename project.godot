@@ -19,7 +19,7 @@ config/icon="res://icon.svg"
 
 FishDefinition="*res://scripts/genetics/FishDefinition.gd"
 UISingleton="*res://scripts/ui/ui_singleton.gd"
-ItemDefinition="*res://scripts/items/ItemDefinition.gd"
+ItemManager="*res://scripts/items/ItemManager.gd"
 
 [display]
 
@@ -113,5 +113,6 @@ throw_stack={
 
 [rendering]
 
+textures/canvas_textures/default_texture_filter=0
 textures/canvas_textures/default_texture_repeat=1
 viewport/transparent_background=true

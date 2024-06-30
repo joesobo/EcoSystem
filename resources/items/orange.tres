@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="Item" load_steps=3 format=3 uid="uid://bm4dq0lqp4mf"]
+
+[ext_resource type="Texture2D" uid="uid://dnx35jswgveud" path="res://sprites/blocks/orange.png" id="1_e50us"]
+[ext_resource type="Script" path="res://scripts/items/Item.gd" id="2_ic207"]
+
+[resource]
+script = ExtResource("2_ic207")
+id = 3
+label = "Orange"
+icon = ExtResource("1_e50us")
+max_quantity = 99

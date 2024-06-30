@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="Item" load_steps=3 format=3 uid="uid://bmc7mas3urc3a"]
+
+[ext_resource type="Script" path="res://scripts/items/Item.gd" id="1_70j4b"]
+[ext_resource type="Texture2D" uid="uid://ciybpknetqaw8" path="res://sprites/blocks/dirt.png" id="1_xlhsc"]
+
+[resource]
+script = ExtResource("1_70j4b")
+id = 1
+label = "Dirt"
+icon = ExtResource("1_xlhsc")
+max_quantity = 99

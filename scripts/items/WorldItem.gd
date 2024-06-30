@@ -13,7 +13,7 @@ func _ready():
 
 func update_sprite():
 	sprite = $Sprite2D
-	sprite.texture = load("res://sprites/item/%s" % item.icon)
+	sprite.texture = item.icon
 
 func _on_Area2D_body_entered(body):
 	if body.is_in_group('player'):

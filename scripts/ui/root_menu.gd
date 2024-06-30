@@ -5,7 +5,6 @@ signal update_slot(slot_index, item)
 
 var button_menu
 @onready var slot_scene = preload("res://scenes/slot.tscn")
-@onready var world_item = preload("res://scenes/world_item.tscn")
 
 @export var slot_size: int = 0
 @export var menu_name: UISingleton.MenuType = UISingleton.MenuType.Storage
@@ -244,7 +243,7 @@ func throw_hovered_item(quantity):
 	var item = menu.items[hovered_slot_index].clone()
 	item.quantity = quantity
 
-	create_world_item(item)
+	create_world_item_at_player(item)
 
 	# update inventory
 	menu.items[hovered_slot_index].quantity -= quantity
@@ -258,7 +257,7 @@ func throw_mouse_item(quantity):
 	var item = UISingleton.follow_mouse_object.item.clone()
 	item.quantity = quantity
 
-	create_world_item(item)
+	create_world_item_at_player(item)
 
 	UISingleton.follow_mouse_object.item.quantity -= quantity
 	UISingleton.follow_mouse_object.set_slot_quantity()
@@ -267,20 +266,17 @@ func throw_mouse_item(quantity):
 		UISingleton.follow_mouse_object.queue_free()
 		UISingleton.follow_mouse_object = null
 
-func create_world_item(item):
-	var worldItem = world_item.instantiate()
-	worldItem.item = item
-	get_tree().root.add_child(worldItem)
-
-	# spawn on either side of player
+func create_world_item_at_player(item):
+	var item_position
+	var force
 	if player.facing_right:
-		worldItem.global_position = player.position + Vector2(15, 0)
+		item_position = player.position + Vector2(40, 25)
+		force = Vector2(500, 500)
 	else:
-		worldItem.global_position = player.position - Vector2(15, 0)
+		item_position = player.position - Vector2(40, 25)
+		force = Vector2(-500, 500)
 
-	# add force to move item initially
-	var throw_direction = (get_global_mouse_position() - player.global_position).normalized()
-	worldItem.apply_impulse(Vector2.ZERO, throw_direction * 500)
+	ItemManager.create_world_item(item, item_position, force)
 
 func handle_escape():
 	if UISingleton.follow_mouse_object and last_pickup_slot_index != -1:

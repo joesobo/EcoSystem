@@ -3,15 +3,15 @@
 [ext_resource type="Script" path="res://scripts/items/WorldItem.gd" id="1_g60dc"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_tqk7d"]
-radius = 6.0
+radius = 4.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ldurs"]
-radius = 7.0
+radius = 5.0
 
 [node name="WorldItem" type="RigidBody2D"]
 collision_layer = 32
 collision_mask = 65
-gravity_scale = 0.75
+gravity_scale = 0.5
 lock_rotation = true
 continuous_cd = 2
 script = ExtResource("1_g60dc")
@@ -20,6 +20,7 @@ script = ExtResource("1_g60dc")
 shape = SubResource("CircleShape2D_tqk7d")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.5, 0.5)
 
 [node name="PickupArea" type="Area2D" parent="."]
 collision_layer = 32

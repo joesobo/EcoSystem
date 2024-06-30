@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="Item" load_steps=3 format=3 uid="uid://hg54itsxek7c"]
+
+[ext_resource type="Texture2D" uid="uid://cd44sfftgjvog" path="res://sprites/blocks/green.png" id="1_fm3n6"]
+[ext_resource type="Script" path="res://scripts/items/Item.gd" id="2_eh8ye"]
+
+[resource]
+script = ExtResource("2_eh8ye")
+id = 4
+label = "Green"
+icon = ExtResource("1_fm3n6")
+max_quantity = 99

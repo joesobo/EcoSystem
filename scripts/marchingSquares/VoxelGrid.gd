@@ -161,13 +161,21 @@ func edit_voxel(point: Vector2):
 	set_voxel(Vector2(voxel_x, voxel_y))
 
 func set_voxel(local_pos: Vector2):
-	toggle_voxel_color(local_pos)
+	var index = local_pos.x + local_pos.y * voxel_resolution_x
+	if voxels.size() > index && voxels[index].state != -1.0:
+		if voxels[index].state == 0.0:
+			voxels[index].state = 1.0
+		elif voxels[index].state >= 1.0:
+			var item = ItemManager.get_item(voxels[index].state)
+			ItemManager.create_world_item(item, camera.get_global_mouse_position() + Vector2(0, 40))
+			voxels[index].state = 0.0
+
 	triangulate()
 
 func toggle_voxel_color(local_pos: Vector2):
 	var index = local_pos.x + local_pos.y * voxel_resolution_x
 
-	if voxels.size() > index && voxels[index].state != 2.0:
+	if voxels.size() > index && voxels[index].state != -1.0:
 		if voxels[index].state == 0.0:
 			voxels[index].state = 1.0
 		elif voxels[index].state == 1.0:
