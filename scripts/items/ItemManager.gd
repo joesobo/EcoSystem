@@ -28,9 +28,9 @@ func load_resources(path: String):
 func create_world_item(item, position, force = Vector2(0, 0)):
 	var worldItem = world_item.instantiate()
 	worldItem.item = item
+	worldItem.global_position = position
 	get_tree().root.add_child(worldItem)
 
-	worldItem.global_position = position
 	worldItem.apply_impulse(Vector2.ZERO, force)
 
 func get_item(id: int) -> Item:

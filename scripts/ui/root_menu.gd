@@ -270,10 +270,10 @@ func create_world_item_at_player(item):
 	var item_position
 	var force
 	if player.facing_right:
-		item_position = player.position + Vector2(40, 25)
+		item_position = player.position + Vector2(30, -15)
 		force = Vector2(500, 500)
 	else:
-		item_position = player.position - Vector2(40, 25)
+		item_position = player.position + Vector2(-30, -15)
 		force = Vector2(-500, 500)
 
 	ItemManager.create_world_item(item, item_position, force)

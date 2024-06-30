@@ -167,7 +167,7 @@ func set_voxel(local_pos: Vector2):
 			voxels[index].state = 1.0
 		elif voxels[index].state >= 1.0:
 			var item = ItemManager.get_item(voxels[index].state)
-			ItemManager.create_world_item(item, camera.get_global_mouse_position() + Vector2(0, 40))
+			ItemManager.create_world_item(item, camera.get_global_mouse_position() + Vector2(0, 0))
 			voxels[index].state = 0.0
 
 	triangulate()
