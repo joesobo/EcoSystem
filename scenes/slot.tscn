@@ -106,14 +106,14 @@ offset_bottom = 6.0
 
 [node name="Count Texture (Tens)" type="AnimatedSprite2D" parent="."]
 unique_name_in_owner = true
-position = Vector2(7, 8)
+position = Vector2(8, 11)
 sprite_frames = SubResource("SpriteFrames_y04p7")
 animation = &"count"
 offset = Vector2(0.5, 0.5)
 
 [node name="Count Texture (Ones)" type="AnimatedSprite2D" parent="."]
 unique_name_in_owner = true
-position = Vector2(11, 8)
+position = Vector2(12, 11)
 sprite_frames = SubResource("SpriteFrames_y04p7")
 animation = &"count"
 offset = Vector2(0.5, 0.5)

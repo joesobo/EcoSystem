@@ -6,8 +6,8 @@ extends Control
 
 var extended: bool = false
 var focus_slot: int = 1
-var start_position = Vector2(-94, -25)
-var horizontal_increment = 19
+var start_position = Vector2(-125, -31)
+var horizontal_increment = 25
 var vertical_increment = -40
 
 var key_to_slot = {
