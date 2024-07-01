@@ -9,7 +9,10 @@ extends RigidBody2D
 @onready var sprite = $Sprite2D
 @onready var pickup_area = $PickupArea
 
+var instance_id: int
+
 func _ready():
+	instance_id = get_instance_id()
 	pickup_area.connect('body_entered', Callable(self, '_on_Area2D_body_entered'))
 
 func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
@@ -31,3 +34,16 @@ func _on_Area2D_body_entered(body):
 
 			if item.quantity == 0:
 				queue_free()
+	elif body != self and body.is_in_group('world_item') and body.item.id == item.id:
+		# to prevent race condition when merging
+		if self.instance_id < body.instance_id:
+			merge_with(body)
+
+func merge_with(other):
+	var total_quantity = self.item.quantity + other.item.quantity
+	if total_quantity <= self.item.max_quantity:
+		self.item.quantity = total_quantity
+		other.queue_free()
+	else:
+		self.item.quantity = self.item.max_quantity
+		other.item.quantity = total_quantity - self.item.max_quantity
