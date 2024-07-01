@@ -29,9 +29,12 @@ func create_world_item(item, position, force = Vector2(0, 0)):
 	var worldItem = world_item.instantiate()
 	worldItem.item = item.clone()
 	worldItem.global_position = position
+
+	worldItem.linear_velocity = force
+
 	get_tree().root.add_child(worldItem)
 
-	worldItem.apply_impulse(Vector2.ZERO, force)
+	worldItem.apply_central_impulse(Vector2(randf_range(-20, 20), randf_range(-20, 20)))
 
 func get_item(id: int) -> Item:
 	return item_resources.get(id, null)
