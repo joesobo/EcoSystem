@@ -1,0 +1,20 @@
+[gd_scene load_steps=5 format=3 uid="uid://wl1yubieq60f"]
+
+[ext_resource type="Script" path="res://scripts/Background.gd" id="1_a4xs5"]
+[ext_resource type="Shader" path="res://shaders/background.gdshader" id="2_7iq4x"]
+[ext_resource type="Texture2D" uid="uid://cgbueytyqf3ak" path="res://sprites/ui/white.png" id="2_fnsca"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_t25vj"]
+shader = ExtResource("2_7iq4x")
+shader_parameter/cutoffs = null
+shader_parameter/offset_multipliers = null
+
+[node name="Background" type="Node2D"]
+script = ExtResource("1_a4xs5")
+start_color = Color(0.588235, 0.823529, 1, 1)
+end_color = Color(0.00392157, 0.156863, 0.25098, 1)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_t25vj")
+scale = Vector2(10, 10)
+texture = ExtResource("2_fnsca")
