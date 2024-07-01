@@ -29,7 +29,7 @@ shape = SubResource("CircleShape2D_tqk7d")
 scale = Vector2(0.5, 0.5)
 
 [node name="PickupArea" type="Area2D" parent="."]
-collision_layer = 32
+collision_layer = 128
 collision_mask = 96
 input_pickable = false
 

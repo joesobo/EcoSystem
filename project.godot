@@ -13,7 +13,6 @@ config_version=5
 config/name="EcoSystem"
 run/main_scene="res://scenes/main.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
-config/icon="res://icon.svg"
 
 [autoload]
 
@@ -110,6 +109,7 @@ throw_stack={
 2d_physics/layer_5="Food"
 2d_physics/layer_6="WorldItem"
 2d_physics/layer_7="Player"
+2d_physics/layer_8="WorldItemPickup"
 
 [rendering]
 
