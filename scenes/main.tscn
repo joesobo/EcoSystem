@@ -1,10 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://bwfe30h2s655f"]
+[gd_scene load_steps=9 format=3 uid="uid://bwfe30h2s655f"]
 
 [ext_resource type="PackedScene" uid="uid://bhj5e7mcbhl3s" path="res://scenes/marching_squares.tscn" id="1_atrqb"]
 [ext_resource type="Script" path="res://scripts/FishManager.gd" id="5_1qjtw"]
 [ext_resource type="PackedScene" uid="uid://wl1yubieq60f" path="res://scenes/background.tscn" id="6_oanyo"]
 [ext_resource type="PackedScene" uid="uid://yc35bijsp2iy" path="res://scenes/orangeFish.tscn" id="6_up3j5"]
 [ext_resource type="Script" path="res://scripts/ui/ui_manager.gd" id="7_8k03j"]
+[ext_resource type="Texture2D" uid="uid://jqnf5wrw4k4q" path="res://sprites/blocks/black.png" id="7_usxur"]
 [ext_resource type="PackedScene" uid="uid://bf5681n5nave6" path="res://scenes/player.tscn" id="8_b3iae"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_a4m6g"]
@@ -33,33 +34,55 @@ gravity_scale = 0.25
 move_speed = 75.0
 jump_force = 150.0
 
-[node name="Wall" type="StaticBody2D" parent="."]
+[node name="Walls" type="Node" parent="."]
+
+[node name="LeftWall" type="StaticBody2D" parent="Walls"]
 position = Vector2(16, 205)
 rotation = 1.5708
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Wall"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/LeftWall"]
 scale = Vector2(2, 1)
 shape = SubResource("WorldBoundaryShape2D_a4m6g")
 
-[node name="Wall2" type="StaticBody2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="Walls/LeftWall"]
+position = Vector2(-20.1081, 3.24727)
+scale = Vector2(21.2486, 0.594091)
+texture = ExtResource("7_usxur")
+
+[node name="RightWall" type="StaticBody2D" parent="Walls"]
 position = Vector2(642, 205)
 rotation = -1.5708
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Wall2"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/RightWall"]
 scale = Vector2(2, 1)
 shape = SubResource("WorldBoundaryShape2D_a4m6g")
 
-[node name="Wall3" type="StaticBody2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="Walls/RightWall"]
+position = Vector2(20.4453, 3.20435)
+scale = Vector2(21.2507, 0.599456)
+texture = ExtResource("7_usxur")
+
+[node name="BottomWall" type="StaticBody2D" parent="Walls"]
 position = Vector2(320, 353)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Wall3"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/BottomWall"]
 scale = Vector2(4, 1)
 shape = SubResource("WorldBoundaryShape2D_a4m6g")
 
-[node name="Wall4" type="StaticBody2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="Walls/BottomWall"]
+position = Vector2(8.99998, 3)
+scale = Vector2(40.125, 0.625)
+texture = ExtResource("7_usxur")
+
+[node name="TopWall" type="StaticBody2D" parent="Walls"]
 position = Vector2(317, 16)
 rotation = 3.14159
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Wall4"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/TopWall"]
 scale = Vector2(4, 1)
 shape = SubResource("WorldBoundaryShape2D_a4m6g")
+
+[node name="Sprite2D" type="Sprite2D" parent="Walls/TopWall"]
+position = Vector2(-12.0649, 3.07778)
+scale = Vector2(40.1186, 0.615277)
+texture = ExtResource("7_usxur")
