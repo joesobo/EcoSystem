@@ -1,6 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://c46qx5ss0j2e"]
+[gd_scene load_steps=5 format=3 uid="uid://c46qx5ss0j2e"]
 
 [ext_resource type="Script" path="res://scripts/items/WorldItem.gd" id="1_g60dc"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_lnawl"]
+friction = 0.75
+bounce = 0.5
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_tqk7d"]
 radius = 4.0
@@ -11,6 +15,7 @@ radius = 5.0
 [node name="WorldItem" type="RigidBody2D"]
 collision_layer = 32
 collision_mask = 65
+physics_material_override = SubResource("PhysicsMaterial_lnawl")
 gravity_scale = 0.5
 can_sleep = false
 lock_rotation = true
